@@ -286,13 +286,13 @@ bool Gestor::intrepertaComandos(string comando) {
         }else if(stringSeparada[0] == "list"){
             Colonia* c;
             if(stringSeparada.size() == 1){
-                controlador->listarTudo(Colonia::LIST);
+                controlador->listarTudo();
                 cout << "Prima qualquer tecla para continuar...";
                 Consola::getch();
             }else{
                 c = controlador->getColonia(controlador->toUpper(stringSeparada[1]));
                 if(c != NULL){
-                    c->listar(Colonia::LIST);
+                    c->listar();
                     cout << "Prima qualquer tecla para continuar...";
                     Consola::getch();
                 }else{

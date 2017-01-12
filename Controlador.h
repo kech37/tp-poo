@@ -59,7 +59,7 @@ public:
     string toLower(string str);
     string toUpper(string str);
     
-    void listarTudo(int modo);
+    void listarTudo();
 
 };
 

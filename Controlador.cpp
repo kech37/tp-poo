@@ -172,9 +172,9 @@ void Controlador::atribuirPerfil() {
     }
 }
 
-void Controlador::listarTudo(int modo) {
+void Controlador::listarTudo() {
     for(int i = 0; i < vectorColonias.size(); i++){
-        vectorColonias[i].listar(modo);
+        vectorColonias[i].listar();
     }
 }
 
