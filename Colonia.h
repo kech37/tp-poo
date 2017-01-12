@@ -18,6 +18,9 @@ private:
 public:    
     Colonia(string nome, int moedas);
     
+    /*
+     * Retorna o ID da colonia
+     */
     int getID() const;
     
     /*
