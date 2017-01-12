@@ -349,6 +349,18 @@ bool Gestor::intrepertaComandos(string comando) {
             }
         }else if(stringSeparada[0] == "repair"){
             
+        }else if(stringSeparada[0] == "upgrade"){
+            
+        }else if(stringSeparada[0] == "sell"){
+            
+        }else if(stringSeparada[0] == "ser"){
+            
+        }else if(stringSeparada[0] == "next"){
+            
+        }else if(stringSeparada[0] == "ataca"){
+            
+        }else if(stringSeparada[0] == "recolhe"){
+            
         }else{ 
             imprimeErro("Digite um comando valido!\n");
         }
