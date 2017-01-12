@@ -170,9 +170,9 @@ void Colonia::listar() {
                 cout << "           "<< vectorSer[i].getNome() << endl;
                 cout << "           " << vectorSer[i].getID() << ") " << vectorSer[i].getPerfil()->getNome();
                 cout << "           ["<< vectorSer[i].getLinha() << ":" << vectorSer[i].getColuna() << "]" << endl;
-                cout << "           "<< vectorSer[i].getSaude() << endl;
-                cout << "           "<< vectorSer[i].getDefesa() << endl;
-                cout << "           "<< vectorSer[i].getAtaque() << endl;      
+                cout << "           "<< "Saude: "<< vectorSer[i].getSaude() << endl;
+                cout << "           "<< "Defesa: "<< vectorSer[i].getDefesa() << endl;
+                cout << "           "<< "Ataque: "<< vectorSer[i].getAtaque() << endl;      
             }   
         }else{
             cout << "           <Sem Seres>" << endl;
