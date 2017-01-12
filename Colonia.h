@@ -41,7 +41,6 @@ public:
      * -1 -> Colonia nao tem dinheiro
      *  0 -> Nao esta no raio de 10 do castelo
      *  1 -> Edificio criado com sucesso
-     *  2 -> Nao ha castelo
      */
     int addEdificio(Edificios e);
     

@@ -15,6 +15,8 @@
 #include "Gestor.h"
 #include "Consola.h"
 #include "Castelo.h"
+#include "Torre.h"
+#include "Quinta.h"
 
 Gestor* Gestor::getInstance() {
     static Gestor* instance = 0;
@@ -313,6 +315,29 @@ bool Gestor::intrepertaComandos(string comando) {
             }else{
                 imprimeErro("Numero de argumentos errado!\n       setmoedas -colonia -num.\n");
             }
+        }else if(stringSeparada[0] == "build"){
+            if(stringSeparada.size() == 4){
+                if(checkNumero(stringSeparada[2]) && checkNumero(stringSeparada[3])){
+                    switch(comando_build("A", controlador->toLower(stringSeparada[1]) , atoi(stringSeparada[2].c_str()), atoi(stringSeparada[2].c_str()))){
+                        case -2:
+                            imprimeErro("Nao foi encontrado a colonia indicada!\n");
+                        break;
+                        case -1:
+                            imprimeErro("A sua colonia nao tem dinheiro!\n");
+                        break;
+                        case 0:
+                            imprimeErro("Nao se encontra no perimetro do castelo, ou posicao ja ocupada!\n");
+                        break;
+                        case 1:
+                            imprimeLog("Edifico criado com sucesso!\n");
+                        break;
+                    }
+                }else{
+                    imprimeErro("Os ultimos 2 argumentos tem que ser inteiros positivos!\n");  
+                }
+            }else{
+                imprimeErro("Numero de argumentos errado!\n       build -edif -lin -col.\n");
+            }
         }else{ 
             imprimeErro("Digite um comando valido!\n");
         }
@@ -338,6 +363,31 @@ bool Gestor::comando_load(string ficheiro) {
 
 void Gestor::comando_inicio() {
     controlador->atribuirPerfil();
+}
+
+int Gestor::comando_build(string co, string edif, int linha, int coluna) {
+    Colonia* c = controlador->getColonia(co);
+    int result;
+    if(c != NULL){
+        if(edif == "torre"){
+            result = c->addEdificio(Torre(linha, coluna, c->getID()));
+        }else if(edif == "quinta"){
+            result = c->addEdificio(Quinta(linha, coluna, c->getID()));
+        }
+        switch(result){
+            case -1:
+                return -1;
+            break;
+            case 0:
+                return 0;
+            break;
+            case 1:
+                return 1;
+            break;
+        }
+    }else{
+        return -2;
+    }
 }
 
 void Gestor::comando_dim(int linhas, int colunas) {

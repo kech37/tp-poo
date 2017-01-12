@@ -18,16 +18,10 @@
 
 
 class Castelo : public Edificios{
+private:
 public:
     Castelo(int linha, int coluna, int equipa);
-    
     virtual ~Castelo();
-
-
-
-
-private:
-
 };
 
 #endif /* CASTELO_H */

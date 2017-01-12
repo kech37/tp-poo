@@ -12,7 +12,9 @@
       <itemPath>Edificios.h</itemPath>
       <itemPath>Gestor.h</itemPath>
       <itemPath>Perfil.h</itemPath>
+      <itemPath>Quinta.h</itemPath>
       <itemPath>Ser.h</itemPath>
+      <itemPath>Torre.h</itemPath>
       <itemPath>Unidade.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
@@ -30,7 +32,9 @@
       <itemPath>Edificios.cpp</itemPath>
       <itemPath>Gestor.cpp</itemPath>
       <itemPath>Perfil.cpp</itemPath>
+      <itemPath>Quinta.cpp</itemPath>
       <itemPath>Ser.cpp</itemPath>
+      <itemPath>Torre.cpp</itemPath>
       <itemPath>Unidade.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
     </logicalFolder>
@@ -91,9 +95,17 @@
       </item>
       <item path="Perfil.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Quinta.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Quinta.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Ser.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Ser.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Torre.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Torre.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Unidade.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -155,9 +167,17 @@
       </item>
       <item path="Perfil.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Quinta.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Quinta.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Ser.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Ser.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Torre.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Torre.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Unidade.cpp" ex="false" tool="1" flavor2="0">
       </item>

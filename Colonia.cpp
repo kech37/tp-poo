@@ -94,12 +94,12 @@ int Colonia::addEdificio(Edificios e) {
             if((this->moedas-e.getCusto()) >= 0){
                 vectorEdificios.push_back(e);
                 this->moedas-=e.getCusto();
-                return true;
+                return 1;
             }else{
-                return false;
+                return -1;
             }
         }else{
-            return false;
+            return 0;
         }
     }
 }
@@ -108,6 +108,11 @@ bool Colonia::raioCastelo(Edificios& e) {
     if(!vectorEdificios.empty()){
         if((vectorEdificios.front().getLinha()-10) <= e.getLinha() && e.getLinha() <= (vectorEdificios.front().getLinha()+10)){
             if((vectorEdificios.front().getColuna()-10) <= e.getColuna() && e.getColuna() <= (vectorEdificios.front().getColuna()+10)){
+                for(int i = 0; i < vectorEdificios.size(); i++){
+                    if(vectorEdificios[i].getLinha() == e.getLinha() && vectorEdificios[i].getColuna() == e.getColuna()){
+                        return false;
+                    }
+                }
                 return true;
             }else{
                 return false;
