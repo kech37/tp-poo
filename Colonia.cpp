@@ -156,7 +156,7 @@ void Colonia::listar(int modo) {
     if(modo == LIST){
         cout << "   Colonia: " << this->nome << " - Moedas: " << this->moedas << endl;
         cout << "       Perfil: " << endl;
-        if(vectorPerfil.size() > 0){
+        /*if(vectorPerfil.size() > 0){
             for(int i = 0; i < vectorPerfil.size(); i++){
                 cout << "           " << i << ") " << vectorPerfil[i].getNome() << endl;
                 if(vectorPerfil[i].getSizePerfil() > 0){
@@ -169,7 +169,7 @@ void Colonia::listar(int modo) {
             } 
         }else{ 
             cout << "       <Sem Perfil>" << endl;
-        }
+        }*/
         cout << "       Seres: " << endl;
         if(vectorSer.size() > 0){
             for(int i = 0; i < vectorSer.size(); i++){
