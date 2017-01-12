@@ -20,7 +20,7 @@
 class Ser:public Unidade{
 private:
     static int conta;
-    int id, saude, velocidade, ataque, defesa;
+    int id, saude, velocidade, ataque, defesa, saudeMAX, numEspada = -1;
     Perfil* perfil;
 public:
     Ser(Perfil* p, int linha, int coluna, int equipa);
@@ -37,7 +37,6 @@ public:
     int getDefesa() const;
     void setDefesa(int defesa);
     
-    void setPerfil(Perfil* p);
     Perfil* getPerfil() const;
     
     virtual int getID() const override;

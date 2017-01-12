@@ -16,11 +16,37 @@
 int Ser::conta = 500;
 
 Ser::Ser(Perfil* p, int linha, int coluna, int equipa):Unidade(linha, coluna, equipa) {
+    int i = 0;
+    Caracteristica* c;
+    
     this->perfil = p;
-    this->saude = 10;
-    //TODO carregar as caracteristicas no ser.
+    this->saudeMAX = 10;
     this->id = conta;
     this->conta++;
+    this->perfil = p;
+    
+    c = this->perfil->getCarateristica(i);
+    while(c != NULL){
+        switch(c->getId()){
+            case 2:
+                this->saudeMAX+=1;
+            break;
+            case 3:
+                this->defesa+=1;
+            break;
+            case 4:
+                this->defesa*=2;
+            break;
+            case 5:
+                this->ataque+=1;
+            break;
+            case 6:
+                this->ataque+=2;
+                this->numEspada = 2;
+            break;
+        }
+    }
+    this->saude = this->saudeMAX;
 }
 
 int Ser::getAtaque() const {
@@ -53,10 +79,6 @@ void Ser::setSaude(int saude) {
 
 void Ser::setVelocidade(int velocidade) {
     this->velocidade = velocidade;
-}
-
-void Ser::setPerfil(Perfil* p) {
-    this->perfil = p;
 }
 
 Perfil* Ser::getPerfil() const {
