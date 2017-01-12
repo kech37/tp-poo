@@ -324,7 +324,7 @@ bool Gestor::intrepertaComandos(string comando) {
                     }else{
                         colString = "A";
                     }
-                    switch(comando_build(colString, controlador->toLower(stringSeparada[1]) , atoi(stringSeparada[2].c_str()), atoi(stringSeparada[2].c_str()))){
+                    switch(comando_build(colString, controlador->toLower(stringSeparada[1]) , atoi(stringSeparada[2].c_str()), atoi(stringSeparada[3].c_str()))){
                         case -3:
                             imprimeErro("Esse edificio nao existe!\n");
                         break;
@@ -391,7 +391,7 @@ void Gestor::comando_inicio() {
 }
 
 int Gestor::comando_build(string co, string edif, int linha, int coluna) {
-    Colonia* c = controlador->getColonia(co);
+    Colonia* c = controlador->getColonia(controlador->toUpper(co));
     int result;
     if(c != NULL){
         if(edif == "torre"){
@@ -414,6 +414,15 @@ int Gestor::comando_build(string co, string edif, int linha, int coluna) {
         }
     }else{
         return -2;
+    }
+}
+
+int Gestor::comando_repair(string co, int id) {
+    Colonia* c = controlador->getColonia(controlador->toUpper(co));
+    if(c != NULL){
+        
+    }else{
+        return -1;
     }
 }
 
