@@ -31,9 +31,10 @@ void Gestor::start() {
     Consola::clrscr();
     imprimeLogo();
     do{
-        if(!config){
+        if(!config){                    
+            cout << "Prima qualquer tecla para continuar...";
+            Consola::getch();
             desenharMapa(controlador->getLinhasDefault(), controlador->getColunasDefault());
-            //controlador->listarTudo();
         }
         getline(cin, comando);
     }while(intrepertaComandos(controlador->toLower(comando)));
@@ -287,17 +288,30 @@ bool Gestor::intrepertaComandos(string comando) {
             Colonia* c;
             if(stringSeparada.size() == 1){
                 controlador->listarTudo();
-                cout << "Prima qualquer tecla para continuar...";
-                Consola::getch();
             }else{
                 c = controlador->getColonia(controlador->toUpper(stringSeparada[1]));
                 if(c != NULL){
                     c->listar();
-                    cout << "Prima qualquer tecla para continuar...";
-                    Consola::getch();
                 }else{
                     imprimeErro("Nao foi encontrada essa colonia!\n");
                 }
+            }
+        }else if(stringSeparada[0] == "setmoedas"){
+            if(stringSeparada.size() == 3){
+                if(checkNumero(stringSeparada[2])){
+                    Colonia* c;
+                    c = controlador->getColonia(controlador->toUpper(stringSeparada[1]));
+                    if(c != NULL){
+                        c->setMoedas(atoi(stringSeparada[2].c_str()));
+                        imprimeLog("Moedas alteradas com sucesso!\n");
+                    }else{
+                        imprimeErro("Nao foi encontrada essa colonia!\n");
+                    }
+                }else{
+                    imprimeErro("O segundo argumento tem que se inteiro positivo!\n");
+                }
+            }else{
+                imprimeErro("Numero de argumentos errado!\n       setmoedas -colonia -num.\n");
             }
         }else{ 
             imprimeErro("Digite um comando valido!\n");

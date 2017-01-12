@@ -54,6 +54,7 @@ public:
     vector<Edificios>* getVectorEdificios();
     
     int getMoedas() const;
+    void setMoedas(int num);
     string getNome() const;
     
     void listar();
