@@ -324,7 +324,7 @@ bool Gestor::intrepertaComandos(string comando) {
                     }else{
                         colString = "A";
                     }
-                    switch(comando_build(colString, controlador->toLower(stringSeparada[1]) , atoi(stringSeparada[2].c_str()), atoi(stringSeparada[2].c_str()))){
+                    switch(comando_build(colString, controlador->toLower(stringSeparada[1]) , atoi(stringSeparada[2].c_str()), atoi(stringSeparada[3].c_str()))){
                         case -3:
                             imprimeErro("Esse edificio nao existe!\n");
                         break;
@@ -348,6 +348,20 @@ bool Gestor::intrepertaComandos(string comando) {
                 imprimeErro("Numero de argumentos errado!\n       build -edif -lin -col.\n");
             }
         }else if(stringSeparada[0] == "repair"){
+            
+        }else if(stringSeparada[0] == "upgrade"){
+            
+        }else if(stringSeparada[0] == "sell"){
+            
+        }else if(stringSeparada[0] == "ser"){
+            
+        }else if(stringSeparada[0] == "next"){
+            
+        }else if(stringSeparada[0] == "nextnum"){
+            
+        }else if(stringSeparada[0] == "ataca"){
+            
+        }else if(stringSeparada[0] == "recolhe"){
             
         }else{ 
             imprimeErro("Digite um comando valido!\n");
@@ -377,7 +391,7 @@ void Gestor::comando_inicio() {
 }
 
 int Gestor::comando_build(string co, string edif, int linha, int coluna) {
-    Colonia* c = controlador->getColonia(co);
+    Colonia* c = controlador->getColonia(controlador->toUpper(co));
     int result;
     if(c != NULL){
         if(edif == "torre"){
@@ -400,6 +414,15 @@ int Gestor::comando_build(string co, string edif, int linha, int coluna) {
         }
     }else{
         return -2;
+    }
+}
+
+int Gestor::comando_repair(string co, int id) {
+    Colonia* c = controlador->getColonia(controlador->toUpper(co));
+    if(c != NULL){
+        
+    }else{
+        return -1;
     }
 }
 

@@ -95,7 +95,9 @@ public:
      *  1 -> Edificio criado com sucesso
      */
     int comando_build(string co, string edif, int linha, int coluna);
-
+    
+    int comando_repair(string co, int id);
+    
     bool isConfig();
 
     bool checkNumero(const string s);
