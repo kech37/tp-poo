@@ -54,9 +54,10 @@ public:
     vector<Edificios>* getVectorEdificios();
     
     int getMoedas() const;
+    void setMoedas(int num);
     string getNome() const;
     
-    void listar(int modo);
+    void listar();
     virtual ~Colonia();
 
 };

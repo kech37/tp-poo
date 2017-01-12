@@ -148,6 +148,10 @@ int Colonia::getMoedas() const {
     return this->moedas;
 }
 
+void Colonia::setMoedas(int num) {
+    this->moedas = num;
+}
+
 string Colonia::getNome() const {
     return this->nome;
 }
