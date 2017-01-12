@@ -150,7 +150,6 @@ int Colonia::getMoedas() const {
 
 string Colonia::getNome() const {
     return this->nome;
-    o tiago é gay
 }
 
 void Colonia::listar(int modo) {
