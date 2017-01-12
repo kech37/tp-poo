@@ -298,6 +298,10 @@ bool Gestor::intrepertaComandos(string comando) {
                     imprimeErro("Nao foi encontrada essa colonia!\n");
                 }
             }
+        }else if(stringSeparada[0] == "listp"){
+            
+        }else if(stringSeparada[0] == "listallp"){
+            
         }else if(stringSeparada[0] == "setmoedas"){
             if(stringSeparada.size() == 3){
                 if(checkNumero(stringSeparada[2])){
