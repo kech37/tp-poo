@@ -86,6 +86,14 @@ public:
     
     bool comando_load(string ficheiro);
     void comando_inicio();
+    
+    /*
+     * -2 -> Não foi encontrada a colonia
+     * -1 -> Colonia nao tem dinheiro
+     *  0 -> Não está no perimetro do castelo ou posicao já ocupada
+     *  1 -> Edificio criado com sucesso
+     */
+    int comando_build(string co, string edif, int linha, int coluna);
 
     bool isConfig();
 
