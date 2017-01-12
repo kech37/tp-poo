@@ -357,6 +357,8 @@ bool Gestor::intrepertaComandos(string comando) {
             
         }else if(stringSeparada[0] == "next"){
             
+        }else if(stringSeparada[0] == "nextnum"){
+            
         }else if(stringSeparada[0] == "ataca"){
             
         }else if(stringSeparada[0] == "recolhe"){
