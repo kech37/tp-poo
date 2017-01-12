@@ -315,10 +315,19 @@ bool Gestor::intrepertaComandos(string comando) {
             }else{
                 imprimeErro("Numero de argumentos errado!\n       setmoedas -colonia -num.\n");
             }
-        }else if(stringSeparada[0] == "build"){
-            if(stringSeparada.size() == 4){
+        }else if(stringSeparada[0] == "build" || stringSeparada[0] == "mkbuild"){
+            string colString;
+            if(stringSeparada.size() >= 4){
                 if(checkNumero(stringSeparada[2]) && checkNumero(stringSeparada[3])){
-                    switch(comando_build("A", controlador->toLower(stringSeparada[1]) , atoi(stringSeparada[2].c_str()), atoi(stringSeparada[2].c_str()))){
+                    if(stringSeparada[0] == "mkbuild"){
+                        colString = controlador->toUpper(stringSeparada[4]);
+                    }else{
+                        colString = "A";
+                    }
+                    switch(comando_build(colString, controlador->toLower(stringSeparada[1]) , atoi(stringSeparada[2].c_str()), atoi(stringSeparada[2].c_str()))){
+                        case -3:
+                            imprimeErro("Esse edificio nao existe!\n");
+                        break;
                         case -2:
                             imprimeErro("Nao foi encontrado a colonia indicada!\n");
                         break;
@@ -338,6 +347,8 @@ bool Gestor::intrepertaComandos(string comando) {
             }else{
                 imprimeErro("Numero de argumentos errado!\n       build -edif -lin -col.\n");
             }
+        }else if(stringSeparada[0] == "repair"){
+            
         }else{ 
             imprimeErro("Digite um comando valido!\n");
         }
@@ -373,6 +384,8 @@ int Gestor::comando_build(string co, string edif, int linha, int coluna) {
             result = c->addEdificio(Torre(linha, coluna, c->getID()));
         }else if(edif == "quinta"){
             result = c->addEdificio(Quinta(linha, coluna, c->getID()));
+        }else{
+            return -3;
         }
         switch(result){
             case -1:
