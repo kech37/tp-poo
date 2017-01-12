@@ -163,8 +163,8 @@ string Colonia::getNome() const {
 
 void Colonia::listar() {
         cout << "   Colonia: " << this->nome << " - Moedas: " << this->moedas << endl;
-        cout << "       Perfil: " << endl;
-        /*if(vectorPerfil.size() > 0){
+        /*cout << "       Perfil: " << endl;
+        if(vectorPerfil.size() > 0){
             for(int i = 0; i < vectorPerfil.size(); i++){
                 cout << "           " << i << ") " << vectorPerfil[i].getNome() << endl;
                 if(vectorPerfil[i].getSizePerfil() > 0){

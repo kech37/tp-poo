@@ -1,7 +1,8 @@
 dim 20 40
 moedas 125
 oponentes 2
-mkpefil g
+castelo A 10 20
+mkperfil g
 addperfil g 1
 addperfil g 2
 addperfil g 2

@@ -88,6 +88,7 @@ public:
     void comando_inicio();
     
     /*
+     * -3 -> Edificio nao existente
      * -2 -> Não foi encontrada a colonia
      * -1 -> Colonia nao tem dinheiro
      *  0 -> Não está no perimetro do castelo ou posicao já ocupada
