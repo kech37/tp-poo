@@ -15,11 +15,7 @@ private:
     vector<Perfil> vectorPerfil;
     vector<Ser> vectorSer;
     vector<Edificios> vectorEdificios;   
-public:
-    
-    const static int LIST = 0;
-    const static int LISTP = 1;
-    
+public:    
     Colonia(string nome, int moedas);
     
     int getID() const;
@@ -60,7 +56,7 @@ public:
     int getMoedas() const;
     string getNome() const;
     
-    void listar(int modo);
+    void listar();
     virtual ~Colonia();
 
 };
