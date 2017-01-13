@@ -50,6 +50,7 @@ public:
     bool raioCastelo(Edificios &e);
     
     Edificios* getCastelo();
+    Edificios* getEdificio(int id);
     
     vector<Perfil>* getVectorPerfil();
     vector<Ser>* getVectorSer();

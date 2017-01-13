@@ -19,8 +19,13 @@
 
 class Torre:public Edificios{
 private:
+    int ataque;
 public:
     Torre(int linha, int coluna, int equipa);
+    
+    int getAtaque() const;
+    
+    void upgradeNivel() override;
     virtual ~Torre();
 };
 

@@ -363,9 +363,54 @@ bool Gestor::intrepertaComandos(string comando) {
                 imprimeErro("Numero de argumentos errado!\n       build -edif -lin -col.\n");
             }
         }else if(stringSeparada[0] == "repair"){
-            
+            if(stringSeparada.size() == 2){
+                if(checkNumero(stringSeparada[1])){
+                    switch(comando_repair("A", atoi(stringSeparada[1].c_str()))){
+                        case -3:
+                            imprimeErro("Edificio destroido!\n");
+                        break;
+                        case -2:
+                            imprimeErro("Nao tem dinheiro sucifiente!\n");
+                        break;
+                        case -1:
+                            imprimeErro("Nao foi encontrada a colonia!\n");
+                        break;
+                        case 0:
+                            imprimeErro("Nao foi encontrado nenhum edicifio com esse id!\n");
+                        break;
+                        case 1:
+                            imprimeLog("Reparacao realizada com sucesso!\n");
+                        break;
+                    }
+                }else{
+                    imprimeErro("O argumento tem que ser um valor inteiro positivo.\n");
+                }
+            }else{
+                imprimeErro("Numero de argumentos errado!\n       repair -EID.\n");
+            }            
         }else if(stringSeparada[0] == "upgrade"){
-            
+            if(stringSeparada.size() == 2){
+                if(checkNumero(stringSeparada[1])){
+                    switch(comando_upgrade("A", atoi(stringSeparada[1].c_str()))){
+                        case -2:
+                            imprimeErro("Nao tem dinheiro sucifiente!\n");
+                        break;
+                        case -1:
+                            imprimeErro("Nao foi encontrada a colonia!\n");
+                        break;
+                        case 0:
+                            imprimeErro("Nao foi encontrado nenhum edicifio com esse id!\n");
+                        break;
+                        case 1:
+                            imprimeLog("Upgrade realizado com sucesso!\n");
+                        break;
+                    }
+                }else{
+                    imprimeErro("O argumento tem que ser um valor inteiro positivo.\n");
+                }
+            }else{
+                imprimeErro("Numero de argumentos errado!\n       repair -EID.\n");
+            } 
         }else if(stringSeparada[0] == "sell"){
             
         }else if(stringSeparada[0] == "ser"){
@@ -434,13 +479,49 @@ int Gestor::comando_build(string co, string edif, int linha, int coluna) {
 
 int Gestor::comando_repair(string co, int id) {
     Colonia* c = controlador->getColonia(controlador->toUpper(co));
+    int custoReparacao;
     if(c != NULL){
-        
+        Edificios* e = c->getEdificio(id);
+        if(e != NULL){
+            if(e->getSaude()>0){
+                custoReparacao = (e->getCusto()*e->getSaude())/e->getSaudeMAX();
+                if(c->getMoedas()-custoReparacao >= 0){
+                    c->setMoedas(c->getMoedas()-custoReparacao);
+                    e->setSaude(e->getSaudeMAX());
+                    return 1;
+                }else{
+                    return -2;
+                }
+            }else{
+                return -3;
+            }
+        }else{
+            return 0;
+        }
     }else{
         return -1;
     }
 }
 
+int Gestor::comando_upgrade(string co, int id) {
+    Colonia* c = controlador->getColonia(controlador->toUpper(co));
+    if(c != NULL){
+        Edificios* e = c->getEdificio(id);
+        if(e != NULL){
+            if(c->getMoedas()-10 >= 0){
+                e->upgradeNivel();
+                c->setMoedas(c->getMoedas()-10);
+                return 1;
+            }else{
+                return -2;
+            }
+        }else{
+            return 0;
+        }
+    }else{
+        return -1;
+    }
+}
 void Gestor::comando_dim(int linhas, int colunas) {
     controlador->setLinhasDefault(linhas);
     controlador->setColunasDefault(colunas);

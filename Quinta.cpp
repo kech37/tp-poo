@@ -14,7 +14,17 @@
 #include "Quinta.h"
 
 Quinta::Quinta(int linha, int coluna, int equipa):Edificios("Q", 20, 20, 10, linha, coluna, equipa){
+    this->moedasProduzitas = 2;
+}
 
+int Quinta::getMoedasProduzidas() const {
+    return this->moedasProduzitas;
+}
+
+void Quinta::upgradeNivel() {
+    this->setDefesa(this->getDefesa()+1);
+    this->moedasProduzitas+=1;
+    this->setCusto(this->getCusto()+10);
 }
 
 Quinta::~Quinta() {
