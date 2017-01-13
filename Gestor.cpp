@@ -460,9 +460,17 @@ bool Gestor::intrepertaComandos(string comando) {
                 imprimeErro("Numero de argumentos errado!\n       ser -num -perf.\n");
             }  
         }else if(stringSeparada[0] == "next"){
-            
-        }else if(stringSeparada[0] == "nextnum"){
-            
+            if(stringSeparada.size() == 1){
+                controlador->next();
+            }else if(stringSeparada.size() == 2){
+                if(checkNumero(stringSeparada[1])){
+                    controlador->next(atoi(stringSeparada[1].c_str()));
+                }else{
+                    imprimeErro("O argumento tem que ser um valor inteiro positivo!\n");
+                }
+            }else{
+                imprimeErro("Numero de argumentos errados!\n       next -num.\n");
+            }            
         }else if(stringSeparada[0] == "ataca"){
             
         }else if(stringSeparada[0] == "recolhe"){
@@ -590,7 +598,6 @@ int Gestor::comando_ser(string co, int num, string perf) {
         Perfil* p = c->getPerfil(controlador->toLower(perf));
         if(p != NULL){
             custoTotal = p->getCusto() * num;
-            cout << p->getCusto() << endl;
             if(c->getMoedas()-custoTotal >= 0){
                 for(int i = 0; i < num; i++){
                     c->addSer(p, c->getCastelo()->getLinha(), c->getCastelo()->getColuna());
