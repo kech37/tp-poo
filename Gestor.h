@@ -23,6 +23,7 @@
 #include "Colonia.h"
 #include "Controlador.h"
 
+
 class Gestor {
 private:
     Controlador* controlador;
@@ -86,7 +87,47 @@ public:
     
     bool comando_load(string ficheiro);
     void comando_inicio();
-
+    
+    /*
+     * -3 -> Edificio nao existente
+     * -2 -> Não foi encontrada a colonia
+     * -1 -> Colonia nao tem dinheiro
+     *  0 -> Não está no perimetro do castelo ou posicao já ocupada
+     *  1 -> Edificio criado com sucesso
+     */
+    int comando_build(string co, string edif, int linha, int coluna);
+    
+    /*
+     * -3 -> Edificio destroido
+     * -1 -> Não foi encontrado o Colonia
+     *  0 -> Nao foi encontrada o edificio
+     *  1 -> repair foi feito com sucesso
+     */
+    int comando_repair(string co, int id);
+    
+    /*
+     * -2 -> Nao ha dinheiro
+     * -1 -> Não foi encontrado o Colonia
+     *  0 -> Nao foi encontrada o edificio
+     *  1 -> repair foi feito com sucesso
+     */
+    int comando_upgrade(string co, int id);
+    
+    /*
+     * -1 -> Não foi encontrado o Colonia
+     *  0 -> Nao foi encontrada o edificio
+     *  1 -> repair foi feito com sucesso
+     */
+    int comando_sell(string co, int id);
+    
+    /*
+     * -2 -> Nao ha dinheiro
+     * -1 -> Não foi encontrado o Colonia
+     *  0 -> Nao foi encontrada o Perfil
+     *  1 -> Comando foi feito com sucesso
+     */
+    int comando_ser(string co, int num, string perf);
+    
     bool isConfig();
 
     bool checkNumero(const string s);

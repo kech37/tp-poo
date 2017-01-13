@@ -94,13 +94,27 @@ int Colonia::addEdificio(Edificios e) {
             if((this->moedas-e.getCusto()) >= 0){
                 vectorEdificios.push_back(e);
                 this->moedas-=e.getCusto();
-                return true;
+                return 1;
             }else{
-                return false;
+                return -1;
             }
         }else{
-            return false;
+            return 0;
         }
+    }
+}
+
+bool Colonia::removeEdificio(int id) {
+    if(vectorEdificios.size()>0){
+        for(int i = 0; i < vectorEdificios.size(); i++){
+            if(vectorEdificios[i].getID() == id){
+                vectorEdificios.erase(vectorEdificios.begin()+i);
+                return true;
+            }
+        }
+        return false;
+    }else{
+        return false;
     }
 }
 
@@ -108,6 +122,11 @@ bool Colonia::raioCastelo(Edificios& e) {
     if(!vectorEdificios.empty()){
         if((vectorEdificios.front().getLinha()-10) <= e.getLinha() && e.getLinha() <= (vectorEdificios.front().getLinha()+10)){
             if((vectorEdificios.front().getColuna()-10) <= e.getColuna() && e.getColuna() <= (vectorEdificios.front().getColuna()+10)){
+                for(int i = 0; i < vectorEdificios.size(); i++){
+                    if(vectorEdificios[i].getLinha() == e.getLinha() && vectorEdificios[i].getColuna() == e.getColuna()){
+                        return false;
+                    }
+                }
                 return true;
             }else{
                 return false;
@@ -132,6 +151,19 @@ Edificios* Colonia::getCastelo() {
     }
 }
 
+Edificios* Colonia::getEdificio(int id) {
+    if(vectorEdificios.size()>0){
+        for(int i = 0; i < vectorEdificios.size(); i++){
+            if(vectorEdificios[i].getID() == id){
+                return &vectorEdificios[i];
+            }
+        }
+        return NULL;
+    }else{
+        return NULL;
+    }
+}
+
 vector<Edificios>* Colonia::getVectorEdificios() {
     return &vectorEdificios;
 }
@@ -148,39 +180,38 @@ int Colonia::getMoedas() const {
     return this->moedas;
 }
 
+void Colonia::setMoedas(int num) {
+    this->moedas = num;
+}
+
 string Colonia::getNome() const {
     return this->nome;
 }
 
 void Colonia::listar() {
         cout << "   Colonia: " << this->nome << " - Moedas: " << this->moedas << endl;
-        cout << "       Perfil: " << endl;
-        /*if(vectorPerfil.size() > 0){
-            for(int i = 0; i < vectorPerfil.size(); i++){
-                cout << "           " << i << ") " << vectorPerfil[i].getNome() << endl;
-                if(vectorPerfil[i].getSizePerfil() > 0){
-                    for(int j = 0; j < vectorPerfil[i].getSizePerfil(); j++){
-                        cout << "               " << vectorPerfil[i].getCarateristica(j)->getId() << ") " << vectorPerfil[i].getCarateristica(j)->getNome() << endl;
-                    }
-                }else{
-                    cout <<  "               <Sem caracteristicas>" << endl;;
-                }
-            } 
-        }else{ 
-            cout << "       <Sem Perfil>" << endl;
-        }*/
+
         cout << "       Seres: " << endl;
         if(vectorSer.size() > 0){
             for(int i = 0; i < vectorSer.size(); i++){
-                cout << "           " << vectorSer[i].getID() << ") " << vectorSer[i].getPerfil()->getNome() << endl;
+                cout << "           "<< vectorSer[i].getNome() << endl;
+                cout << "           " << vectorSer[i].getID() << ") " << vectorSer[i].getPerfil()->getNome();
+                cout << "           ["<< vectorSer[i].getLinha() << ":" << vectorSer[i].getColuna() << "]" << endl;
+                cout << "           "<< "Saude: "<< vectorSer[i].getSaude() << endl;
+                cout << "           "<< "Defesa: "<< vectorSer[i].getDefesa() << endl;
+                cout << "           "<< "Ataque: "<< vectorSer[i].getAtaque() << endl;      
             }   
         }else{
             cout << "           <Sem Seres>" << endl;
         }
+        
+        
         cout << "       Edificios: " << endl;
         if(vectorEdificios.size() > 0){
             for(int i = 0; i < vectorEdificios.size(); i++){
                 cout << "           " << vectorEdificios[i].getID() << ") " << vectorEdificios[i].getNome() << " ["<< vectorEdificios[i].getLinha() << ", " << vectorEdificios[i].getColuna() << "]" << endl;
+                cout << "           " << "Defesa: " << vectorEdificios[i].getDefesa() << endl;
+                cout << "           " << "Saude: " <<vectorEdificios[i].getSaude() << endl;
             }
         }else{
             cout << "           <Sem Edificios>" << endl;

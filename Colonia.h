@@ -18,6 +18,9 @@ private:
 public:    
     Colonia(string nome, int moedas);
     
+    /*
+     * Retorna o ID da colonia
+     */
     int getID() const;
     
     /*
@@ -41,22 +44,25 @@ public:
      * -1 -> Colonia nao tem dinheiro
      *  0 -> Nao esta no raio de 10 do castelo
      *  1 -> Edificio criado com sucesso
-     *  2 -> Nao ha castelo
      */
     int addEdificio(Edificios e);
+    
+    bool removeEdificio(int id);
     
     bool raioCastelo(Edificios &e);
     
     Edificios* getCastelo();
+    Edificios* getEdificio(int id);
     
     vector<Perfil>* getVectorPerfil();
     vector<Ser>* getVectorSer();
     vector<Edificios>* getVectorEdificios();
     
     int getMoedas() const;
+    void setMoedas(int num);
     string getNome() const;
     
-    void listar(int modo);
+    void listar();
     virtual ~Colonia();
 
 };

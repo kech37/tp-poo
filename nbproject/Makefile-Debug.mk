@@ -43,7 +43,9 @@ OBJECTFILES= \
 	${OBJECTDIR}/Edificios.o \
 	${OBJECTDIR}/Gestor.o \
 	${OBJECTDIR}/Perfil.o \
+	${OBJECTDIR}/Quinta.o \
 	${OBJECTDIR}/Ser.o \
+	${OBJECTDIR}/Torre.o \
 	${OBJECTDIR}/Unidade.o \
 	${OBJECTDIR}/main.o
 
@@ -112,10 +114,20 @@ ${OBJECTDIR}/Perfil.o: Perfil.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Perfil.o Perfil.cpp
 
+${OBJECTDIR}/Quinta.o: Quinta.cpp
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Quinta.o Quinta.cpp
+
 ${OBJECTDIR}/Ser.o: Ser.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Ser.o Ser.cpp
+
+${OBJECTDIR}/Torre.o: Torre.cpp
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Torre.o Torre.cpp
 
 ${OBJECTDIR}/Unidade.o: Unidade.cpp
 	${MKDIR} -p ${OBJECTDIR}

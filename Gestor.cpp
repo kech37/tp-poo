@@ -15,6 +15,8 @@
 #include "Gestor.h"
 #include "Consola.h"
 #include "Castelo.h"
+#include "Torre.h"
+#include "Quinta.h"
 
 Gestor* Gestor::getInstance() {
     static Gestor* instance = 0;
@@ -31,9 +33,10 @@ void Gestor::start() {
     Consola::clrscr();
     imprimeLogo();
     do{
-        if(!config){
+        if(!config){                    
+            cout << "Prima qualquer tecla para continuar...";
+            Consola::getch();
             desenharMapa(controlador->getLinhasDefault(), controlador->getColunasDefault());
-            //controlador->listarTudo();
         }
         getline(cin, comando);
     }while(intrepertaComandos(controlador->toLower(comando)));
@@ -287,18 +290,183 @@ bool Gestor::intrepertaComandos(string comando) {
             Colonia* c;
             if(stringSeparada.size() == 1){
                 controlador->listarTudo();
-                cout << "Prima qualquer tecla para continuar...";
-                Consola::getch();
             }else{
                 c = controlador->getColonia(controlador->toUpper(stringSeparada[1]));
                 if(c != NULL){
                     c->listar();
-                    cout << "Prima qualquer tecla para continuar...";
-                    Consola::getch();
                 }else{
                     imprimeErro("Nao foi encontrada essa colonia!\n");
                 }
             }
+        }else if(stringSeparada[0] == "listp"){
+            if(stringSeparada.size()==2){
+                for(int i = 0; i < controlador->getVectorColonia()->size(); i++){
+                    for(int j = 0; j < controlador->getVectorColonia()->at(i).getVectorPerfil()->size(); j++){
+                      if(controlador->getVectorColonia()->at(i).getVectorPerfil()->at(j).getNome() == stringSeparada[1]){
+                          controlador->getVectorColonia()->at(i).getVectorPerfil()->at(j).listarTudo();
+                      }  
+                    }
+                }
+            }
+        }else if(stringSeparada[0] == "listallp"){
+            if(stringSeparada.size()==1){
+                for(int i = 0; i < controlador->getVectorColonia()->size(); i++){
+                    for(int j = 0; j < controlador->getVectorColonia()->at(i).getVectorPerfil()->size(); j++){
+                      
+                          controlador->getVectorColonia()->at(i).getVectorPerfil()->at(j).listarTudo();
+                        
+                    }
+                }
+            }
+        }else if(stringSeparada[0] == "setmoedas"){
+            if(stringSeparada.size() == 3){
+                if(checkNumero(stringSeparada[2])){
+                    Colonia* c;
+                    c = controlador->getColonia(controlador->toUpper(stringSeparada[1]));
+                    if(c != NULL){
+                        c->setMoedas(atoi(stringSeparada[2].c_str()));
+                        imprimeLog("Moedas alteradas com sucesso!\n");
+                    }else{
+                        imprimeErro("Nao foi encontrada essa colonia!\n");
+                    }
+                }else{
+                    imprimeErro("O segundo argumento tem que se inteiro positivo!\n");
+                }
+            }else{
+                imprimeErro("Numero de argumentos errado!\n       setmoedas -colonia -num.\n");
+            }
+        }else if(stringSeparada[0] == "build" || stringSeparada[0] == "mkbuild"){
+            string colString;
+            if(stringSeparada.size() >= 4){
+                if(checkNumero(stringSeparada[2]) && checkNumero(stringSeparada[3])){
+                    if(stringSeparada[0] == "mkbuild"){
+                        colString = controlador->toUpper(stringSeparada[4]);
+                    }else{
+                        colString = "A";
+                    }
+                    switch(comando_build(colString, controlador->toLower(stringSeparada[1]) , atoi(stringSeparada[2].c_str()), atoi(stringSeparada[3].c_str()))){
+                        case -3:
+                            imprimeErro("Esse edificio nao existe!\n");
+                        break;
+                        case -2:
+                            imprimeErro("Nao foi encontrado a colonia indicada!\n");
+                        break;
+                        case -1:
+                            imprimeErro("A sua colonia nao tem dinheiro!\n");
+                        break;
+                        case 0:
+                            imprimeErro("Nao se encontra no perimetro do castelo, ou posicao ja ocupada!\n");
+                        break;
+                        case 1:
+                            imprimeLog("Edifico criado com sucesso!\n");
+                        break;
+                    }
+                }else{
+                    imprimeErro("Os ultimos 2 argumentos tem que ser inteiros positivos!\n");  
+                }
+            }else{
+                imprimeErro("Numero de argumentos errado!\n       build -edif -lin -col.\n");
+            }
+        }else if(stringSeparada[0] == "repair"){
+            if(stringSeparada.size() == 2){
+                if(checkNumero(stringSeparada[1])){
+                    switch(comando_repair("A", atoi(stringSeparada[1].c_str()))){
+                        case -3:
+                            imprimeErro("Edificio destroido!\n");
+                        break;
+                        case -2:
+                            imprimeErro("Nao tem dinheiro sucifiente!\n");
+                        break;
+                        case -1:
+                            imprimeErro("Nao foi encontrada a colonia!\n");
+                        break;
+                        case 0:
+                            imprimeErro("Nao foi encontrado nenhum edicifio com esse id!\n");
+                        break;
+                        case 1:
+                            imprimeLog("Reparacao realizada com sucesso!\n");
+                        break;
+                    }
+                }else{
+                    imprimeErro("O argumento tem que ser um valor inteiro positivo.\n");
+                }
+            }else{
+                imprimeErro("Numero de argumentos errado!\n       repair -EID.\n");
+            }            
+        }else if(stringSeparada[0] == "upgrade"){
+            if(stringSeparada.size() == 2){
+                if(checkNumero(stringSeparada[1])){
+                    switch(comando_upgrade("A", atoi(stringSeparada[1].c_str()))){
+                        case -2:
+                            imprimeErro("Nao tem dinheiro sucifiente!\n");
+                        break;
+                        case -1:
+                            imprimeErro("Nao foi encontrada a colonia!\n");
+                        break;
+                        case 0:
+                            imprimeErro("Nao foi encontrado nenhum edicifio com esse id!\n");
+                        break;
+                        case 1:
+                            imprimeLog("Upgrade realizado com sucesso!\n");
+                        break;
+                    }
+                }else{
+                    imprimeErro("O argumento tem que ser um valor inteiro positivo.\n");
+                }
+            }else{
+                imprimeErro("Numero de argumentos errado!\n       upgrade -EID.\n");
+            } 
+        }else if(stringSeparada[0] == "sell"){
+            if(stringSeparada.size() == 2){
+                if(checkNumero(stringSeparada[1])){
+                    switch(comando_sell("A", atoi(stringSeparada[1].c_str()))){
+                        case -1:
+                            imprimeErro("Nao foi encontrada a colonia!\n");
+                        break;
+                        case 0:
+                            imprimeErro("Nao foi encontrado nenhum edicifio com esse id!\n");
+                        break;
+                        case 1:
+                            imprimeLog("Edificio vendido com sucesso!\n");
+                        break;
+                    }
+                }else{
+                    imprimeErro("O argumento tem que ser um valor inteiro positivo.\n");
+                }
+            }else{
+                imprimeErro("Numero de argumentos errado!\n       sell -EID.\n");
+            } 
+        }else if(stringSeparada[0] == "ser"){
+            if(stringSeparada.size() == 3){
+                if(checkNumero(stringSeparada[1])){
+                    switch(comando_ser("A", atoi(stringSeparada[1].c_str()), stringSeparada[2])){
+                        case -2:
+                            imprimeErro("Nao tem dinheiro suficiente!\n");
+                        break;
+                        case -1:
+                            imprimeErro("Nao foi encontrada a colonia!\n");
+                        break;
+                        case 0:
+                            imprimeErro("Nao foi encontrado nenhum perfil com esse nome!\n");
+                        break;
+                        case 1:
+                            imprimeLog("Seres criados com sucesso!\n");
+                        break;
+                    }
+                }else{
+                    imprimeErro("O argumento -num tem que ser um valor inteiro positivo.\n");
+                }
+            }else{
+                imprimeErro("Numero de argumentos errado!\n       ser -num -perf.\n");
+            }  
+        }else if(stringSeparada[0] == "next"){
+            
+        }else if(stringSeparada[0] == "nextnum"){
+            
+        }else if(stringSeparada[0] == "ataca"){
+            
+        }else if(stringSeparada[0] == "recolhe"){
+            
         }else{ 
             imprimeErro("Digite um comando valido!\n");
         }
@@ -324,6 +492,119 @@ bool Gestor::comando_load(string ficheiro) {
 
 void Gestor::comando_inicio() {
     controlador->atribuirPerfil();
+}
+
+int Gestor::comando_build(string co, string edif, int linha, int coluna) {
+    Colonia* c = controlador->getColonia(controlador->toUpper(co));
+    int result;
+    if(c != NULL){
+        if(edif == "torre"){
+            result = c->addEdificio(Torre(linha, coluna, c->getID()));
+        }else if(edif == "quinta"){
+            result = c->addEdificio(Quinta(linha, coluna, c->getID()));
+        }else{
+            return -3;
+        }
+        switch(result){
+            case -1:
+                return -1;
+            break;
+            case 0:
+                return 0;
+            break;
+            case 1:
+                return 1;
+            break;
+        }
+    }else{
+        return -2;
+    }
+}
+
+int Gestor::comando_repair(string co, int id) {
+    Colonia* c = controlador->getColonia(controlador->toUpper(co));
+    int custoReparacao;
+    if(c != NULL){
+        Edificios* e = c->getEdificio(id);
+        if(e != NULL){
+            if(e->getSaude()>0){
+                custoReparacao = (e->getCusto()*e->getSaude())/e->getSaudeMAX();
+                if(c->getMoedas()-custoReparacao >= 0){
+                    c->setMoedas(c->getMoedas()-custoReparacao);
+                    e->setSaude(e->getSaudeMAX());
+                    return 1;
+                }else{
+                    return -2;
+                }
+            }else{
+                return -3;
+            }
+        }else{
+            return 0;
+        }
+    }else{
+        return -1;
+    }
+}
+
+int Gestor::comando_upgrade(string co, int id) {
+    Colonia* c = controlador->getColonia(controlador->toUpper(co));
+    if(c != NULL){
+        Edificios* e = c->getEdificio(id);
+        if(e != NULL){
+            if(c->getMoedas()-10 >= 0){
+                e->upgradeNivel();
+                c->setMoedas(c->getMoedas()-10);
+                return 1;
+            }else{
+                return -2;
+            }
+        }else{
+            return 0;
+        }
+    }else{
+        return -1;
+    }
+}
+
+int Gestor::comando_sell(string co, int id) {
+    Colonia* c = controlador->getColonia(controlador->toUpper(co));
+    if(c != NULL){
+        Edificios* e = c->getEdificio(id);
+        if(e != NULL){
+            c->setMoedas((c->getMoedas()+(e->getCusto()/2)));
+            c->removeEdificio(id);
+            return 1;
+        }else{
+            return 0;
+        }
+    }else{
+        return -1;
+    }
+}
+
+int Gestor::comando_ser(string co, int num, string perf) {
+    Colonia* c = controlador->getColonia(controlador->toUpper(co));
+    int custoTotal;
+    if(c != NULL){
+        Perfil* p = c->getPerfil(controlador->toLower(perf));
+        if(p != NULL){
+            custoTotal = p->getCusto() * num;
+            cout << p->getCusto() << endl;
+            if(c->getMoedas()-custoTotal >= 0){
+                for(int i = 0; i < num; i++){
+                    c->addSer(p, c->getCastelo()->getLinha(), c->getCastelo()->getColuna());
+                }
+                return 1;
+            }else{
+                return -2;
+            }
+        }else{
+            return 0;
+        }
+    }else{
+        return -1;
+    }
 }
 
 void Gestor::comando_dim(int linhas, int colunas) {

@@ -133,7 +133,16 @@ bool Controlador::addEdificio(Colonia* colonia, Edificios edificio){
         return false;
     }
 }
-
+Ser* Controlador::getSer(int linha, int coluna){
+    for(int i = 0; i < vectorColonias.size(); i++){
+        for(int j = 0; j < vectorColonias[i].getVectorSer()->size(); j++){
+            if(vectorColonias[i].getVectorSer()->at(j).checkPosicao(linha, coluna)){
+                return &vectorColonias[i].getVectorSer()->at(j);
+            }
+        }
+    }
+    return NULL;
+}
 void Controlador::atribuirPerfil() {
     vector<int> v(4);
     iota(v.begin(), v.end(), 0);
@@ -175,6 +184,56 @@ void Controlador::atribuirPerfil() {
 void Controlador::listarTudo() {
     for(int i = 0; i < vectorColonias.size(); i++){
         vectorColonias[i].listar();
+    }
+}
+
+void Controlador::next(int num) {
+    int index_car;
+    Caracteristica* car;
+    Ser* ser/*, serAtacar*/;
+    for(int round = 0; round < num; round++){
+        for(int i = 0; i < vectorColonias.size(); i++){
+            for(int j = 0; j < vectorColonias[i].getVectorSer()->size(); j++){
+                index_car = 0;
+                ser = &vectorColonias[i].getVectorSer()->at(j);
+                car = ser->getPerfil()->getCarateristica(index_car);
+                while(car != NULL){
+                    switch(car->getId()){
+                        case 7:
+                            //serAtacar/*[0]*/ = &this->getSer(ser->getLinha()-1, ser->getColuna()-1);
+                            /*serAtacar[1] = this->getSer(ser->getLinha(), ser->getColuna()-1);
+                            serAtacar[2] = this->getSer(ser->getLinha()+1, ser->getColuna()-1);
+                            serAtacar[3] = this->getSer(ser->getLinha()+1, ser->getColuna());
+                            serAtacar[4] = this->getSer(ser->getLinha()+1, ser->getColuna()+1);
+                            serAtacar[5] = this->getSer(ser->getLinha(), ser->getColuna()+1);
+                            serAtacar[6] = this->getSer(ser->getLinha()-1, ser->getColuna()+1);
+                            serAtacar[7] = this->getSer(ser->getLinha()-1, ser->getColuna());*/
+                            break;
+                        case 8:
+                            
+                            break;
+                        case 9:
+                            
+                            break;
+                        case 10:
+                            
+                            break;
+                        case 11:
+                            
+                            break;
+                        case 12:
+                            
+                            break;
+                        case 13:
+                            
+                            break;
+                        case 14:
+                            
+                            break;
+                    }
+                }
+            }
+        }
     }
 }
 

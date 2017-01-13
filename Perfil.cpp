@@ -26,6 +26,7 @@ Perfil::Perfil(const Perfil &p){
     this->forca = p.forca;
     this->nome = p.nome;
     this->vetorCaracteristicas = p.vetorCaracteristicas;
+    this->custo = p.custo;
 }
 
 Perfil& Perfil::operator=(Perfil p) {
@@ -34,6 +35,7 @@ Perfil& Perfil::operator=(Perfil p) {
         this->forca = p.forca;
         this->nome = p.nome;
         this->vetorCaracteristicas = p.vetorCaracteristicas;
+        this->custo = p.custo;
     }
     return *this;
 }
@@ -65,9 +67,9 @@ int Perfil::getCusto() const {
 }
 
 void Perfil::listarTudo() {
-    cout << this->nome << ":" << endl;
-    for(int i = 0; i < vetorCaracteristicas.size(); i++){
-        cout << "-" << this->vetorCaracteristicas[i]->getNome() << endl;
+    cout << "Perfil: " << getNome() << ":" << endl;
+    for (int i = 0; i < vetorCaracteristicas.size(); i++) {
+        cout << "           -" << this->vetorCaracteristicas[i]->getNome() << endl;
     }
 }
 
@@ -75,8 +77,21 @@ string Perfil::getNome() const {
     return this->nome;
 }
 
+bool Perfil::temBandeira() {
+    for(int i = 0; i < vetorCaracteristicas.size(); i++){
+        if(vetorCaracteristicas[i]->getId() == 1){
+            return true;
+        }
+    }
+    return false;
+}
+
 Caracteristica* Perfil::getCarateristica(int index) {
-    return vetorCaracteristicas[index];
+    if(index < vetorCaracteristicas.size()){
+        return vetorCaracteristicas[index];
+    }else{
+        return NULL;
+    }
 }
 
 int Perfil::getSizePerfil() const {

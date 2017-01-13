@@ -18,10 +18,15 @@ public:
     
     bool addCaracteristica(Caracteristica *c);
     Caracteristica* getCarateristica(int index);
+    
     bool removeCarateristica(int id);
+    
     string getNome() const;
     int getCusto() const;
     int getSizePerfil() const;
+    
+    bool temBandeira();
+    
     void listarTudo();
     virtual ~Perfil();
 };
