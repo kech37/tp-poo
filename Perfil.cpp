@@ -67,9 +67,9 @@ int Perfil::getCusto() const {
 }
 
 void Perfil::listarTudo() {
-    cout << "Perfil: " <<  getNome() << ":" << endl;
-    for(int i = 0; i < vetorCaracteristicas.size(); i++){
-        cout << "-" << this->vetorCaracteristicas[i]->getNome() << endl;
+    cout << "Perfil: " << getNome() << ":" << endl;
+    for (int i = 0; i < vetorCaracteristicas.size(); i++) {
+        cout << "           -" << this->vetorCaracteristicas[i]->getNome() << endl;
     }
 }
 
