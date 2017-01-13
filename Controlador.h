@@ -52,11 +52,12 @@ public:
     
     Unidade* getUnidade(Colonia* colonia, int id, int tipo);
     Ser* getSer(int linha, int coluna);
+    Edificios* getEdifico(int linha, int coluna);
     Unidade* verificaPosicao(int linha, int coluna);
     
     void atribuirPerfil();
     
-    void next(int num = 1);
+    void next(int num);
     
     string toLower(string str);
     string toUpper(string str);
