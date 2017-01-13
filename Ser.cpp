@@ -25,12 +25,19 @@ Ser::Ser(Perfil* p, int linha, int coluna, int equipa):Unidade(linha, coluna, eq
     this->saudeMAX = 10;
     this->defesa = 0;
     this->ataque = 0;
+    this->numEspada = -1;
     this->id = conta;
     this->conta++;
+    this->secondChance = false;
+    this->remedio = false;
+    this->bandeira = false;
     
     c = this->perfil->getCarateristica(i);
     while(c != NULL){
         switch(c->getId()){
+            case 1:
+                this->bandeira = true;
+            break;
             case 2:
                 this->saudeMAX+=1;
             break;
@@ -44,9 +51,15 @@ Ser::Ser(Perfil* p, int linha, int coluna, int equipa):Unidade(linha, coluna, eq
                 this->ataque+=1;
             break;
             case 6:
-                this->ataque+=2;
                 this->numEspada = 2;
+                this->ataque+=2;
             break;
+            case 12:
+                this->remedio = true;
+                break;
+            case 13:
+                this->secondChance = true;
+                break;
         }
         i++;
         c = this->perfil->getCarateristica(i);
@@ -54,8 +67,13 @@ Ser::Ser(Perfil* p, int linha, int coluna, int equipa):Unidade(linha, coluna, eq
     this->saude = this->saudeMAX;
 }
 
-int Ser::getAtaque() const {
-    return this->ataque;
+int Ser::getAtaque() {
+    if(this->numEspada > 0){
+        this->numEspada--;
+        return this->ataque+1;
+    }else{
+        return this->ataque;
+    }
 }
 
 int Ser::getNumEspada() const {
@@ -68,6 +86,10 @@ int Ser::getDefesa() const {
 
 int Ser::getSaude() const {
     return this->saude;
+}
+
+int Ser::getSaudeMAX() const{
+    return this->saudeMAX;
 }
 
 int Ser::getVelocidade() const {
@@ -104,6 +126,26 @@ int Ser::getID() const {
 
 string Ser::getNome() const {
     return this->perfil->getNome();
+}
+
+bool Ser::getRemedio() const {
+    return this->remedio;
+}
+
+bool Ser::getSecondChance() const {
+    return this->secondChance;
+}
+
+bool Ser::getBandeira() const {
+    return this->bandeira;
+}
+
+void Ser::setRemedio(bool b) {
+    this->remedio = b;
+}
+
+void Ser::setSecondChance(bool b) {
+    this->secondChance = b;
 }
 
 Ser::~Ser() {

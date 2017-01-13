@@ -11,6 +11,7 @@ class Colonia {
 private:
     string nome;
     int moedas, id;
+    bool flag_avanca;
     static int conta;
     vector<Perfil> vectorPerfil;
     vector<Ser> vectorSer;
@@ -57,6 +58,9 @@ public:
     vector<Perfil>* getVectorPerfil();
     vector<Ser>* getVectorSer();
     vector<Edificios>* getVectorEdificios();
+    
+    bool getFlagAvancar() const;
+    void setFlagAvancar(bool b);
     
     int getMoedas() const;
     void setMoedas(int num);

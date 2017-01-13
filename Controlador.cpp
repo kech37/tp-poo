@@ -201,6 +201,30 @@ void Controlador::listarTudo() {
     }
 }
 
+bool Controlador::removeSer(int id) {
+    for(int i = 0; i < vectorColonias.size(); i++){
+        for(int j = 0; j < vectorColonias[i].getVectorSer()->size(); j++){
+            if(vectorColonias[i].getVectorSer()->at(j).getID() == id){
+                vectorColonias[i].getVectorSer()->erase(vectorColonias[i].getVectorSer()->begin() + j);
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+bool Controlador::removeEdificio(int id) {
+    for(int i = 0; i < vectorColonias.size(); i++){
+        for(int j = 0; j < vectorColonias[i].getVectorEdificios()->size(); j++){
+            if(vectorColonias[i].getVectorEdificios()->at(j).getID() == id){
+                vectorColonias[i].getVectorEdificios()->erase(vectorColonias[i].getVectorEdificios()->begin() + j);
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 void Controlador::next(int num) {
     for(int round = 0; round < num; round++){
         for(int i = 0; i < vectorColonias.size(); i++){
@@ -212,54 +236,72 @@ void Controlador::next(int num) {
                 while(car != NULL){
                     switch(car->getId()){
                         case 7: //Agressão
-                            Ser* serAtacar[8];
-                            serAtacar[0] = this->getSer(ser->getLinha()-1, ser->getColuna()-1);
-                            serAtacar[1] = this->getSer(ser->getLinha(), ser->getColuna()-1);
-                            serAtacar[2] = this->getSer(ser->getLinha()+1, ser->getColuna()-1);
-                            serAtacar[3] = this->getSer(ser->getLinha()+1, ser->getColuna());
-                            serAtacar[4] = this->getSer(ser->getLinha()+1, ser->getColuna()+1);
-                            serAtacar[5] = this->getSer(ser->getLinha(), ser->getColuna()+1);
-                            serAtacar[6] = this->getSer(ser->getLinha()-1, ser->getColuna()+1);
-                            serAtacar[7] = this->getSer(ser->getLinha()-1, ser->getColuna());
-                            for(int k = 0; k < 8; k++){
-                                if(serAtacar[k] != NULL && serAtacar[k]->getEquipa() != ser->getEquipa()){
-                                    if(ser->getAtaque() > serAtacar[escolhido]->getDefesa()){
-                                        serAtacar[escolhido]->setSaude(serAtacar[escolhido]->getSaude()-(ser->getAtaque()-serAtacar[escolhido]->getDefesa()));
-                                    }else{
-                                        serAtacar[escolhido]->setSaude(serAtacar[escolhido]->getSaude()-1);
+                            if(ser->getBandeira()){
+                                Ser* serAtacar[8];
+                                serAtacar[0] = this->getSer(ser->getLinha()-1, ser->getColuna()-1);
+                                serAtacar[1] = this->getSer(ser->getLinha(), ser->getColuna()-1);
+                                serAtacar[2] = this->getSer(ser->getLinha()+1, ser->getColuna()-1);
+                                serAtacar[3] = this->getSer(ser->getLinha()+1, ser->getColuna());
+                                serAtacar[4] = this->getSer(ser->getLinha()+1, ser->getColuna()+1);
+                                serAtacar[5] = this->getSer(ser->getLinha(), ser->getColuna()+1);
+                                serAtacar[6] = this->getSer(ser->getLinha()-1, ser->getColuna()+1);
+                                serAtacar[7] = this->getSer(ser->getLinha()-1, ser->getColuna());
+                                for(int k = 0; k < 8; k++){
+                                    if(serAtacar[k] != NULL){
+                                        if(serAtacar[k]->getBandeira() == true && serAtacar[k]->getEquipa() != ser->getEquipa() || serAtacar[k]->getBandeira() == false){
+                                            if(ser->getAtaque() > serAtacar[escolhido]->getDefesa()){
+                                                serAtacar[escolhido]->setSaude(serAtacar[escolhido]->getSaude()-(ser->getAtaque()-serAtacar[escolhido]->getDefesa()));
+                                            }else{
+                                                serAtacar[escolhido]->setSaude(serAtacar[escolhido]->getSaude()-1);
+                                            }
+                                            if(serAtacar[escolhido]->getSaude() <= 0){
+                                                if(serAtacar[escolhido]->getSecondChance() == true){
+                                                    serAtacar[escolhido]->setSecondChance(false);
+                                                    serAtacar[escolhido]->setSaude(serAtacar[escolhido]->getSaudeMAX());
+                                                    serAtacar[escolhido]->setLinhaColuna(vectorColonias[i].getCastelo()->getLinha(), vectorColonias[i].getCastelo()->getColuna()); 
+                                                }else{
+                                                    this->removeSer(serAtacar[escolhido]->getID());
+                                                }
+                                            }
+                                            k = 8; 
+                                        }
                                     }
-                                    k = 8;
                                 }
                             }
                             break;
                         case 8: //Ecologico
-                            Edificios* ediAtacar[8];
-                            ediAtacar[0] = this->getEdifico(ser->getLinha()-1, ser->getColuna()-1);
-                            ediAtacar[1] = this->getEdifico(ser->getLinha(), ser->getColuna()-1);
-                            ediAtacar[2] = this->getEdifico(ser->getLinha()+1, ser->getColuna()-1);
-                            ediAtacar[3] = this->getEdifico(ser->getLinha()+1, ser->getColuna());
-                            ediAtacar[4] = this->getEdifico(ser->getLinha()+1, ser->getColuna()+1);
-                            ediAtacar[5] = this->getEdifico(ser->getLinha(), ser->getColuna()+1);
-                            ediAtacar[6] = this->getEdifico(ser->getLinha()-1, ser->getColuna()+1);
-                            ediAtacar[7] = this->getEdifico(ser->getLinha()-1, ser->getColuna());
-                            for(int k = 0; k < 8; k++){
-                                if(ediAtacar[k] != NULL && ediAtacar[k]->getEquipa() != ser->getEquipa()){
-                                    if(ser->getAtaque() > ediAtacar[escolhido]->getDefesa()){
-                                        ediAtacar[escolhido]->setSaude(ediAtacar[escolhido]->getSaude()-(ser->getAtaque() - ediAtacar[escolhido]->getDefesa()));
-                                    }else{
-                                        ediAtacar[escolhido]->setSaude(ediAtacar[escolhido]->getSaude()-1);
+                            if(ser->getBandeira()){
+                                Edificios* ediAtacar[8];
+                                ediAtacar[0] = this->getEdifico(ser->getLinha()-1, ser->getColuna()-1);
+                                ediAtacar[1] = this->getEdifico(ser->getLinha(), ser->getColuna()-1);
+                                ediAtacar[2] = this->getEdifico(ser->getLinha()+1, ser->getColuna()-1);
+                                ediAtacar[3] = this->getEdifico(ser->getLinha()+1, ser->getColuna());
+                                ediAtacar[4] = this->getEdifico(ser->getLinha()+1, ser->getColuna()+1);
+                                ediAtacar[5] = this->getEdifico(ser->getLinha(), ser->getColuna()+1);
+                                ediAtacar[6] = this->getEdifico(ser->getLinha()-1, ser->getColuna()+1);
+                                ediAtacar[7] = this->getEdifico(ser->getLinha()-1, ser->getColuna());
+                                for(int k = 0; k < 8; k++){
+                                    if(ediAtacar[k] != NULL && ediAtacar[k]->getEquipa() != ser->getEquipa()){
+                                        if(ser->getAtaque() > ediAtacar[escolhido]->getDefesa()){
+                                            ediAtacar[escolhido]->setSaude(ediAtacar[escolhido]->getSaude()-(ser->getAtaque() - ediAtacar[escolhido]->getDefesa()));
+                                        }else{
+                                            ediAtacar[escolhido]->setSaude(ediAtacar[escolhido]->getSaude()-1);
+                                        }
+                                        if(ediAtacar[escolhido]->getSaude() <= 0){
+                                            this->removeEdificio(ediAtacar[escolhido]->getID());
+                                        }
+                                        k = 8;
                                     }
-                                    k = 8;
                                 }
                             }
                             break;
-                        case 9:
+                        case 9: //HeatSeeker
                             
                             break;
-                        case 10:
+                        case 10: //BuildSeeker
                             
                             break;
-                        case 11:
+                        case 11: //Walker
                             switch(rand() % 8){
                                 case 0:
                                     if(verificaPosicao(ser->getLinha()-1, ser->getColuna()-1) == NULL){
@@ -323,13 +365,13 @@ void Controlador::next(int num) {
                                     break;
                             }
                             break;
-                        case 12:
-                            
+                        case 12: //Remedio
+                            if(ser->getSaude() > 0 && ser->getSaude() <= 3 && ser->getRemedio() == true){
+                                ser->setSaude(ser->getSaude()+2);
+                                ser->setRemedio(false);
+                            }
                             break;
-                        case 13:
-                            
-                            break;
-                        case 14:
+                        case 14: //Aluno
                             
                             break;
                     }
