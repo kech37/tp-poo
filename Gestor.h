@@ -23,6 +23,7 @@
 #include "Colonia.h"
 #include "Controlador.h"
 
+
 class Gestor {
 private:
     Controlador* controlador;

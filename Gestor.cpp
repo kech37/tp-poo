@@ -299,6 +299,17 @@ bool Gestor::intrepertaComandos(string comando) {
                 }
             }
         }else if(stringSeparada[0] == "listp"){
+            if(stringSeparada.size()==2){
+                for(int i = 0; i < controlador->getVectorColonia()->size(); i++){
+                    for(int j = 0; j < controlador->getVectorColonia()->at(i).getVectorPerfil()->size(); j++){
+                      if(controlador->getVectorColonia()->at(i).getVectorPerfil()->at(j).getNome() == stringSeparada[1]){
+                          controlador->getVectorColonia()->at(i).getVectorPerfil()->at(j).listarTudo();
+                      }  
+                    }
+                }
+            }
+
+           
             
         }else if(stringSeparada[0] == "listallp"){
             
