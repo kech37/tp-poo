@@ -310,11 +310,22 @@ bool Gestor::intrepertaComandos(string comando) {
             }
         }else if(stringSeparada[0] == "listallp"){
             if(stringSeparada.size()==1){
+                bool repet;
                 for(int i = 0; i < controlador->getVectorColonia()->size(); i++){
                     for(int j = 0; j < controlador->getVectorColonia()->at(i).getVectorPerfil()->size(); j++){
-                      
-                          controlador->getVectorColonia()->at(i).getVectorPerfil()->at(j).listarTudo();
-                        
+                        repet=false;
+                            for(int k=0; k <controlador->getVectorColonia()->at(i).getVectorPerfil()->size(); k++){
+                                if(controlador->getVectorColonia()->at(i).getVectorPerfil()->at(j).getNome()==controlador->getVectorColonia()->at(i).getVectorPerfil()->at(k).getNome()){
+                                    cout <<"-------------------------"<<endl;
+                                    repet=true;
+                                    break;
+                                }
+                            }
+                    if(repet){
+                        cout<<"merda";
+                        controlador->getVectorColonia()->at(i).getVectorPerfil()->at(j).listarTudo();
+                    
+                     }
                     }
                 }
             }
