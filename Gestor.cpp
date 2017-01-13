@@ -304,6 +304,7 @@ bool Gestor::intrepertaComandos(string comando) {
                     for(int j = 0; j < controlador->getVectorColonia()->at(i).getVectorPerfil()->size(); j++){
                       if(controlador->getVectorColonia()->at(i).getVectorPerfil()->at(j).getNome() == stringSeparada[1]){
                           controlador->getVectorColonia()->at(i).getVectorPerfil()->at(j).listarTudo();
+                          break;
                       }  
                     }
                 }
@@ -312,9 +313,7 @@ bool Gestor::intrepertaComandos(string comando) {
             if(stringSeparada.size()==1){
                 for(int i = 0; i < controlador->getVectorColonia()->size(); i++){
                     for(int j = 0; j < controlador->getVectorColonia()->at(i).getVectorPerfil()->size(); j++){
-                      
                           controlador->getVectorColonia()->at(i).getVectorPerfil()->at(j).listarTudo();
-                        
                     }
                 }
             }
@@ -461,7 +460,7 @@ bool Gestor::intrepertaComandos(string comando) {
             }  
         }else if(stringSeparada[0] == "next"){
             if(stringSeparada.size() == 1){
-                controlador->next();
+                controlador->next(1);
             }else if(stringSeparada.size() == 2){
                 if(checkNumero(stringSeparada[1])){
                     controlador->next(atoi(stringSeparada[1].c_str()));

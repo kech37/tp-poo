@@ -263,46 +263,62 @@ void Controlador::next(int num) {
                             switch(rand() % 8){
                                 case 0:
                                     if(verificaPosicao(ser->getLinha()-1, ser->getColuna()-1) == NULL){
-                                        ser->setLinha(ser->getLinha()-1);
-                                        ser->setColuna(ser->getColuna()-1);
+                                        if((ser->getLinha()-1) >= 0 && (ser->getLinha()-1) < linhasDefault && (ser->getColuna()-1) >= 0 && (ser->getColuna()-1) < colunasDefault){
+                                            ser->setLinha(ser->getLinha()-1);
+                                            ser->setColuna(ser->getColuna()-1);  
+                                        }
                                     }
                                     break;
                                 case 1:
                                     if(verificaPosicao(ser->getLinha(), ser->getColuna()-1) == NULL){
-                                        ser->setColuna(ser->getColuna()-1);
+                                        if(ser->getLinha() >= 0 && ser->getLinha() < linhasDefault && (ser->getColuna()-1) >= 0 && (ser->getColuna()-1) < colunasDefault){
+                                            ser->setColuna(ser->getColuna()-1);
+                                        }
                                     }
                                     break;
                                 case 2:
                                     if(verificaPosicao(ser->getLinha()+1, ser->getColuna()-1) == NULL){
-                                        ser->setLinha(ser->getLinha()+1);
-                                        ser->setColuna(ser->getColuna()-1);
+                                        if((ser->getLinha()+1) >= 0 && (ser->getLinha()+1) < linhasDefault && (ser->getColuna()-1) >= 0 && (ser->getColuna()-1) < colunasDefault){
+                                            ser->setLinha(ser->getLinha()+1);
+                                            ser->setColuna(ser->getColuna()-1);  
+                                        }
                                     }
                                     break;
                                 case 3:
                                     if(verificaPosicao(ser->getLinha()+1, ser->getColuna()) == NULL){
-                                        ser->setLinha(ser->getLinha()+1);
+                                        if((ser->getLinha()+1) >= 0 && (ser->getLinha()+1) < linhasDefault && (ser->getColuna()) >= 0 && (ser->getColuna()) < colunasDefault){
+                                            ser->setLinha(ser->getLinha()+1);
+                                        }
                                     }
                                     break;
                                 case 4:
                                     if(verificaPosicao(ser->getLinha()+1, ser->getColuna()+1) == NULL){
-                                        ser->setLinha(ser->getLinha()+1);
-                                        ser->setColuna(ser->getColuna()+1);
+                                        if((ser->getLinha()+1) >= 0 && (ser->getLinha()+1) < linhasDefault && (ser->getColuna()+1) >= 0 && (ser->getColuna()+1) < colunasDefault){
+                                            ser->setLinha(ser->getLinha()+1);
+                                            ser->setColuna(ser->getColuna()+1);  
+                                        }
                                     }
                                     break;
                                 case 5:
                                     if(verificaPosicao(ser->getLinha(), ser->getColuna()+1) == NULL){
-                                        ser->setColuna(ser->getColuna()+1);
+                                        if((ser->getLinha()) >= 0 && (ser->getLinha()) < linhasDefault && (ser->getColuna()+1) >= 0 && (ser->getColuna()+1) < colunasDefault){
+                                            ser->setColuna(ser->getColuna()+1);  
+                                        }
                                     }
                                     break;
                                 case 6:
                                     if(verificaPosicao(ser->getLinha()-1, ser->getColuna()+1) == NULL){
-                                        ser->setLinha(ser->getLinha()-1);
-                                        ser->setColuna(ser->getColuna()+1);
+                                        if((ser->getLinha()-1) >= 0 && (ser->getLinha()-1) < linhasDefault && (ser->getColuna()+1) >= 0 && (ser->getColuna()+1) < colunasDefault){
+                                            ser->setLinha(ser->getLinha()-1);
+                                            ser->setColuna(ser->getColuna()+1);  
+                                        }
                                     }
                                     break;
                                 case 7:
                                     if(verificaPosicao(ser->getLinha()-1, ser->getColuna()) == NULL){
-                                        ser->setLinha(ser->getLinha()-1);
+                                        if((ser->getLinha()-1) >= 0 && (ser->getLinha()-1) < linhasDefault && (ser->getColuna()) >= 0 && (ser->getColuna()) < colunasDefault){
+                                            ser->setLinha(ser->getLinha()-1); 
+                                        }
                                     }
                                     break;
                             }
