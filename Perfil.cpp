@@ -43,7 +43,7 @@ bool Perfil::addCaracteristica(Caracteristica* c) {
     if((forca-c->getForca()) >= 0){
         this->vetorCaracteristicas.push_back(c);
         forca-=c->getForca();
-        this->custo += c->getMonetario();
+        this->custo += c->getMonetario(); //TODO Nao esta a carregar o valor monetario
         return true;
     }else{
         return false;
@@ -76,7 +76,11 @@ string Perfil::getNome() const {
 }
 
 Caracteristica* Perfil::getCarateristica(int index) {
-    return vetorCaracteristicas[index];
+    if(index < vetorCaracteristicas.size()){
+        return vetorCaracteristicas[index];
+    }else{
+        return NULL;
+    }
 }
 
 int Perfil::getSizePerfil() const {

@@ -113,6 +113,21 @@ public:
      */
     int comando_upgrade(string co, int id);
     
+    /*
+     * -1 -> Não foi encontrado o Colonia
+     *  0 -> Nao foi encontrada o edificio
+     *  1 -> repair foi feito com sucesso
+     */
+    int comando_sell(string co, int id);
+    
+    /*
+     * -2 -> Nao ha dinheiro
+     * -1 -> Não foi encontrado o Colonia
+     *  0 -> Nao foi encontrada o Perfil
+     *  1 -> Comando foi feito com sucesso
+     */
+    int comando_ser(string co, int num, string perf);
+    
     bool isConfig();
 
     bool checkNumero(const string s);

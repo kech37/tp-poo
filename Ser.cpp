@@ -13,6 +13,8 @@
 
 #include "Ser.h"
 
+#include <iostream>
+
 int Ser::conta = 500;
 
 Ser::Ser(Perfil* p, int linha, int coluna, int equipa):Unidade(linha, coluna, equipa) {
@@ -35,7 +37,7 @@ Ser::Ser(Perfil* p, int linha, int coluna, int equipa):Unidade(linha, coluna, eq
                 this->defesa+=1;
             break;
             case 4:
-                this->defesa*=2;
+                this->defesa+=2;
             break;
             case 5:
                 this->ataque+=1;
@@ -45,6 +47,8 @@ Ser::Ser(Perfil* p, int linha, int coluna, int equipa):Unidade(linha, coluna, eq
                 this->numEspada = 2;
             break;
         }
+        i++;
+        c = this->perfil->getCarateristica(i);
     }
     this->saude = this->saudeMAX;
 }

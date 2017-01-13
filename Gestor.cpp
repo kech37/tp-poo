@@ -308,9 +308,6 @@ bool Gestor::intrepertaComandos(string comando) {
                     }
                 }
             }
-
-           
-            
         }else if(stringSeparada[0] == "listallp"){
             
         }else if(stringSeparada[0] == "setmoedas"){
@@ -409,12 +406,51 @@ bool Gestor::intrepertaComandos(string comando) {
                     imprimeErro("O argumento tem que ser um valor inteiro positivo.\n");
                 }
             }else{
-                imprimeErro("Numero de argumentos errado!\n       repair -EID.\n");
+                imprimeErro("Numero de argumentos errado!\n       upgrade -EID.\n");
             } 
         }else if(stringSeparada[0] == "sell"){
-            
+            if(stringSeparada.size() == 2){
+                if(checkNumero(stringSeparada[1])){
+                    switch(comando_sell("A", atoi(stringSeparada[1].c_str()))){
+                        case -1:
+                            imprimeErro("Nao foi encontrada a colonia!\n");
+                        break;
+                        case 0:
+                            imprimeErro("Nao foi encontrado nenhum edicifio com esse id!\n");
+                        break;
+                        case 1:
+                            imprimeLog("Edificio vendido com sucesso!\n");
+                        break;
+                    }
+                }else{
+                    imprimeErro("O argumento tem que ser um valor inteiro positivo.\n");
+                }
+            }else{
+                imprimeErro("Numero de argumentos errado!\n       sell -EID.\n");
+            } 
         }else if(stringSeparada[0] == "ser"){
-            
+            if(stringSeparada.size() == 3){
+                if(checkNumero(stringSeparada[1])){
+                    switch(comando_ser("A", atoi(stringSeparada[1].c_str()), stringSeparada[2])){
+                        case -2:
+                            imprimeErro("Nao tem dinheiro suficiente!\n");
+                        break;
+                        case -1:
+                            imprimeErro("Nao foi encontrada a colonia!\n");
+                        break;
+                        case 0:
+                            imprimeErro("Nao foi encontrado nenhum perfil com esse nome!\n");
+                        break;
+                        case 1:
+                            imprimeLog("Seres criados com sucesso!\n");
+                        break;
+                    }
+                }else{
+                    imprimeErro("O argumento -num tem que ser um valor inteiro positivo.\n");
+                }
+            }else{
+                imprimeErro("Numero de argumentos errado!\n       ser -num -perf.\n");
+            }  
         }else if(stringSeparada[0] == "next"){
             
         }else if(stringSeparada[0] == "nextnum"){
@@ -522,6 +558,47 @@ int Gestor::comando_upgrade(string co, int id) {
         return -1;
     }
 }
+
+int Gestor::comando_sell(string co, int id) {
+    Colonia* c = controlador->getColonia(controlador->toUpper(co));
+    if(c != NULL){
+        Edificios* e = c->getEdificio(id);
+        if(e != NULL){
+            c->setMoedas((c->getMoedas()+(e->getCusto()/2))); //TODO Apagar da memoria o edificio
+            delete(&e);
+            return 1;
+        }else{
+            return 0;
+        }
+    }else{
+        return -1;
+    }
+}
+
+int Gestor::comando_ser(string co, int num, string perf) {
+    Colonia* c = controlador->getColonia(controlador->toUpper(co));
+    int custoTotal;
+    if(c != NULL){
+        Perfil* p = c->getPerfil(controlador->toLower(perf));
+        if(p != NULL){
+            custoTotal = p->getCusto() * num;
+            cout << custoTotal << endl;
+            if(c->getMoedas()-custoTotal >= 0){
+                for(int i = 0; i < num; i++){
+                    c->addSer(p, c->getCastelo()->getLinha(), c->getCastelo()->getColuna());
+                }
+                return 1;
+            }else{
+                return -2;
+            }
+        }else{
+            return 0;
+        }
+    }else{
+        return -1;
+    }
+}
+
 void Gestor::comando_dim(int linhas, int colunas) {
     controlador->setLinhasDefault(linhas);
     controlador->setColunasDefault(colunas);
