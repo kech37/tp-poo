@@ -133,20 +133,11 @@ bool Controlador::addEdificio(Colonia* colonia, Edificios edificio){
         return false;
     }
 }
-Unidade* Controlador::getUnidade(int linha, int coluna, int tipo){
+Ser* Controlador::getSer(int linha, int coluna){
     for(int i = 0; i < vectorColonias.size(); i++){
-        if(tipo == this->QUALQUER || tipo == this->EDIFICIO){
-            for(int j = 0; j < vectorColonias[i].getVectorEdificios()->size(); j++){
-                if(vectorColonias[i].getVectorEdificios()->at(j).checkPosicao(linha, coluna)){
-                    return &vectorColonias[i].getVectorEdificios()->at(j);
-                }
-            }
-        }
-        if(tipo == this->QUALQUER || tipo == this->SER){
-            for(int j = 0; j < vectorColonias[i].getVectorSer()->size(); j++){
-                if(vectorColonias[i].getVectorSer()->at(j).checkPosicao(linha, coluna)){
-                    return &vectorColonias[i].getVectorSer()->at(j);
-                }
+        for(int j = 0; j < vectorColonias[i].getVectorSer()->size(); j++){
+            if(vectorColonias[i].getVectorSer()->at(j).checkPosicao(linha, coluna)){
+                return &vectorColonias[i].getVectorSer()->at(j);
             }
         }
     }
@@ -199,7 +190,7 @@ void Controlador::listarTudo() {
 void Controlador::next(int num) {
     int index_car;
     Caracteristica* car;
-    Ser* ser;
+    Ser* ser, serAtacar[8];
     for(int round = 0; round < num; round++){
         for(int i = 0; i < vectorColonias.size(); i++){
             for(int j = 0; j < vectorColonias[i].getVectorSer()->size(); j++){
@@ -209,7 +200,14 @@ void Controlador::next(int num) {
                 while(car != NULL){
                     switch(car->getId()){
                         case 7:
-                            
+                            serAtacar[0] = this->getSer(ser->getLinha()-1, ser->getColuna()-1);
+                            serAtacar[1] = this->getSer(ser->getLinha(), ser->getColuna()-1);
+                            serAtacar[2] = this->getSer(ser->getLinha()+1, ser->getColuna()-1);
+                            serAtacar[3] = this->getSer(ser->getLinha()+1, ser->getColuna());
+                            serAtacar[4] = this->getSer(ser->getLinha()+1, ser->getColuna()+1);
+                            serAtacar[5] = this->getSer(ser->getLinha(), ser->getColuna()+1);
+                            serAtacar[6] = this->getSer(ser->getLinha()-1, ser->getColuna()+1);
+                            serAtacar[7] = this->getSer(ser->getLinha()-1, ser->getColuna());
                             break;
                         case 8:
                             

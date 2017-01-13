@@ -51,7 +51,7 @@ public:
     bool addEdificio(Colonia* colonia, Edificios edificio);
     
     Unidade* getUnidade(Colonia* colonia, int id, int tipo);
-    Unidade* getUnidade(int linha, int coluna, int tipo = QUALQUER);
+    Ser* getSer(int linha, int coluna);
     Unidade* verificaPosicao(int linha, int coluna);
     
     void atribuirPerfil();
