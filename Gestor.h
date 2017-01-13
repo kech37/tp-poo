@@ -96,7 +96,21 @@ public:
      */
     int comando_build(string co, string edif, int linha, int coluna);
     
+    /*
+     * -3 -> Edificio destroido
+     * -1 -> Não foi encontrado o Colonia
+     *  0 -> Nao foi encontrada o edificio
+     *  1 -> repair foi feito com sucesso
+     */
     int comando_repair(string co, int id);
+    
+    /*
+     * -2 -> Nao ha dinheiro
+     * -1 -> Não foi encontrado o Colonia
+     *  0 -> Nao foi encontrada o edificio
+     *  1 -> repair foi feito com sucesso
+     */
+    int comando_upgrade(string co, int id);
     
     bool isConfig();
 

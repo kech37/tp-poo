@@ -19,8 +19,11 @@
 
 class Quinta:public Edificios{
 private:
+    int moedasProduzitas;
 public:
     Quinta(int linha, int coluna, int equipa);
+    int getMoedasProduzidas() const;
+    void upgradeNivel() override;
     virtual ~Quinta();
 };
 
