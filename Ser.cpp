@@ -23,9 +23,10 @@ Ser::Ser(Perfil* p, int linha, int coluna, int equipa):Unidade(linha, coluna, eq
     
     this->perfil = p;
     this->saudeMAX = 10;
+    this->defesa = 0;
+    this->ataque = 0;
     this->id = conta;
     this->conta++;
-    this->perfil = p;
     
     c = this->perfil->getCarateristica(i);
     while(c != NULL){

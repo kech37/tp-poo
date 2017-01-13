@@ -104,6 +104,20 @@ int Colonia::addEdificio(Edificios e) {
     }
 }
 
+bool Colonia::removeEdificio(int id) {
+    if(vectorEdificios.size()>0){
+        for(int i = 0; i < vectorEdificios.size(); i++){
+            if(vectorEdificios[i].getID() == id){
+                vectorEdificios.erase(vectorEdificios.begin()+i);
+                return true;
+            }
+        }
+        return false;
+    }else{
+        return false;
+    }
+}
+
 bool Colonia::raioCastelo(Edificios& e) {
     if(!vectorEdificios.empty()){
         if((vectorEdificios.front().getLinha()-10) <= e.getLinha() && e.getLinha() <= (vectorEdificios.front().getLinha()+10)){

@@ -26,6 +26,7 @@ Perfil::Perfil(const Perfil &p){
     this->forca = p.forca;
     this->nome = p.nome;
     this->vetorCaracteristicas = p.vetorCaracteristicas;
+    this->custo = p.custo;
 }
 
 Perfil& Perfil::operator=(Perfil p) {
@@ -34,6 +35,7 @@ Perfil& Perfil::operator=(Perfil p) {
         this->forca = p.forca;
         this->nome = p.nome;
         this->vetorCaracteristicas = p.vetorCaracteristicas;
+        this->custo = p.custo;
     }
     return *this;
 }
@@ -43,7 +45,7 @@ bool Perfil::addCaracteristica(Caracteristica* c) {
     if((forca-c->getForca()) >= 0){
         this->vetorCaracteristicas.push_back(c);
         forca-=c->getForca();
-        this->custo += c->getMonetario(); //TODO Nao esta a carregar o valor monetario
+        this->custo += c->getMonetario();
         return true;
     }else{
         return false;

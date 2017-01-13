@@ -564,8 +564,8 @@ int Gestor::comando_sell(string co, int id) {
     if(c != NULL){
         Edificios* e = c->getEdificio(id);
         if(e != NULL){
-            c->setMoedas((c->getMoedas()+(e->getCusto()/2))); //TODO Apagar da memoria o edificio
-            delete(&e);
+            c->setMoedas((c->getMoedas()+(e->getCusto()/2)));
+            c->removeEdificio(id);
             return 1;
         }else{
             return 0;
@@ -582,7 +582,7 @@ int Gestor::comando_ser(string co, int num, string perf) {
         Perfil* p = c->getPerfil(controlador->toLower(perf));
         if(p != NULL){
             custoTotal = p->getCusto() * num;
-            cout << custoTotal << endl;
+            cout << p->getCusto() << endl;
             if(c->getMoedas()-custoTotal >= 0){
                 for(int i = 0; i < num; i++){
                     c->addSer(p, c->getCastelo()->getLinha(), c->getCastelo()->getColuna());

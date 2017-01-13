@@ -47,6 +47,8 @@ public:
      */
     int addEdificio(Edificios e);
     
+    bool removeEdificio(int id);
+    
     bool raioCastelo(Edificios &e);
     
     Edificios* getCastelo();

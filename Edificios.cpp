@@ -13,6 +13,8 @@
 
 #include "Edificios.h"
 
+#include <iostream>
+
 int Edificios::conta = 0;
 
 Edificios::Edificios(string nome, int custo, int saude, int defesa, int linha, int coluna, int equipa):Unidade(linha, coluna, equipa) {
@@ -71,7 +73,7 @@ void Edificios::upgradeNivel() {
 }
 
 Edificios::~Edificios() {
-
+    
 }
 
 
