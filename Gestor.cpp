@@ -307,10 +307,19 @@ bool Gestor::intrepertaComandos(string comando) {
                       }  
                     }
                 }
+            }else{
+                imprimeErro("Numero de argumentos errado!           listp PERFIL\n");
             }
+                
         }else if(stringSeparada[0] == "listallp"){
             if(stringSeparada.size()==1){
-                cout << "O prof. Durães é uma bosta!" << endl;
+                for(int i = 0; i < controlador->getVectorColonia()->size(); i++){
+                    for(int j = 0; j < controlador->getVectorColonia()->at(i).getVectorPerfil()->size(); j++){
+                        controlador->getVectorColonia()->at(i).getVectorPerfil()->at(j).listarTudo();
+                    }
+                }
+            }else{
+                imprimeErro("Comando errado !!     listallp!");
             }
         }else if(stringSeparada[0] == "setmoedas"){
             if(stringSeparada.size() == 3){
