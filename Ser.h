@@ -34,6 +34,9 @@ public:
     int getAtaque() const;
     void setAtaque(int ataque);
     
+    int getNumEspada() const;
+    void setNumEspada(int num);
+    
     int getDefesa() const;
     void setDefesa(int defesa);
     

@@ -77,6 +77,15 @@ string Perfil::getNome() const {
     return this->nome;
 }
 
+bool Perfil::temBandeira() {
+    for(int i = 0; i < vetorCaracteristicas.size(); i++){
+        if(vetorCaracteristicas[i]->getId() == 1){
+            return true;
+        }
+    }
+    return false;
+}
+
 Caracteristica* Perfil::getCarateristica(int index) {
     if(index < vetorCaracteristicas.size()){
         return vetorCaracteristicas[index];

@@ -133,7 +133,25 @@ bool Controlador::addEdificio(Colonia* colonia, Edificios edificio){
         return false;
     }
 }
-
+Unidade* Controlador::getUnidade(int linha, int coluna, int tipo){
+    for(int i = 0; i < vectorColonias.size(); i++){
+        if(tipo == this->QUALQUER || tipo == this->EDIFICIO){
+            for(int j = 0; j < vectorColonias[i].getVectorEdificios()->size(); j++){
+                if(vectorColonias[i].getVectorEdificios()->at(j).checkPosicao(linha, coluna)){
+                    return &vectorColonias[i].getVectorEdificios()->at(j);
+                }
+            }
+        }
+        if(tipo == this->QUALQUER || tipo == this->SER){
+            for(int j = 0; j < vectorColonias[i].getVectorSer()->size(); j++){
+                if(vectorColonias[i].getVectorSer()->at(j).checkPosicao(linha, coluna)){
+                    return &vectorColonias[i].getVectorSer()->at(j);
+                }
+            }
+        }
+    }
+    return NULL;
+}
 void Controlador::atribuirPerfil() {
     vector<int> v(4);
     iota(v.begin(), v.end(), 0);
@@ -175,6 +193,49 @@ void Controlador::atribuirPerfil() {
 void Controlador::listarTudo() {
     for(int i = 0; i < vectorColonias.size(); i++){
         vectorColonias[i].listar();
+    }
+}
+
+void Controlador::next(int num) {
+    int index_car;
+    Caracteristica* car;
+    Ser* ser;
+    for(int round = 0; round < num; round++){
+        for(int i = 0; i < vectorColonias.size(); i++){
+            for(int j = 0; j < vectorColonias[i].getVectorSer()->size(); j++){
+                index_car = 0;
+                ser = &vectorColonias[i].getVectorSer()->at(j);
+                car = ser->getPerfil()->getCarateristica(index_car);
+                while(car != NULL){
+                    switch(car->getId()){
+                        case 7:
+                            
+                            break;
+                        case 8:
+                            
+                            break;
+                        case 9:
+                            
+                            break;
+                        case 10:
+                            
+                            break;
+                        case 11:
+                            
+                            break;
+                        case 12:
+                            
+                            break;
+                        case 13:
+                            
+                            break;
+                        case 14:
+                            
+                            break;
+                    }
+                }
+            }
+        }
     }
 }
 

@@ -48,13 +48,15 @@ public:
     Colonia* getColonia(string nome);
     vector<Colonia>* getVectorColonia();
 
-    Unidade* verificaPosicao(int linha, int coluna);
-
     bool addEdificio(Colonia* colonia, Edificios edificio);
     
-    Unidade *getUnidade(Colonia* colonia, int id, int tipo);
+    Unidade* getUnidade(Colonia* colonia, int id, int tipo);
+    Unidade* getUnidade(int linha, int coluna, int tipo = QUALQUER);
+    Unidade* verificaPosicao(int linha, int coluna);
     
     void atribuirPerfil();
+    
+    void next(int num = 1);
     
     string toLower(string str);
     string toUpper(string str);

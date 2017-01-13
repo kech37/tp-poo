@@ -58,6 +58,10 @@ int Ser::getAtaque() const {
     return this->ataque;
 }
 
+int Ser::getNumEspada() const {
+    return this->numEspada;
+}
+
 int Ser::getDefesa() const {
     return this->defesa;
 }
@@ -72,6 +76,10 @@ int Ser::getVelocidade() const {
 
 void Ser::setAtaque(int ataque) {
     this->ataque = ataque;
+}
+
+void Ser::setNumEspada(int num) {
+    this->numEspada = num;
 }
 
 void Ser::setDefesa(int defesa) {
