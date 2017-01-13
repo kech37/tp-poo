@@ -67,10 +67,42 @@ int Perfil::getCusto() const {
 }
 
 void Perfil::listarTudo() {
+    int ataque = 0, defesa = 0, velocidade = 0, saude = 10;
     cout << "Perfil: " << getNome() << ":" << endl;
     for (int i = 0; i < vetorCaracteristicas.size(); i++) {
-        cout << "           -" << this->vetorCaracteristicas[i]->getNome() << endl;
+        cout << "           - " << this->vetorCaracteristicas[i]->getNome() << "." << endl;
+        switch(vetorCaracteristicas[i]->getId()){
+            case 2:
+                saude+=1;
+            break;
+            case 3:
+                defesa+=1;
+            break;
+            case 4:
+                defesa+=2;
+            break;
+            case 5:
+                ataque+=1;
+            break;
+            case 6:
+                ataque+=3;
+            break;
+            case 9:
+                velocidade+=1;
+            break;
+            case 10:
+                velocidade+=1;
+            break;
+            case 11:
+                velocidade+=1;
+            break;
+            case 12:
+                saude=2;                
+            break;
+        }
     }
+    cout << "           - Custo: " << this->getCusto() << " - Saude: " << saude << "." << endl;
+    cout << "           - Ataque: " << ataque << " - Defesa: " << defesa << " - Velocidade: " << velocidade << "." << endl << endl;
 }
 
 string Perfil::getNome() const {
