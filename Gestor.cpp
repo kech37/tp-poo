@@ -58,15 +58,21 @@ void Gestor::desenharMapa() {
             Consola::setBackgroundColor(Consola::CINZENTO);
         }
         Consola::setTextColor(Consola::PRETO);
-        if(linhas >0){
+       
+        if(linhas ==0){
+        cout <<"0 ";
+        }
+        else if(linhas >0){
         if(linhas < 10){
             cout << " " << linhas;
-        }else{
+        }
+        else{
             cout << linhas;
         }
         }
+        
         for(int colunas = this->focoColunas; colunas < this->focoColunas+40; colunas++){
-            cout << " ";
+         
             if(linhas % 2 == 0){
                 if(colunas % 2 == 0){
                     Consola::setBackgroundColor(Consola::CINZENTO);
@@ -81,24 +87,27 @@ void Gestor::desenharMapa() {
                 }
             }
             Consola::setTextColor(Consola::PRETO);
-            if(colunas >0){
-            if(linhas == this->focoLinhas){
-                if(colunas < 10){
-                    cout<<colunas;
-                }else{
-                    cout <<colunas;
-                }
-            }}
             
             u = controlador->verificaPosicao(linhas, colunas);
             if(u != NULL){
                 Consola::setBackgroundColor(u->getEquipa());
                 Consola::setTextColor(Consola::BRANCO_CLARO);
-                cout << u->getNome() << " ";
+                cout << u->getNome()<<" ";
                 //Consola::setTextColor(Consola::BRANCO_CLARO);
-            }else{
-                cout << "  ";
             }
+            else if(colunas>0&&linhas == this->focoLinhas){
+                    if(colunas < 10){
+                    cout<<colunas << " ";
+                    }else{
+                        cout <<colunas;
+                     }
+                }
+            else if(colunas==0){
+                cout << "";
+            }
+            else{
+                cout << "  ";
+            }            
         }
         cout << endl;
     }
