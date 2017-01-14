@@ -28,6 +28,8 @@ Gestor* Gestor::getInstance() {
 
 void Gestor::start() {
     controlador = new Controlador();
+    focoLinhas = 0;
+    focoColunas = 0;
     string comando;
     Consola::setBackgroundColor(Consola::CYAN);
     Consola::clrscr();
@@ -36,7 +38,7 @@ void Gestor::start() {
         if(!config){                    
             cout << "Prima qualquer tecla para continuar...";
             Consola::getch();
-            desenharMapa(controlador->getLinhasDefault(), controlador->getColunasDefault());
+            desenharMapa();
         }
         getline(cin, comando);
     }while(intrepertaComandos(controlador->toLower(comando)));
@@ -44,13 +46,13 @@ void Gestor::start() {
 }
 
 
-void Gestor::desenharMapa(int x, int y) {
+void Gestor::desenharMapa() {
     Consola::setBackgroundColor(Consola::CYAN);
     Consola::clrscr();
     imprimeLogo();
     Unidade* u;
-    for(int linhas = 0; linhas < x; linhas++){
-        for(int colunas = 0; colunas < y; colunas++){
+    for(int linhas = this->focoLinhas; linhas < this->focoLinhas+20; linhas++){
+        for(int colunas = this->focoColunas; colunas < this->focoColunas+40; colunas++){
             if(linhas % 2 == 0){
                 if(colunas % 2 == 0){
                     Consola::setBackgroundColor(Consola::CINZENTO);
@@ -285,6 +287,26 @@ bool Gestor::intrepertaComandos(string comando) {
             if(isConfig()){
                 comando_inicio();
                 config = false;
+            }
+        }
+        else if(stringSeparada[0] == "foco"){
+            if(atoi(stringSeparada[1].c_str())-10 < 0){
+                this->focoLinhas = 0;
+            }else{
+                if(atoi(stringSeparada[1].c_str())+10 >= controlador->getLinhasDefault()){
+                    this->focoLinhas = controlador->getLinhasDefault() - 20;
+                }else{
+                    this->focoLinhas = atoi(stringSeparada[1].c_str()) - 10;
+                }
+            }
+            if(atoi(stringSeparada[2].c_str())-20 < 0){
+                this->focoColunas = 0;
+            }else{
+                if(atoi(stringSeparada[2].c_str())+20 >= controlador->getColunasDefault()){
+                    this->focoColunas = controlador->getLinhasDefault() - 40;
+                }else{
+                    this->focoColunas = atoi(stringSeparada[2].c_str()) - 20;
+                }
             }
         }else if(stringSeparada[0] == "list"){
             Colonia* c;

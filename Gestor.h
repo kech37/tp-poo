@@ -28,12 +28,13 @@ class Gestor {
 private:
     Controlador* controlador;
     bool c_dim = false, c_moedas = false, c_oponentes = false, c_mkperfil = false, config = true;
+    int focoLinhas, focoColunas;
 public:
     static Gestor * getInstance();
 
     void start();
 
-    void desenharMapa(int x, int y);
+    void desenharMapa();
 
     bool intrepertaComandos(string comando);
     vector<string> separaComando(string comando, char separador);
