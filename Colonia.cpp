@@ -20,8 +20,16 @@ Colonia::Colonia(string nome, int moedas) {
     this->nome = nome;
     this->moedas = moedas;
     this->id = conta;
+    this->flag_avanca = false;
     this->conta++;
-    
+}
+
+bool Colonia::getFlagAvancar() const {
+    return this->flag_avanca;
+}
+
+void Colonia::setFlagAvancar(bool b) {
+    this->flag_avanca = b;
 }
 
 int Colonia::getID() const {

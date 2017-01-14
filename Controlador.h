@@ -52,7 +52,9 @@ public:
     
     Unidade* getUnidade(Colonia* colonia, int id, int tipo);
     Ser* getSer(int linha, int coluna);
+    bool removeSer(int id);
     Edificios* getEdifico(int linha, int coluna);
+    bool removeEdificio(int id);
     Unidade* verificaPosicao(int linha, int coluna);
     
     void atribuirPerfil();
