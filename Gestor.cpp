@@ -51,8 +51,8 @@ void Gestor::desenharMapa() {
     Consola::clrscr();
     imprimeLogo();
     Unidade* u;
-    for(int linhas = this->focoLinhas; linhas <= this->focoLinhas+20; linhas++){
-        for(int colunas = this->focoColunas; colunas <= this->focoColunas+40; colunas++){
+    for(int linhas = this->focoLinhas-1; linhas < this->focoLinhas+20; linhas++){
+        for(int colunas = this->focoColunas-1; colunas < this->focoColunas+40; colunas++){
             if(linhas % 2 == 0){
                 if(colunas % 2 == 0){
                     Consola::setBackgroundColor(Consola::CINZENTO);
@@ -67,14 +67,33 @@ void Gestor::desenharMapa() {
                 }
             }
             Consola::setTextColor(Consola::PRETO);
-            u = controlador->verificaPosicao(linhas, colunas);
-            if(u != NULL){
-                Consola::setBackgroundColor(u->getEquipa());
-                Consola::setTextColor(Consola::BRANCO_CLARO);
-                cout << u->getNome();
-                //Consola::setTextColor(Consola::BRANCO_CLARO);
+            if(linhas == this->focoLinhas-1 && colunas == this->focoColunas-1){
+                cout << "  ";
             }else{
-                cout << " ";
+                if(linhas == this->focoLinhas-1){
+                    if(colunas < 10){
+                        cout << " " << colunas;
+                    }else{
+                        cout << colunas;
+                    }
+                }else{
+                    if(colunas == this->focoColunas-1){
+                        if(linhas < 10){
+                            cout << " " << linhas;
+                        }else{
+                            cout << linhas;
+                        } 
+                    }else{
+                        u = controlador->verificaPosicao(linhas, colunas);
+                        if(u != NULL){
+                            Consola::setBackgroundColor(u->getEquipa());
+                            Consola::setTextColor(Consola::BRANCO_CLARO);
+                            cout << u->getNome() << " ";
+                        }else{
+                            cout << "  ";
+                        } 
+                    }
+                }
             }
         }
         cout << endl;
@@ -149,24 +168,32 @@ bool Gestor::intrepertaComandos(string comando) {
                 imprimeErro("Configuracao terminada!\n");
             }
         }else if(stringSeparada[0] == "castelo"){
-            if(stringSeparada.size() == 4){
-                if(checkNumero(stringSeparada[2]) && checkNumero(stringSeparada[3])){
-                    switch(comando_castelo(stringSeparada[1], atoi(stringSeparada[2].c_str()), atoi(stringSeparada[3].c_str()))){
-                        case -1:
-                            imprimeErro("Nao existe a colonia \'" + stringSeparada[1] + "\'!\n");
-                        break;
-                        case 0:
-                            imprimeErro("Posicao ja ocupada!\n");
-                        break;
-                        case 1:
-                            imprimeLog("Castelo movido com sucesso!\n");
-                        break;
+            if(config){
+                if(stringSeparada.size() == 4){
+                    if(checkNumero(stringSeparada[2]) && checkNumero(stringSeparada[3])){
+                        if(atoi(stringSeparada[2].c_str()) < controlador->getLinhasDefault() && atoi(stringSeparada[3].c_str()) < controlador->getColunasDefault()){
+                            switch(comando_castelo(stringSeparada[1], atoi(stringSeparada[2].c_str()), atoi(stringSeparada[3].c_str()))){
+                                case -1:
+                                    imprimeErro("Nao existe a colonia \'" + stringSeparada[1] + "\'!\n");
+                                break;
+                                case 0:
+                                    imprimeErro("Posicao ja ocupada!\n");
+                                break;
+                                case 1:
+                                    imprimeLog("Castelo movido com sucesso!\n");
+                                break;
+                            }
+                        }else{
+                            imprimeErro("A posicao indicada ultrapassa os limites do mapa!\n");
+                        } 
+                    }else{
+                        imprimeErro("Argumentos -lin -col, tem que ser inteiros positivos!\n");
                     }
                 }else{
-                    imprimeErro("Argumentos -lin -col, tem que ser inteiros positivos!\n");
+                    imprimeErro("Numero de argumentos errado!\n       castelo -colonia -lin -col.\n");
                 }
             }else{
-                imprimeErro("Numero de argumentos errado!\n       castelo -colonia -lin -col.\n");
+                imprimeErro("Configuracao terminada!\n");
             }
         }else if(stringSeparada[0] == "mkperfil"){
             if(config){
