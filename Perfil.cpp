@@ -118,6 +118,15 @@ bool Perfil::temBandeira() {
     return false;
 }
 
+bool Perfil::temRemedio() {
+    for(int i = 0; i < vetorCaracteristicas.size(); i++){
+        if(vetorCaracteristicas[i]->getId() == 12){
+            return true;
+        }
+    }
+    return false;
+}
+
 Caracteristica* Perfil::getCarateristica(int index) {
     if(index < vetorCaracteristicas.size()){
         return vetorCaracteristicas[index];

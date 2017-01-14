@@ -39,7 +39,7 @@ public:
     bool intrepertaComandos(string comando);
     vector<string> separaComando(string comando, char separador);
 
-    void comando_dim(int linhas, int colunas);
+    bool comando_dim(int linhas, int colunas);
     void comando_moedas(int num);
     
     /*
@@ -89,6 +89,8 @@ public:
     bool comando_load(string ficheiro);
     void comando_inicio();
     
+    bool comando_ataca_recolhe(string co, bool b);
+    
     /*
      * -3 -> Edificio nao existente
      * -2 -> Não foi encontrada a colonia
@@ -128,6 +130,8 @@ public:
      *  1 -> Comando foi feito com sucesso
      */
     int comando_ser(string co, int num, string perf);
+    
+    void comando_foco(int linhas, int colunas);
     
     bool isConfig();
 

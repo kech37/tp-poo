@@ -51,8 +51,8 @@ void Gestor::desenharMapa() {
     Consola::clrscr();
     imprimeLogo();
     Unidade* u;
-    for(int linhas = this->focoLinhas; linhas < this->focoLinhas+20; linhas++){
-        for(int colunas = this->focoColunas; colunas < this->focoColunas+40; colunas++){
+    for(int linhas = this->focoLinhas; linhas <= this->focoLinhas+20; linhas++){
+        for(int colunas = this->focoColunas; colunas <= this->focoColunas+40; colunas++){
             if(linhas % 2 == 0){
                 if(colunas % 2 == 0){
                     Consola::setBackgroundColor(Consola::CINZENTO);
@@ -94,9 +94,12 @@ bool Gestor::intrepertaComandos(string comando) {
             if(config){
                 if(stringSeparada.size() == 3){
                     if(checkNumero(stringSeparada[1]) && checkNumero(stringSeparada[2])){
-                        comando_dim(atoi(stringSeparada[1].c_str()), atoi(stringSeparada[2].c_str()));
-                        imprimeLog("Dimensao configurada - Linhas: " + stringSeparada[1] + ", Colunas: " + stringSeparada[2] + ".\n");
-                        c_dim = true;
+                        if(comando_dim(atoi(stringSeparada[1].c_str()), atoi(stringSeparada[2].c_str()))){
+                            imprimeLog("Dimensao configurada - Linhas: " + stringSeparada[1] + ", Colunas: " + stringSeparada[2] + ".\n");
+                            c_dim = true;
+                        }else{
+                            imprimeErro("As dimensoes tem que ser pelo menos 20 x 40.\n");
+                        }
                     }else{
                         imprimeErro("Os argumentos tem que ser inteiros positivo!\n");
                     }
@@ -290,23 +293,14 @@ bool Gestor::intrepertaComandos(string comando) {
             }
         }
         else if(stringSeparada[0] == "foco"){
-            if(atoi(stringSeparada[1].c_str())-10 < 0){
-                this->focoLinhas = 0;
+            if(stringSeparada.size() == 3){
+               if(checkNumero(stringSeparada[1]) && checkNumero(stringSeparada[2])){
+                   comando_foco(atoi(stringSeparada[1].c_str()), atoi(stringSeparada[2].c_str()));
+               }else{
+                    imprimeErro("Os argumentos tem que ser inteiros positivos!\n");
+               } 
             }else{
-                if(atoi(stringSeparada[1].c_str())+10 >= controlador->getLinhasDefault()){
-                    this->focoLinhas = controlador->getLinhasDefault() - 20;
-                }else{
-                    this->focoLinhas = atoi(stringSeparada[1].c_str()) - 10;
-                }
-            }
-            if(atoi(stringSeparada[2].c_str())-20 < 0){
-                this->focoColunas = 0;
-            }else{
-                if(atoi(stringSeparada[2].c_str())+20 >= controlador->getColunasDefault()){
-                    this->focoColunas = controlador->getLinhasDefault() - 40;
-                }else{
-                    this->focoColunas = atoi(stringSeparada[2].c_str()) - 20;
-                }
+                imprimeErro("Numero de argumentos errado!\n       foco -linhas -colunas.\n");
             }
         }else if(stringSeparada[0] == "list"){
             Colonia* c;
@@ -331,7 +325,7 @@ bool Gestor::intrepertaComandos(string comando) {
                     }
                 }
             }else{
-                imprimeErro("Numero de argumentos errado!           listp PERFIL\n");
+                imprimeErro("Numero de argumentos errado!\n       listp -perfil\n");
             }
                 
         }else if(stringSeparada[0] == "listallp"){
@@ -343,7 +337,7 @@ bool Gestor::intrepertaComandos(string comando) {
                     }
                 }
             }else{
-                imprimeErro("Comando errado !!     listallp!");
+                imprimeErro("Se quer listar todos os perfils de todas colonias, escreva apenas listallp!\n");
             }
         }else if(stringSeparada[0] == "setmoedas"){
             if(stringSeparada.size() == 3){
@@ -499,9 +493,25 @@ bool Gestor::intrepertaComandos(string comando) {
                 imprimeErro("Numero de argumentos errados!\n       next -num.\n");
             }            
         }else if(stringSeparada[0] == "ataca"){
-            
+            if(stringSeparada.size() == 1){
+                if(this->comando_ataca_recolhe("A", true)){
+                    imprimeLog("ATACAR!!\n");
+                }else{
+                    imprimeErro("Nao foi encontrada a colonia!\n");
+                }
+            }else{
+                imprimeErro("Se quer mandar as suas tropas atacar, escreva apenas ataca.\n");
+            }            
         }else if(stringSeparada[0] == "recolhe"){
-            
+            if(stringSeparada.size() == 1){
+                if(this->comando_ataca_recolhe("A", false)){
+                    imprimeLog("RECOLHER!!\n");
+                }else{
+                    imprimeErro("Nao foi encontrada a colonia!\n");
+                }
+            }else{
+                imprimeErro("Se quer mandar as suas tropas recolher, escreva apenas recolhe.\n");
+            }  
         }else{ 
             imprimeErro("Digite um comando valido!\n");
         }
@@ -509,6 +519,27 @@ bool Gestor::intrepertaComandos(string comando) {
         imprimeErro("Digite um comando!\n");
     }
     return true;
+}
+
+void Gestor::comando_foco(int linhas, int colunas) {
+    if(linhas-10 < 0){
+        this->focoLinhas = 0;
+    }else{
+        if(linhas+10 >= controlador->getLinhasDefault()){
+            this->focoLinhas = controlador->getLinhasDefault() - 20;
+        }else{
+            this->focoLinhas = linhas - 10;
+        }
+    }
+    if(colunas-20 < 0){
+        this->focoColunas = 0;
+    }else{
+        if(colunas+20 >= controlador->getColunasDefault()){
+            this->focoColunas = controlador->getLinhasDefault() - 40;
+        }else{
+            this->focoColunas = colunas - 20;
+        }
+    }
 }
 
 bool Gestor::comando_load(string ficheiro) {
@@ -526,7 +557,17 @@ bool Gestor::comando_load(string ficheiro) {
 }
 
 void Gestor::comando_inicio() {
+    comando_foco(controlador->getColonia("A")->getCastelo()->getLinha(), controlador->getColonia("A")->getCastelo()->getColuna());
     controlador->atribuirPerfil();
+}
+
+bool Gestor::comando_ataca_recolhe(string co, bool b) {
+    Colonia* c = controlador->getColonia(controlador->toUpper(co));
+    if(c != NULL){
+        c->setFlagAvancar(b);
+        return true;
+    }
+    return false;
 }
 
 int Gestor::comando_build(string co, string edif, int linha, int coluna) {
@@ -641,9 +682,14 @@ int Gestor::comando_ser(string co, int num, string perf) {
     }
 }
 
-void Gestor::comando_dim(int linhas, int colunas) {
-    controlador->setLinhasDefault(linhas);
-    controlador->setColunasDefault(colunas);
+bool Gestor::comando_dim(int linhas, int colunas) {
+    if(linhas >= 20 && colunas >= 40){
+        controlador->setLinhasDefault(linhas);
+        controlador->setColunasDefault(colunas);
+        return true;
+    }else{
+        return false;
+    }
 }
 
 void Gestor::comando_moedas(int num) {

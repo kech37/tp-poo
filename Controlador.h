@@ -31,6 +31,8 @@ public:
     const static int QUALQUER = 0;
     const static int EDIFICIO = 1;
     const static int SER = 2;
+    const static int ATACA = 1;
+    const static int RECOLHE = 2;
     
     Controlador();
    
@@ -56,6 +58,9 @@ public:
     Edificios* getEdifico(int linha, int coluna);
     bool removeEdificio(int id);
     Unidade* verificaPosicao(int linha, int coluna);
+    bool verificaMovimento(int linha, int coluna, int flag, int equipa = -1);
+    
+    void movimentoRandom(Ser* ser);
     
     void atribuirPerfil();
     

@@ -26,6 +26,7 @@ public:
     int getSizePerfil() const;
     
     bool temBandeira();
+    bool temRemedio();
     
     void listarTudo();
     virtual ~Perfil();
