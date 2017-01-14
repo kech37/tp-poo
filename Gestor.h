@@ -133,6 +133,8 @@ public:
     
     void comando_foco(int linhas, int colunas);
     
+    bool comando_listp(string perfil);
+    
     bool isConfig();
 
     bool checkNumero(const string s);

@@ -202,12 +202,11 @@ void Colonia::listar() {
         cout << "       Seres: " << endl;
         if(vectorSer.size() > 0){
             for(int i = 0; i < vectorSer.size(); i++){
-                cout << "           "<< vectorSer[i].getNome() << endl;
                 cout << "           " << vectorSer[i].getID() << ") " << vectorSer[i].getPerfil()->getNome();
-                cout << "           ["<< vectorSer[i].getLinha() << ":" << vectorSer[i].getColuna() << "]" << endl;
-                cout << "           "<< "Saude: "<< vectorSer[i].getSaude() << endl;
-                cout << "           "<< "Defesa: "<< vectorSer[i].getDefesa() << endl;
-                cout << "           "<< "Ataque: "<< vectorSer[i].getAtaque() << endl;      
+                cout << "   ["<< vectorSer[i].getLinha() << ":" << vectorSer[i].getColuna();
+                cout << "   ["<< "Saude: "<< vectorSer[i].getSaude() << "]";
+                cout << "   ["<< "Defesa: "<< vectorSer[i].getDefesa() << "]";
+                cout << "   ["<< "Ataque: "<< vectorSer[i].getAtaque() << "]" << endl;;      
             }   
         }else{
             cout << "           <Sem Seres>" << endl;
@@ -217,9 +216,10 @@ void Colonia::listar() {
         cout << "       Edificios: " << endl;
         if(vectorEdificios.size() > 0){
             for(int i = 0; i < vectorEdificios.size(); i++){
-                cout << "           " << vectorEdificios[i].getID() << ") " << vectorEdificios[i].getNome() << " ["<< vectorEdificios[i].getLinha() << ", " << vectorEdificios[i].getColuna() << "]" << endl;
-                cout << "           " << "Defesa: " << vectorEdificios[i].getDefesa() << endl;
-                cout << "           " << "Saude: " <<vectorEdificios[i].getSaude() << endl;
+                cout << "           " << vectorEdificios[i].getID() << ") " << vectorEdificios[i].getNome();
+                cout << "   ["<< vectorEdificios[i].getLinha() << ", " << vectorEdificios[i].getColuna() << "]";
+                cout << "   [" << "Defesa: " << vectorEdificios[i].getDefesa() << "]";
+                cout << "   [" << "Saude: " <<vectorEdificios[i].getSaude() << "]" << endl;
             }
         }else{
             cout << "           <Sem Edificios>" << endl;

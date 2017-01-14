@@ -343,13 +343,8 @@ bool Gestor::intrepertaComandos(string comando) {
             }
         }else if(stringSeparada[0] == "listp"){
             if(stringSeparada.size()==2){
-                for(int i = 0; i < controlador->getVectorColonia()->size(); i++){
-                    for(int j = 0; j < controlador->getVectorColonia()->at(i).getVectorPerfil()->size(); j++){
-                      if(controlador->getVectorColonia()->at(i).getVectorPerfil()->at(j).getNome() == stringSeparada[1]){
-                          controlador->getVectorColonia()->at(i).getVectorPerfil()->at(j).listarTudo();
-                          break;
-                      }  
-                    }
+                if(!comando_listp(stringSeparada[1])){
+                    imprimeErro("Nao foi encontrado esse perfil!\n");
                 }
             }else{
                 imprimeErro("Numero de argumentos errado!\n       listp -perfil\n");
@@ -358,9 +353,9 @@ bool Gestor::intrepertaComandos(string comando) {
         }else if(stringSeparada[0] == "listallp"){
             if(stringSeparada.size()==1){
                 for(int i = 0; i < controlador->getVectorColonia()->size(); i++){
+                    cout << "[ Colonia: " << controlador->getVectorColonia()->at(i).getNome() << " ]" << endl;
                     for(int j = 0; j < controlador->getVectorColonia()->at(i).getVectorPerfil()->size(); j++){
                         controlador->getVectorColonia()->at(i).getVectorPerfil()->at(j).listarTudo();
-
                     }
                 }
             }else{
@@ -567,6 +562,18 @@ void Gestor::comando_foco(int linhas, int colunas) {
             this->focoColunas = colunas - 20;
         }
     }
+}
+
+bool Gestor::comando_listp(string perfil) {
+    for(int i = 0; i < controlador->getVectorColonia()->size(); i++){
+        for(int j = 0; j < controlador->getVectorColonia()->at(i).getVectorPerfil()->size(); j++){
+            if(controlador->getVectorColonia()->at(i).getVectorPerfil()->at(j).getNome() == controlador->toLower(perfil)){
+                controlador->getVectorColonia()->at(i).getVectorPerfil()->at(j).listarTudo();
+                return true;
+            }  
+        }
+    }
+    return false;
 }
 
 bool Gestor::comando_load(string ficheiro) {
