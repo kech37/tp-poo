@@ -67,7 +67,7 @@ public:
     
     void atribuirPerfil();
     
-    bool next(int num);
+    bool next();
     
     string toLower(string str);
     string toUpper(string str);

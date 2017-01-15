@@ -51,31 +51,32 @@ int Controlador::getRandomColunas() {
 int Controlador::getRandomLinhas() {
     return (rand() % linhasDefault);
 }
+
 bool Controlador::addColonia() {
     Colonia* c;
     int i = -1;
     int linha, coluna;
-    do{
+    do {
         i++;
         c = getColonia(this->nomes[i]);
-    }while(c != NULL && i < 26);
-    if(i < 26){
+    } while (c != NULL && i < 26);
+    if (i < 26) {
         vectorColonias.push_back(Colonia(this->nomes[i], this->moedasDefault));
         c = &vectorColonias.back();
-        do{
+        do {
             linha = getRandomLinhas();
             coluna = getRandomColunas();
-        }while(verificaPosicao(linha, coluna) != NULL);
+        } while (verificaPosicao(linha, coluna) != NULL);
         c->getVectorEdificios()->push_back(Castelo(linha, coluna, c->getID()));
         return true;
-    }else{
+    } else {
         return false;
     }
 }
 
 Colonia* Controlador::getColonia(string nome) {
-    for(int i = 0; i < vectorColonias.size(); i++){
-        if(vectorColonias[i].getNome() == nome){
+    for (int i = 0; i < vectorColonias.size(); i++) {
+        if (vectorColonias[i].getNome() == nome) {
             return &vectorColonias[i];
         }
     }
@@ -91,15 +92,15 @@ void Controlador::apagarVectorColonias() {
 }
 
 Unidade* Controlador::verificaPosicao(int linha, int coluna) {
-    if(linha < this->linhasDefault && coluna < this->colunasDefault){
-        for(int i = 0; i < vectorColonias.size(); i++){
-            for(int j = 0; j < vectorColonias[i].getVectorEdificios()->size(); j++){
-                if(vectorColonias[i].getVectorEdificios()->at(j).checkPosicao(linha, coluna)){
+    if (linha < this->linhasDefault && coluna < this->colunasDefault) {
+        for (int i = 0; i < vectorColonias.size(); i++) {
+            for (int j = 0; j < vectorColonias[i].getVectorEdificios()->size(); j++) {
+                if (vectorColonias[i].getVectorEdificios()->at(j).checkPosicao(linha, coluna)) {
                     return &vectorColonias[i].getVectorEdificios()->at(j);
                 }
             }
-            for(int j = 0; j < vectorColonias[i].getVectorSer()->size(); j++){
-                if(vectorColonias[i].getVectorSer()->at(j).checkPosicao(linha, coluna)){
+            for (int j = 0; j < vectorColonias[i].getVectorSer()->size(); j++) {
+                if (vectorColonias[i].getVectorSer()->at(j).checkPosicao(linha, coluna)) {
                     return &vectorColonias[i].getVectorSer()->at(j);
                 }
             }
@@ -109,36 +110,37 @@ Unidade* Controlador::verificaPosicao(int linha, int coluna) {
 }
 
 Unidade* Controlador::getUnidade(Colonia* colonia, int id, int tipo) {
-    switch(tipo){
+    switch (tipo) {
         case EDIFICIO:
-            for(int i = 0; i < colonia->getVectorEdificios()->size(); i++){
-                if(colonia->getVectorEdificios()->at(i).getID() == id){
+            for (int i = 0; i < colonia->getVectorEdificios()->size(); i++) {
+                if (colonia->getVectorEdificios()->at(i).getID() == id) {
                     return &colonia->getVectorEdificios()->at(i);
                 }
             }
-        break;
+            break;
         case SER:
-            for(int i = 0; i < colonia->getVectorSer()->size(); i++){
-                if(colonia->getVectorSer()->at(i).getID() == id){
+            for (int i = 0; i < colonia->getVectorSer()->size(); i++) {
+                if (colonia->getVectorSer()->at(i).getID() == id) {
                     return &colonia->getVectorSer()->at(i);
                 }
-            }    
-        break;
+            }
+            break;
     }
     return NULL;
 }
 
-bool Controlador::addEdificio(Colonia* colonia, Edificios edificio){
-    if(colonia->addEdificio(edificio)){
+bool Controlador::addEdificio(Colonia* colonia, Edificios edificio) {
+    if (colonia->addEdificio(edificio)) {
         return true;
-    }else{
+    } else {
         return false;
     }
 }
-Ser* Controlador::getSer(int linha, int coluna){
-    for(int i = 0; i < vectorColonias.size(); i++){
-        for(int j = 0; j < vectorColonias[i].getVectorSer()->size(); j++){
-            if(vectorColonias[i].getVectorSer()->at(j).checkPosicao(linha, coluna)){
+
+Ser* Controlador::getSer(int linha, int coluna) {
+    for (int i = 0; i < vectorColonias.size(); i++) {
+        for (int j = 0; j < vectorColonias[i].getVectorSer()->size(); j++) {
+            if (vectorColonias[i].getVectorSer()->at(j).checkPosicao(linha, coluna)) {
                 return &vectorColonias[i].getVectorSer()->at(j);
             }
         }
@@ -146,10 +148,10 @@ Ser* Controlador::getSer(int linha, int coluna){
     return NULL;
 }
 
-Edificios* Controlador::getEdifico(int linha, int coluna){
-    for(int i = 0; i < vectorColonias.size(); i++){
-        for(int j = 0; j < vectorColonias[i].getVectorEdificios()->size(); j++){
-            if(vectorColonias[i].getVectorEdificios()->at(j).checkPosicao(linha, coluna)){
+Edificios* Controlador::getEdifico(int linha, int coluna) {
+    for (int i = 0; i < vectorColonias.size(); i++) {
+        for (int j = 0; j < vectorColonias[i].getVectorEdificios()->size(); j++) {
+            if (vectorColonias[i].getVectorEdificios()->at(j).checkPosicao(linha, coluna)) {
                 return &vectorColonias[i].getVectorEdificios()->at(j);
             }
         }
@@ -161,34 +163,34 @@ void Controlador::atribuirPerfil() {
     vector<int> v(4);
     iota(v.begin(), v.end(), 0);
     int tamA = getColonia("A")->getVectorPerfil()->size(), resp, car, nom;
-    for(int i = 1; i < vectorColonias.size(); i++){
-        if(tamA > 3){
+    for (int i = 1; i < vectorColonias.size(); i++) {
+        if (tamA > 3) {
             random_shuffle(v.begin(), v.end());
-            for(int j = 0; j < 5; j++){
-                if(j < 3){
+            for (int j = 0; j < 5; j++) {
+                if (j < 3) {
                     vectorColonias[i].getVectorPerfil()->push_back(Perfil(vectorColonias[0].getVectorPerfil()->at(v[j])));
-                }else{
-                    do{
+                } else {
+                    do {
                         nom = rand() % 26;
                         resp = vectorColonias[i].addPerfil(toLower(nomes[nom]));
-                    }while(resp != 1);
-                    do{
-                        car = rand() % 14 + 1; 
-                    }while(vectorColonias[i].getPerfil(toLower(nomes[nom]))->addCaracteristica(new Caracteristica(car)));
+                    } while (resp != 1);
+                    do {
+                        car = rand() % 14 + 1;
+                    } while (vectorColonias[i].getPerfil(toLower(nomes[nom]))->addCaracteristica(new Caracteristica(car)));
                 }
             }
-        }else{
-            for(int j = 0; j < 5; j++){
-                if(j < tamA){
+        } else {
+            for (int j = 0; j < 5; j++) {
+                if (j < tamA) {
                     vectorColonias[i].getVectorPerfil()->push_back(Perfil(vectorColonias[0].getVectorPerfil()->at(j)));
-                }else{
-                    do{
+                } else {
+                    do {
                         nom = rand() % 26;
                         resp = vectorColonias[i].addPerfil(toLower(nomes[nom]));
-                    }while(resp != 1);
-                    do{
-                        car = rand() % 14 + 1; 
-                    }while(vectorColonias[i].getPerfil(toLower(nomes[nom]))->addCaracteristica(new Caracteristica(car)));
+                    } while (resp != 1);
+                    do {
+                        car = rand() % 14 + 1;
+                    } while (vectorColonias[i].getPerfil(toLower(nomes[nom]))->addCaracteristica(new Caracteristica(car)));
                 }
             }
         }
@@ -196,15 +198,15 @@ void Controlador::atribuirPerfil() {
 }
 
 void Controlador::listarTudo() {
-    for(int i = 0; i < vectorColonias.size(); i++){
+    for (int i = 0; i < vectorColonias.size(); i++) {
         vectorColonias[i].listar();
     }
 }
 
 bool Controlador::removeSer(int id) {
-    for(int i = 0; i < vectorColonias.size(); i++){
-        for(int j = 0; j < vectorColonias[i].getVectorSer()->size(); j++){
-            if(vectorColonias[i].getVectorSer()->at(j).getID() == id){
+    for (int i = 0; i < vectorColonias.size(); i++) {
+        for (int j = 0; j < vectorColonias[i].getVectorSer()->size(); j++) {
+            if (vectorColonias[i].getVectorSer()->at(j).getID() == id) {
                 vectorColonias[i].getVectorSer()->erase(vectorColonias[i].getVectorSer()->begin() + j);
                 return true;
             }
@@ -214,9 +216,9 @@ bool Controlador::removeSer(int id) {
 }
 
 bool Controlador::removeEdificio(int id) {
-    for(int i = 0; i < vectorColonias.size(); i++){
-        for(int j = 0; j < vectorColonias[i].getVectorEdificios()->size(); j++){
-            if(vectorColonias[i].getVectorEdificios()->at(j).getID() == id){
+    for (int i = 0; i < vectorColonias.size(); i++) {
+        for (int j = 0; j < vectorColonias[i].getVectorEdificios()->size(); j++) {
+            if (vectorColonias[i].getVectorEdificios()->at(j).getID() == id) {
                 vectorColonias[i].getVectorEdificios()->erase(vectorColonias[i].getVectorEdificios()->begin() + j);
                 return true;
             }
@@ -225,355 +227,353 @@ bool Controlador::removeEdificio(int id) {
     return false;
 }
 
-bool Controlador::next(int num) {
-    for(int round = 0; round < num; round++){
-        for(int i = 0; i < vectorColonias.size(); i++){
-            for(int j = 0; j < vectorColonias[i].getVectorSer()->size(); j++){
-                Ser* ser = &vectorColonias[i].getVectorSer()->at(j);
-                if(vectorColonias[i].getFlagAvancar()){
-                    int index_car = 0;
-                    Caracteristica* car = ser->getPerfil()->getCarateristica(index_car);
-                    while(car != NULL){
-                        switch(car->getId()){
-                            case 7: //Agressão
-                                if(ser->getBandeira()){
-                                    Ser* serAtacar[8];
-                                    serAtacar[0] = this->getSer(ser->getLinha()-1, ser->getColuna()-1);
-                                    serAtacar[1] = this->getSer(ser->getLinha(), ser->getColuna()-1);
-                                    serAtacar[2] = this->getSer(ser->getLinha()+1, ser->getColuna()-1);
-                                    serAtacar[3] = this->getSer(ser->getLinha()+1, ser->getColuna());
-                                    serAtacar[4] = this->getSer(ser->getLinha()+1, ser->getColuna()+1);
-                                    serAtacar[5] = this->getSer(ser->getLinha(), ser->getColuna()+1);
-                                    serAtacar[6] = this->getSer(ser->getLinha()-1, ser->getColuna()+1);
-                                    serAtacar[7] = this->getSer(ser->getLinha()-1, ser->getColuna());
-                                    for(int k = 0; k < 8; k++){
-                                        if(serAtacar[k] != NULL){
-                                            if(serAtacar[k]->getBandeira() == true && serAtacar[k]->getEquipa() != ser->getEquipa() || serAtacar[k]->getBandeira() == false){
-                                                if(ser->getAtaque() > serAtacar[k]->getDefesa()){
-                                                    serAtacar[k]->setSaude(serAtacar[k]->getSaude()-(ser->getAtaque()-serAtacar[k]->getDefesa()));
-                                                }else{
-                                                    serAtacar[k]->setSaude(serAtacar[k]->getSaude()-1);
-                                                }
-                                                if(serAtacar[k]->getSaude() <= 0){
-                                                    if(serAtacar[k]->getSecondChance() == true){
-                                                        serAtacar[k]->setSecondChance(false);
-                                                        serAtacar[k]->setSaude(serAtacar[k]->getSaudeMAX());
-                                                        serAtacar[k]->setLinhaColuna(vectorColonias[i].getCastelo()->getLinha(), vectorColonias[i].getCastelo()->getColuna()); 
-                                                    }else{
-                                                        this->removeSer(serAtacar[k]->getID());
-                                                    }
-                                                }
-                                                k = 8; 
+bool Controlador::next() {
+    for (int i = 0; i < vectorColonias.size(); i++) {
+        for (int j = 0; j < vectorColonias[i].getVectorSer()->size(); j++) {
+            Ser* ser = &vectorColonias[i].getVectorSer()->at(j);
+            if (vectorColonias[i].getFlagAvancar()) {
+                int index_car = 0;
+                Caracteristica* car = ser->getPerfil()->getCarateristica(index_car);
+                while (car != NULL) {
+                    switch (car->getId()) {
+                        case 7: //Agressão
+                            if (ser->getBandeira()) {
+                                Ser * serAtacar[8];
+                                serAtacar[0] = this->getSer(ser->getLinha() - 1, ser->getColuna() - 1);
+                                serAtacar[1] = this->getSer(ser->getLinha(), ser->getColuna() - 1);
+                                serAtacar[2] = this->getSer(ser->getLinha() + 1, ser->getColuna() - 1);
+                                serAtacar[3] = this->getSer(ser->getLinha() + 1, ser->getColuna());
+                                serAtacar[4] = this->getSer(ser->getLinha() + 1, ser->getColuna() + 1);
+                                serAtacar[5] = this->getSer(ser->getLinha(), ser->getColuna() + 1);
+                                serAtacar[6] = this->getSer(ser->getLinha() - 1, ser->getColuna() + 1);
+                                serAtacar[7] = this->getSer(ser->getLinha() - 1, ser->getColuna());
+                                for (int k = 0; k < 8; k++) {
+                                    if (serAtacar[k] != NULL) {
+                                        if (serAtacar[k]->getBandeira() == true && serAtacar[k]->getEquipa() != ser->getEquipa() || serAtacar[k]->getBandeira() == false) {
+                                            if (ser->getAtaque() > serAtacar[k]->getDefesa()) {
+                                                serAtacar[k]->setSaude(serAtacar[k]->getSaude()-(ser->getAtaque() - serAtacar[k]->getDefesa()));
+                                            } else {
+                                                serAtacar[k]->setSaude(serAtacar[k]->getSaude() - 1);
                                             }
-                                        }
-                                    }
-                                }
-                                break;
-                            case 8: //Ecologico
-                                if(ser->getBandeira()){
-                                    Edificios* ediAtacar[8];
-                                    ediAtacar[0] = this->getEdifico(ser->getLinha()-1, ser->getColuna()-1);
-                                    ediAtacar[1] = this->getEdifico(ser->getLinha(), ser->getColuna()-1);
-                                    ediAtacar[2] = this->getEdifico(ser->getLinha()+1, ser->getColuna()-1);
-                                    ediAtacar[3] = this->getEdifico(ser->getLinha()+1, ser->getColuna());
-                                    ediAtacar[4] = this->getEdifico(ser->getLinha()+1, ser->getColuna()+1);
-                                    ediAtacar[5] = this->getEdifico(ser->getLinha(), ser->getColuna()+1);
-                                    ediAtacar[6] = this->getEdifico(ser->getLinha()-1, ser->getColuna()+1);
-                                    ediAtacar[7] = this->getEdifico(ser->getLinha()-1, ser->getColuna());
-                                    for(int k = 0; k < 8; k++){
-                                        if(ediAtacar[k] != NULL && ediAtacar[k]->getEquipa() != ser->getEquipa()){
-                                            if(ser->getAtaque() > ediAtacar[k]->getDefesa()){
-                                                ediAtacar[k]->setSaude(ediAtacar[k]->getSaude()-(ser->getAtaque() - ediAtacar[k]->getDefesa()));
-                                            }else{
-                                                ediAtacar[k]->setSaude(ediAtacar[k]->getSaude()-1);
-                                            }
-                                            if(ediAtacar[k]->getSaude() <= 0){
-                                                if(ediAtacar[k]->getNome() == "C"){
-                                                    this->removeColonia(ediAtacar[k]->getEquipa());
-                                                }else{
-                                                    this->removeEdificio(ediAtacar[k]->getID());
+                                            if (serAtacar[k]->getSaude() <= 0) {
+                                                if (serAtacar[k]->getSecondChance() == true) {
+                                                    serAtacar[k]->setSecondChance(false);
+                                                    serAtacar[k]->setSaude(serAtacar[k]->getSaudeMAX());
+                                                    serAtacar[k]->setLinhaColuna(vectorColonias[i].getCastelo()->getLinha(), vectorColonias[i].getCastelo()->getColuna());
+                                                } else {
+                                                    this->removeSer(serAtacar[k]->getID());
                                                 }
                                             }
                                             k = 8;
                                         }
                                     }
                                 }
-                                break;
-                            case 9: //HeatSeeker
-                                Ser* perto;
-                                int s_l_p, s_c_p;
-                                Ser* temp;
-                                int s_l_t, s_c_t;
-                                perto = NULL;
-                                for(int l = ser->getLinha()-10; l < ser->getLinha()+10; l++){
-                                    for(int c = ser->getColuna()-20; c < ser->getColuna()+20; c++){
-                                        temp = getSer(l, c);
-                                        if(temp != NULL){
-                                            if(temp->getEquipa() != ser->getEquipa()){
-                                                if(perto == NULL){
+                            }
+                            break;
+                        case 8: //Ecologico
+                            if (ser->getBandeira()) {
+                                Edificios * ediAtacar[8];
+                                ediAtacar[0] = this->getEdifico(ser->getLinha() - 1, ser->getColuna() - 1);
+                                ediAtacar[1] = this->getEdifico(ser->getLinha(), ser->getColuna() - 1);
+                                ediAtacar[2] = this->getEdifico(ser->getLinha() + 1, ser->getColuna() - 1);
+                                ediAtacar[3] = this->getEdifico(ser->getLinha() + 1, ser->getColuna());
+                                ediAtacar[4] = this->getEdifico(ser->getLinha() + 1, ser->getColuna() + 1);
+                                ediAtacar[5] = this->getEdifico(ser->getLinha(), ser->getColuna() + 1);
+                                ediAtacar[6] = this->getEdifico(ser->getLinha() - 1, ser->getColuna() + 1);
+                                ediAtacar[7] = this->getEdifico(ser->getLinha() - 1, ser->getColuna());
+                                for (int k = 0; k < 8; k++) {
+                                    if (ediAtacar[k] != NULL && ediAtacar[k]->getEquipa() != ser->getEquipa()) {
+                                        if (ser->getAtaque() > ediAtacar[k]->getDefesa()) {
+                                            ediAtacar[k]->setSaude(ediAtacar[k]->getSaude()-(ser->getAtaque() - ediAtacar[k]->getDefesa()));
+                                        } else {
+                                            ediAtacar[k]->setSaude(ediAtacar[k]->getSaude() - 1);
+                                        }
+                                        if (ediAtacar[k]->getSaude() <= 0) {
+                                            if (ediAtacar[k]->getNome() == "C") {
+                                                this->removeColonia(ediAtacar[k]->getEquipa());
+                                            } else {
+                                                this->removeEdificio(ediAtacar[k]->getID());
+                                            }
+                                        }
+                                        k = 8;
+                                    }
+                                }
+                            }
+                            break;
+                        case 9: //HeatSeeker
+                            Ser* perto;
+                            int s_l_p, s_c_p;
+                            Ser* temp;
+                            int s_l_t, s_c_t;
+                            perto = NULL;
+                            for (int l = ser->getLinha() - 10; l < ser->getLinha() + 10; l++) {
+                                for (int c = ser->getColuna() - 20; c < ser->getColuna() + 20; c++) {
+                                    temp = getSer(l, c);
+                                    if (temp != NULL) {
+                                        if (temp->getEquipa() != ser->getEquipa()) {
+                                            if (perto == NULL) {
+                                                perto = temp;
+                                                if (perto->getLinha() > ser->getLinha()) {
+                                                    s_l_p = perto->getLinha() - ser->getLinha();
+                                                } else {
+                                                    s_l_p = ser->getLinha() - perto->getLinha();
+                                                }
+                                                if (perto->getColuna() > ser->getColuna()) {
+                                                    s_c_p = perto->getColuna() - ser->getColuna();
+                                                } else {
+                                                    s_c_p = ser->getColuna() - perto->getColuna();
+                                                }
+                                            } else {
+                                                if (temp->getLinha() > ser->getLinha()) {
+                                                    s_l_t = temp->getLinha() - ser->getLinha();
+                                                } else {
+                                                    s_l_t = ser->getLinha() - temp->getLinha();
+                                                }
+                                                if (temp->getColuna() > ser->getColuna()) {
+                                                    s_c_t = temp->getColuna() - ser->getColuna();
+                                                } else {
+                                                    s_c_t = ser->getColuna() - temp->getColuna();
+                                                }
+                                                if (s_c_t < s_c_p && s_l_t < s_l_p) {
+                                                    s_c_p = s_c_t;
+                                                    s_l_p = s_l_t;
                                                     perto = temp;
-                                                    if(perto->getLinha() > ser->getLinha()){
-                                                        s_l_p = perto->getLinha() - ser->getLinha();
-                                                    }else{
-                                                        s_l_p = ser->getLinha() - perto->getLinha();
-                                                    }
-                                                    if(perto->getColuna() > ser->getColuna()){
-                                                        s_c_p = perto->getColuna() - ser->getColuna();
-                                                    }else{
-                                                        s_c_p = ser->getColuna() - perto->getColuna();
-                                                    }
-                                                }else{
-                                                    if(temp->getLinha() > ser->getLinha()){
-                                                        s_l_t = temp->getLinha() - ser->getLinha();
-                                                    }else{
-                                                        s_l_t = ser->getLinha() - temp->getLinha();
-                                                    }
-                                                    if(temp->getColuna() > ser->getColuna()){
-                                                        s_c_t = temp->getColuna() - ser->getColuna();
-                                                    }else{
-                                                        s_c_t = ser->getColuna() - temp->getColuna();
-                                                    }
-                                                    if(s_c_t < s_c_p && s_l_t < s_l_p){
-                                                        s_c_p = s_c_t;
-                                                        s_l_p = s_l_t;
-                                                        perto = temp;
-                                                    }
                                                 }
                                             }
                                         }
                                     }
                                 }
-                                if(perto != NULL){
-                                    if(ser->getLinha() < perto->getLinha() && ser->getColuna() < perto->getColuna()){
-                                        if(verificaMovimento(ser->getLinha()+1, ser->getColuna()+1, ATACA)){
-                                            ser->setLinhaColuna(ser->getLinha()+1, ser->getColuna()+1);
-                                        }else{
-                                            movimentoRandom(ser);
-                                        }
-                                    }else if(ser->getLinha() < perto->getLinha() && ser->getColuna() > perto->getColuna()){
-                                        if(verificaMovimento(ser->getLinha()+1, ser->getColuna()-1, ATACA)){
-                                            ser->setLinhaColuna(ser->getLinha()+1, ser->getColuna()-1);
-                                        }else{
-                                            movimentoRandom(ser);
-                                        }
-                                    }else if(ser->getLinha() > perto->getLinha() && ser->getColuna() > perto->getColuna()){
-                                        if(verificaMovimento(ser->getLinha()-1, ser->getColuna()-1, ATACA)){
-                                            ser->setLinhaColuna(ser->getLinha()-1, ser->getColuna()-1);
-                                        }else{
-                                            movimentoRandom(ser);
-                                        }                         
-                                    }else if(ser->getLinha() > perto->getLinha() && ser->getColuna() < perto->getColuna()){
-                                        if(verificaMovimento(ser->getLinha()-1, ser->getColuna()+1, ATACA)){
-                                            ser->setLinhaColuna(ser->getLinha()-1, ser->getColuna()+1);
-                                        }else{
-                                            movimentoRandom(ser);
-                                        }     
-                                    }else if(ser->getLinha() == perto->getLinha() && ser->getColuna() < perto->getColuna()){
-                                        if(verificaMovimento(ser->getLinha(), ser->getColuna()+1, ATACA)){
-                                            ser->setLinhaColuna(ser->getLinha(), ser->getColuna()+1);
-                                        }else{
-                                            movimentoRandom(ser);
-                                        }                      
-                                    }else if(ser->getLinha() == perto->getLinha() && ser->getColuna() > perto->getColuna()){
-                                        if(verificaMovimento(ser->getLinha(), ser->getColuna()-1, ATACA)){
-                                            ser->setLinhaColuna(ser->getLinha(), ser->getColuna()-1);
-                                        }else{
-                                            movimentoRandom(ser);
-                                        }
-                                    }else if(ser->getLinha() < perto->getLinha() && ser->getColuna() == perto->getColuna()){
-                                        if(verificaMovimento(ser->getLinha()+1, ser->getColuna(), ATACA)){
-                                            ser->setLinhaColuna(ser->getLinha()+1, ser->getColuna());
-                                        }else{
-                                            movimentoRandom(ser);
-                                        }
-                                    }else if(ser->getLinha() > perto->getLinha() && ser->getColuna() == perto->getColuna()){
-                                        if(verificaMovimento(ser->getLinha()-1, ser->getColuna(), ATACA)){
-                                            ser->setLinhaColuna(ser->getLinha()-1, ser->getColuna());
-                                        }else{
-                                            movimentoRandom(ser);
-                                        }
+                            }
+                            if (perto != NULL) {
+                                if (ser->getLinha() < perto->getLinha() && ser->getColuna() < perto->getColuna()) {
+                                    if (verificaMovimento(ser->getLinha() + 1, ser->getColuna() + 1, ATACA)) {
+                                        ser->setLinhaColuna(ser->getLinha() + 1, ser->getColuna() + 1);
+                                    } else {
+                                        movimentoRandom(ser);
+                                    }
+                                } else if (ser->getLinha() < perto->getLinha() && ser->getColuna() > perto->getColuna()) {
+                                    if (verificaMovimento(ser->getLinha() + 1, ser->getColuna() - 1, ATACA)) {
+                                        ser->setLinhaColuna(ser->getLinha() + 1, ser->getColuna() - 1);
+                                    } else {
+                                        movimentoRandom(ser);
+                                    }
+                                } else if (ser->getLinha() > perto->getLinha() && ser->getColuna() > perto->getColuna()) {
+                                    if (verificaMovimento(ser->getLinha() - 1, ser->getColuna() - 1, ATACA)) {
+                                        ser->setLinhaColuna(ser->getLinha() - 1, ser->getColuna() - 1);
+                                    } else {
+                                        movimentoRandom(ser);
+                                    }
+                                } else if (ser->getLinha() > perto->getLinha() && ser->getColuna() < perto->getColuna()) {
+                                    if (verificaMovimento(ser->getLinha() - 1, ser->getColuna() + 1, ATACA)) {
+                                        ser->setLinhaColuna(ser->getLinha() - 1, ser->getColuna() + 1);
+                                    } else {
+                                        movimentoRandom(ser);
+                                    }
+                                } else if (ser->getLinha() == perto->getLinha() && ser->getColuna() < perto->getColuna()) {
+                                    if (verificaMovimento(ser->getLinha(), ser->getColuna() + 1, ATACA)) {
+                                        ser->setLinhaColuna(ser->getLinha(), ser->getColuna() + 1);
+                                    } else {
+                                        movimentoRandom(ser);
+                                    }
+                                } else if (ser->getLinha() == perto->getLinha() && ser->getColuna() > perto->getColuna()) {
+                                    if (verificaMovimento(ser->getLinha(), ser->getColuna() - 1, ATACA)) {
+                                        ser->setLinhaColuna(ser->getLinha(), ser->getColuna() - 1);
+                                    } else {
+                                        movimentoRandom(ser);
+                                    }
+                                } else if (ser->getLinha() < perto->getLinha() && ser->getColuna() == perto->getColuna()) {
+                                    if (verificaMovimento(ser->getLinha() + 1, ser->getColuna(), ATACA)) {
+                                        ser->setLinhaColuna(ser->getLinha() + 1, ser->getColuna());
+                                    } else {
+                                        movimentoRandom(ser);
+                                    }
+                                } else if (ser->getLinha() > perto->getLinha() && ser->getColuna() == perto->getColuna()) {
+                                    if (verificaMovimento(ser->getLinha() - 1, ser->getColuna(), ATACA)) {
+                                        ser->setLinhaColuna(ser->getLinha() - 1, ser->getColuna());
+                                    } else {
+                                        movimentoRandom(ser);
                                     }
                                 }
-                                break;
-                            case 10: //BuildSeeker
-                                Edificios* ep;
-                                int l_p, c_p;
-                                Edificios* tp;
-                                int l_t, c_t;
-                                ep = NULL;
-                                for(int l = ser->getLinha()-10; l < ser->getLinha()+10; l++){
-                                    for(int c = ser->getColuna()-20; c < ser->getColuna()+20; c++){
-                                        tp = getEdifico(l, c);
-                                        if(tp != NULL){
-                                            if(tp->getEquipa() != ser->getEquipa()){
-                                                if(ep == NULL){
+                            }
+                            break;
+                        case 10: //BuildSeeker
+                            Edificios* ep;
+                            int l_p, c_p;
+                            Edificios* tp;
+                            int l_t, c_t;
+                            ep = NULL;
+                            for (int l = ser->getLinha() - 10; l < ser->getLinha() + 10; l++) {
+                                for (int c = ser->getColuna() - 20; c < ser->getColuna() + 20; c++) {
+                                    tp = getEdifico(l, c);
+                                    if (tp != NULL) {
+                                        if (tp->getEquipa() != ser->getEquipa()) {
+                                            if (ep == NULL) {
+                                                ep = tp;
+                                                if (ep->getLinha() > ser->getLinha()) {
+                                                    l_p = ep->getLinha() - ser->getLinha();
+                                                } else {
+                                                    l_p = ser->getLinha() - ep->getLinha();
+                                                }
+                                                if (ep->getColuna() > ser->getColuna()) {
+                                                    c_p = ep->getColuna() - ser->getColuna();
+                                                } else {
+                                                    c_p = ser->getColuna() - ep->getColuna();
+                                                }
+                                            } else {
+                                                if (tp->getLinha() > ser->getLinha()) {
+                                                    l_t = tp->getLinha() - ser->getLinha();
+                                                } else {
+                                                    l_t = ser->getLinha() - tp->getLinha();
+                                                }
+                                                if (tp->getColuna() > ser->getColuna()) {
+                                                    c_t = tp->getColuna() - ser->getColuna();
+                                                } else {
+                                                    c_t = ser->getColuna() - tp->getColuna();
+                                                }
+                                                if (c_t < c_p && l_t < l_p) {
+                                                    c_p = c_t;
+                                                    l_p = l_t;
                                                     ep = tp;
-                                                    if(ep->getLinha() > ser->getLinha()){
-                                                        l_p = ep->getLinha() - ser->getLinha();
-                                                    }else{
-                                                        l_p = ser->getLinha() - ep->getLinha();
-                                                    }
-                                                    if(ep->getColuna() > ser->getColuna()){
-                                                        c_p = ep->getColuna() - ser->getColuna();
-                                                    }else{
-                                                        c_p = ser->getColuna() - ep->getColuna();
-                                                    }
-                                                }else{
-                                                    if(tp->getLinha() > ser->getLinha()){
-                                                        l_t = tp->getLinha() - ser->getLinha();
-                                                    }else{
-                                                        l_t = ser->getLinha() - tp->getLinha();
-                                                    }
-                                                    if(tp->getColuna() > ser->getColuna()){
-                                                        c_t = tp->getColuna() - ser->getColuna();
-                                                    }else{
-                                                        c_t = ser->getColuna() - tp->getColuna();
-                                                    }
-                                                    if(c_t < c_p && l_t < l_p){
-                                                        c_p = c_t;
-                                                        l_p = l_t;
-                                                        ep = tp;
-                                                    }
                                                 }
                                             }
                                         }
                                     }
                                 }
-                                if(ep != NULL){
-                                    if(ser->getLinha() < ep->getLinha() && ser->getColuna() < ep->getColuna()){
-                                        if(verificaMovimento(ser->getLinha()+1, ser->getColuna()+1, ATACA)){
-                                            ser->setLinhaColuna(ser->getLinha()+1, ser->getColuna()+1);
-                                        }
-                                    }else if(ser->getLinha() < ep->getLinha() && ser->getColuna() > ep->getColuna()){
-                                        if(verificaMovimento(ser->getLinha()+1, ser->getColuna()-1, ATACA)){
-                                            ser->setLinhaColuna(ser->getLinha()+1, ser->getColuna()-1);
-                                        }
-                                    }else if(ser->getLinha() > ep->getLinha() && ser->getColuna() > ep->getColuna()){
-                                        if(verificaMovimento(ser->getLinha()-1, ser->getColuna()-1, ATACA)){
-                                            ser->setLinhaColuna(ser->getLinha()-1, ser->getColuna()-1);
-                                        }                       
-                                    }else if(ser->getLinha() > ep->getLinha() && ser->getColuna() < ep->getColuna()){
-                                        if(verificaMovimento(ser->getLinha()-1, ser->getColuna()+1, ATACA)){
-                                            ser->setLinhaColuna(ser->getLinha()-1, ser->getColuna()+1);
-                                        }   
-                                    }else if(ser->getLinha() == ep->getLinha() && ser->getColuna() < ep->getColuna()){
-                                        if(verificaMovimento(ser->getLinha(), ser->getColuna()+1, ATACA)){
-                                            ser->setLinhaColuna(ser->getLinha(), ser->getColuna()+1);
-                                        }                      
-                                    }else if(ser->getLinha() == ep->getLinha() && ser->getColuna() > ep->getColuna()){
-                                        if(verificaMovimento(ser->getLinha(), ser->getColuna()-1, ATACA)){
-                                            ser->setLinhaColuna(ser->getLinha(), ser->getColuna()-1);
-                                        }
-                                    }else if(ser->getLinha() < ep->getLinha() && ser->getColuna() == ep->getColuna()){
-                                        if(verificaMovimento(ser->getLinha()+1, ser->getColuna(), ATACA)){
-                                            ser->setLinhaColuna(ser->getLinha()+1, ser->getColuna());
-                                        }
-                                    }else if(ser->getLinha() > ep->getLinha() && ser->getColuna() == ep->getColuna()){
-                                        if(verificaMovimento(ser->getLinha()-1, ser->getColuna(), ATACA)){
-                                            ser->setLinhaColuna(ser->getLinha()-1, ser->getColuna());
-                                        }
+                            }
+                            if (ep != NULL) {
+                                if (ser->getLinha() < ep->getLinha() && ser->getColuna() < ep->getColuna()) {
+                                    if (verificaMovimento(ser->getLinha() + 1, ser->getColuna() + 1, ATACA)) {
+                                        ser->setLinhaColuna(ser->getLinha() + 1, ser->getColuna() + 1);
+                                    }
+                                } else if (ser->getLinha() < ep->getLinha() && ser->getColuna() > ep->getColuna()) {
+                                    if (verificaMovimento(ser->getLinha() + 1, ser->getColuna() - 1, ATACA)) {
+                                        ser->setLinhaColuna(ser->getLinha() + 1, ser->getColuna() - 1);
+                                    }
+                                } else if (ser->getLinha() > ep->getLinha() && ser->getColuna() > ep->getColuna()) {
+                                    if (verificaMovimento(ser->getLinha() - 1, ser->getColuna() - 1, ATACA)) {
+                                        ser->setLinhaColuna(ser->getLinha() - 1, ser->getColuna() - 1);
+                                    }
+                                } else if (ser->getLinha() > ep->getLinha() && ser->getColuna() < ep->getColuna()) {
+                                    if (verificaMovimento(ser->getLinha() - 1, ser->getColuna() + 1, ATACA)) {
+                                        ser->setLinhaColuna(ser->getLinha() - 1, ser->getColuna() + 1);
+                                    }
+                                } else if (ser->getLinha() == ep->getLinha() && ser->getColuna() < ep->getColuna()) {
+                                    if (verificaMovimento(ser->getLinha(), ser->getColuna() + 1, ATACA)) {
+                                        ser->setLinhaColuna(ser->getLinha(), ser->getColuna() + 1);
+                                    }
+                                } else if (ser->getLinha() == ep->getLinha() && ser->getColuna() > ep->getColuna()) {
+                                    if (verificaMovimento(ser->getLinha(), ser->getColuna() - 1, ATACA)) {
+                                        ser->setLinhaColuna(ser->getLinha(), ser->getColuna() - 1);
+                                    }
+                                } else if (ser->getLinha() < ep->getLinha() && ser->getColuna() == ep->getColuna()) {
+                                    if (verificaMovimento(ser->getLinha() + 1, ser->getColuna(), ATACA)) {
+                                        ser->setLinhaColuna(ser->getLinha() + 1, ser->getColuna());
+                                    }
+                                } else if (ser->getLinha() > ep->getLinha() && ser->getColuna() == ep->getColuna()) {
+                                    if (verificaMovimento(ser->getLinha() - 1, ser->getColuna(), ATACA)) {
+                                        ser->setLinhaColuna(ser->getLinha() - 1, ser->getColuna());
                                     }
                                 }
-                                break;
-                            case 11: //Walker
-                                movimentoRandom(ser);
-                                break;
-                            case 12: //Remedio
-                                if(ser->getSaude() > 0 && ser->getSaude() <= 3 && ser->getRemedio() == true){
-                                    ser->setSaude(ser->getSaude()+2);
-                                    ser->setRemedio(false);
-                                }
-                                break;
-                            case 14: //Aluno
+                            }
+                            break;
+                        case 11: //Walker
+                            movimentoRandom(ser);
+                            break;
+                        case 12: //Remedio
+                            if (ser->getSaude() > 0 && ser->getSaude() <= 3 && ser->getRemedio() == true) {
+                                ser->setSaude(ser->getSaude() + 2);
+                                ser->setRemedio(false);
+                            }
+                            break;
+                        case 14: //Aluno
 
-                                break;
-                        }
-                        index_car++;
-                        car = ser->getPerfil()->getCarateristica(index_car);
+                            break;
                     }
-                }else{
-                    if(ser->getLinha() == vectorColonias[i].getCastelo()->getLinha() && ser->getColuna() == vectorColonias[i].getCastelo()->getColuna()){
-                        if(ser->getSaude() > 0 && ser->getSaude() < ser->getSaudeMAX()){
-                            ser->setSaude(ser->getSaude()+1);
+                    index_car++;
+                    car = ser->getPerfil()->getCarateristica(index_car);
+                }
+            } else {
+                if (ser->getLinha() == vectorColonias[i].getCastelo()->getLinha() && ser->getColuna() == vectorColonias[i].getCastelo()->getColuna()) {
+                    if (ser->getSaude() > 0 && ser->getSaude() < ser->getSaudeMAX()) {
+                        ser->setSaude(ser->getSaude() + 1);
+                    }
+                    if (ser->getPerfil()->temRemedio()) {
+                        ser->setRemedio(true);
+                    }
+                    if (ser->getNumEspada() != -1) {
+                        ser->setNumEspada(2);
+                    }
+                } else {
+                    if (ser->getLinha() < vectorColonias[i].getCastelo()->getLinha() && ser->getColuna() < vectorColonias[i].getCastelo()->getColuna()) {
+                        if (verificaMovimento(ser->getLinha() + 1, ser->getColuna() + 1, RECOLHE, ser->getEquipa())) {
+                            ser->setLinhaColuna(ser->getLinha() + 1, ser->getColuna() + 1);
+                        } else {
+                            movimentoRandom(ser);
                         }
-                        if(ser->getPerfil()->temRemedio()){
-                            ser->setRemedio(true);
+                    } else if (ser->getLinha() < vectorColonias[i].getCastelo()->getLinha() && ser->getColuna() > vectorColonias[i].getCastelo()->getColuna()) {
+                        if (verificaMovimento(ser->getLinha() + 1, ser->getColuna() - 1, RECOLHE, ser->getEquipa())) {
+                            ser->setLinhaColuna(ser->getLinha() + 1, ser->getColuna() - 1);
+                        } else {
+                            movimentoRandom(ser);
                         }
-                        if(ser->getNumEspada() != -1){
-                            ser->setNumEspada(2);
+                    } else if (ser->getLinha() > vectorColonias[i].getCastelo()->getLinha() && ser->getColuna() > vectorColonias[i].getCastelo()->getColuna()) {
+                        if (verificaMovimento(ser->getLinha() - 1, ser->getColuna() - 1, RECOLHE, ser->getEquipa())) {
+                            ser->setLinhaColuna(ser->getLinha() - 1, ser->getColuna() - 1);
+                        } else {
+                            movimentoRandom(ser);
                         }
-                    }else{
-                        if(ser->getLinha() < vectorColonias[i].getCastelo()->getLinha() && ser->getColuna() < vectorColonias[i].getCastelo()->getColuna()){
-                            if(verificaMovimento(ser->getLinha()+1, ser->getColuna()+1, RECOLHE, ser->getEquipa())){
-                                ser->setLinhaColuna(ser->getLinha()+1, ser->getColuna()+1);
-                            }else{
-                                movimentoRandom(ser);
-                            }
-                        }else if(ser->getLinha() < vectorColonias[i].getCastelo()->getLinha() && ser->getColuna() > vectorColonias[i].getCastelo()->getColuna()){
-                            if(verificaMovimento(ser->getLinha()+1, ser->getColuna()-1, RECOLHE, ser->getEquipa())){
-                                ser->setLinhaColuna(ser->getLinha()+1, ser->getColuna()-1);
-                            }else{
-                                movimentoRandom(ser);
-                            }
-                        }else if(ser->getLinha() > vectorColonias[i].getCastelo()->getLinha() && ser->getColuna() > vectorColonias[i].getCastelo()->getColuna()){
-                            if(verificaMovimento(ser->getLinha()-1, ser->getColuna()-1, RECOLHE, ser->getEquipa())){
-                                ser->setLinhaColuna(ser->getLinha()-1, ser->getColuna()-1);
-                            }else{
-                                movimentoRandom(ser);
-                            }                         
-                        }else if(ser->getLinha() > vectorColonias[i].getCastelo()->getLinha() && ser->getColuna() < vectorColonias[i].getCastelo()->getColuna()){
-                            if(verificaMovimento(ser->getLinha()-1, ser->getColuna()+1, RECOLHE, ser->getEquipa())){
-                                ser->setLinhaColuna(ser->getLinha()-1, ser->getColuna()+1);
-                            }else{
-                                movimentoRandom(ser);
-                            }     
-                        }else if(ser->getLinha() == vectorColonias[i].getCastelo()->getLinha() && ser->getColuna() < vectorColonias[i].getCastelo()->getColuna()){
-                            if(verificaMovimento(ser->getLinha(), ser->getColuna()+1, RECOLHE, ser->getEquipa())){
-                                ser->setLinhaColuna(ser->getLinha(), ser->getColuna()+1);
-                            }else{
-                                movimentoRandom(ser);
-                            }                      
-                        }else if(ser->getLinha() == vectorColonias[i].getCastelo()->getLinha() && ser->getColuna() > vectorColonias[i].getCastelo()->getColuna()){
-                            if(verificaMovimento(ser->getLinha(), ser->getColuna()-1, RECOLHE, ser->getEquipa())){
-                                ser->setLinhaColuna(ser->getLinha(), ser->getColuna()-1);
-                            }else{
-                                movimentoRandom(ser);
-                            }
-                        }else if(ser->getLinha() < vectorColonias[i].getCastelo()->getLinha() && ser->getColuna() == vectorColonias[i].getCastelo()->getColuna()){
-                            if(verificaMovimento(ser->getLinha()+1, ser->getColuna(), RECOLHE, ser->getEquipa())){
-                                ser->setLinhaColuna(ser->getLinha()+1, ser->getColuna());
-                            }else{
-                                movimentoRandom(ser);
-                            }
-                        }else if(ser->getLinha() > vectorColonias[i].getCastelo()->getLinha() && ser->getColuna() == vectorColonias[i].getCastelo()->getColuna()){
-                            if(verificaMovimento(ser->getLinha()-1, ser->getColuna(), RECOLHE, ser->getEquipa())){
-                                ser->setLinhaColuna(ser->getLinha()-1, ser->getColuna());
-                            }else{
-                                movimentoRandom(ser);
-                            }
+                    } else if (ser->getLinha() > vectorColonias[i].getCastelo()->getLinha() && ser->getColuna() < vectorColonias[i].getCastelo()->getColuna()) {
+                        if (verificaMovimento(ser->getLinha() - 1, ser->getColuna() + 1, RECOLHE, ser->getEquipa())) {
+                            ser->setLinhaColuna(ser->getLinha() - 1, ser->getColuna() + 1);
+                        } else {
+                            movimentoRandom(ser);
+                        }
+                    } else if (ser->getLinha() == vectorColonias[i].getCastelo()->getLinha() && ser->getColuna() < vectorColonias[i].getCastelo()->getColuna()) {
+                        if (verificaMovimento(ser->getLinha(), ser->getColuna() + 1, RECOLHE, ser->getEquipa())) {
+                            ser->setLinhaColuna(ser->getLinha(), ser->getColuna() + 1);
+                        } else {
+                            movimentoRandom(ser);
+                        }
+                    } else if (ser->getLinha() == vectorColonias[i].getCastelo()->getLinha() && ser->getColuna() > vectorColonias[i].getCastelo()->getColuna()) {
+                        if (verificaMovimento(ser->getLinha(), ser->getColuna() - 1, RECOLHE, ser->getEquipa())) {
+                            ser->setLinhaColuna(ser->getLinha(), ser->getColuna() - 1);
+                        } else {
+                            movimentoRandom(ser);
+                        }
+                    } else if (ser->getLinha() < vectorColonias[i].getCastelo()->getLinha() && ser->getColuna() == vectorColonias[i].getCastelo()->getColuna()) {
+                        if (verificaMovimento(ser->getLinha() + 1, ser->getColuna(), RECOLHE, ser->getEquipa())) {
+                            ser->setLinhaColuna(ser->getLinha() + 1, ser->getColuna());
+                        } else {
+                            movimentoRandom(ser);
+                        }
+                    } else if (ser->getLinha() > vectorColonias[i].getCastelo()->getLinha() && ser->getColuna() == vectorColonias[i].getCastelo()->getColuna()) {
+                        if (verificaMovimento(ser->getLinha() - 1, ser->getColuna(), RECOLHE, ser->getEquipa())) {
+                            ser->setLinhaColuna(ser->getLinha() - 1, ser->getColuna());
+                        } else {
+                            movimentoRandom(ser);
                         }
                     }
                 }
             }
         }
     }
-    if(vectorColonias.size()==1){
+    if (vectorColonias.size() == 1) {
         Consola::setBackgroundColor(Consola::CYAN);
         Consola::clrscr();
         Consola::setTextColor(Consola::VERMELHO_CLARO);
         cout << "        <";
         Consola::setTextColor(Consola::BRANCO_CLARO);
-        cout << "----- "; 
+        cout << "----- ";
         Consola::setTextColor(Consola::VERMELHO_CLARO);
         cout << "C";
         Consola::setTextColor(Consola::BRANCO_CLARO);
-        cout << "ASTLE";   
+        cout << "ASTLE";
         Consola::setTextColor(Consola::VERMELHO_CLARO);
         cout << "W";
         Consola::setTextColor(Consola::BRANCO_CLARO);
-        cout << "AR!";    
+        cout << "AR!";
         Consola::setTextColor(Consola::BRANCO_CLARO);
-        cout << " -----"; 
+        cout << " -----";
         Consola::setTextColor(Consola::VERMELHO_CLARO);
         cout << ">" << endl;
         Consola::setTextColor(Consola::BRANCO_CLARO);
@@ -586,37 +586,37 @@ bool Controlador::next(int num) {
 }
 
 bool Controlador::verificaMovimento(int linha, int coluna, int flag, int equipa) {
-    if(linha >= 0 && linha < linhasDefault && coluna >= 0 && coluna < colunasDefault){
+    if (linha >= 0 && linha < linhasDefault && coluna >= 0 && coluna < colunasDefault) {
         Unidade* u = verificaPosicao(linha, coluna);
-        if(u == NULL){
+        if (u == NULL) {
             return true;
-        }else{
-            if(flag == ATACA){
+        } else {
+            if (flag == ATACA) {
                 return false;
-            }else if(flag == RECOLHE){
-                if(equipa != -1){
-                    if(u->getEquipa() == equipa){
-                        if(u->getNome() == "C"){
+            } else if (flag == RECOLHE) {
+                if (equipa != -1) {
+                    if (u->getEquipa() == equipa) {
+                        if (u->getNome() == "C") {
                             return true;
-                        }else{
+                        } else {
                             return false;
                         }
-                    }else{
+                    } else {
                         return false;
                     }
-                }else{
+                } else {
                     return false;
                 }
             }
         }
-    }else{
+    } else {
         return false;
     }
 }
 
 bool Controlador::removeColonia(int id) {
-    for(int i = 0; i < vectorColonias.size(); i++){
-        if(vectorColonias[i].getID() == id){
+    for (int i = 0; i < vectorColonias.size(); i++) {
+        if (vectorColonias[i].getID() == id) {
             vectorColonias.erase(vectorColonias.begin() + i);
             return true;
         }
@@ -625,49 +625,50 @@ bool Controlador::removeColonia(int id) {
 }
 
 void Controlador::movimentoRandom(Ser* ser) {
-    switch(rand() % 8){
+    switch (rand() % 8) {
         case 0:
-            if(verificaMovimento(ser->getLinha()-1, ser->getColuna()-1, ATACA)){
-                ser->setLinhaColuna(ser->getLinha()-1, ser->getColuna()-1);
+            if (verificaMovimento(ser->getLinha() - 1, ser->getColuna() - 1, ATACA)) {
+                ser->setLinhaColuna(ser->getLinha() - 1, ser->getColuna() - 1);
             }
-        break;
+            break;
         case 1:
-            if(verificaMovimento(ser->getLinha(), ser->getColuna()-1, ATACA)){
-                ser->setLinhaColuna(ser->getLinha(), ser->getColuna()-1);
+            if (verificaMovimento(ser->getLinha(), ser->getColuna() - 1, ATACA)) {
+                ser->setLinhaColuna(ser->getLinha(), ser->getColuna() - 1);
             }
-        break;
+            break;
         case 2:
-            if(verificaMovimento(ser->getLinha()+1, ser->getColuna()-1, ATACA)){
-                ser->setLinhaColuna(ser->getLinha()+1, ser->getColuna()-1);
+            if (verificaMovimento(ser->getLinha() + 1, ser->getColuna() - 1, ATACA)) {
+                ser->setLinhaColuna(ser->getLinha() + 1, ser->getColuna() - 1);
             }
-        break;
+            break;
         case 3:
-            if(verificaMovimento(ser->getLinha()+1, ser->getColuna(), ATACA)){
-                ser->setLinhaColuna(ser->getLinha()+1, ser->getColuna());
+            if (verificaMovimento(ser->getLinha() + 1, ser->getColuna(), ATACA)) {
+                ser->setLinhaColuna(ser->getLinha() + 1, ser->getColuna());
             }
-        break;
+            break;
         case 4:
-            if(verificaMovimento(ser->getLinha()+1, ser->getColuna()+1, ATACA)){
-                ser->setLinhaColuna(ser->getLinha()+1, ser->getColuna()+1);
+            if (verificaMovimento(ser->getLinha() + 1, ser->getColuna() + 1, ATACA)) {
+                ser->setLinhaColuna(ser->getLinha() + 1, ser->getColuna() + 1);
             }
-        break;
+            break;
         case 5:
-            if(verificaMovimento(ser->getLinha(), ser->getColuna()+1, ATACA)){
-                ser->setLinhaColuna(ser->getLinha(), ser->getColuna()+1);
+            if (verificaMovimento(ser->getLinha(), ser->getColuna() + 1, ATACA)) {
+                ser->setLinhaColuna(ser->getLinha(), ser->getColuna() + 1);
             }
-        break;
+            break;
         case 6:
-            if(verificaMovimento(ser->getLinha()-1, ser->getColuna()+1, ATACA)){
-                ser->setLinhaColuna(ser->getLinha()-1, ser->getColuna()+1);
+            if (verificaMovimento(ser->getLinha() - 1, ser->getColuna() + 1, ATACA)) {
+                ser->setLinhaColuna(ser->getLinha() - 1, ser->getColuna() + 1);
             }
-        break;
+            break;
         case 7:
-            if(verificaMovimento(ser->getLinha()-1, ser->getColuna(), ATACA)){
-                ser->setLinhaColuna(ser->getLinha()-1, ser->getColuna());
+            if (verificaMovimento(ser->getLinha() - 1, ser->getColuna(), ATACA)) {
+                ser->setLinhaColuna(ser->getLinha() - 1, ser->getColuna());
             }
-        break;
+            break;
     }
 }
+
 string Controlador::toLower(string str) {
     transform(str.begin(), str.end(), str.begin(), ::tolower);
     return str;
