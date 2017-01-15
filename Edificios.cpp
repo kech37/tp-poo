@@ -26,6 +26,7 @@ Edificios::Edificios(string nome, int custo, int saude, int defesa, int linha, i
     this->id = conta;
     this->conta++;
     this->nivel = 0;
+    this->tipoUnidade = Unidade::EDIFICO;
 }
 
 int Edificios::getSaude() const {
@@ -68,9 +69,25 @@ string Edificios::getNome() const {
     return this->nome;
 }
 
-void Edificios::upgradeNivel() {
-
+int Edificios::getTipo() const {
+    return this->tipo;
 }
+
+void Edificios::upgradeNivel() {
+    switch(tipo){
+        case QUINTA:
+            setDefesa(getDefesa() + 1);
+            moedasProduzitas += 1;
+            setCusto(getCusto() + 10);
+        break;
+        case TORRE:
+            ataque += 1;
+            setDefesa(getDefesa() + 2);
+            setCusto(getCusto() + 10);
+        break;
+    }
+}
+
 
 Edificios::~Edificios() {
     

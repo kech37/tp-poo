@@ -21,7 +21,11 @@ using namespace std;
 class Unidade {
 private:
     int linha, coluna, equipa;
+protected:
+    int tipoUnidade;
 public:
+    const static int SER = 0;
+    const static int EDIFICO = 1;
     /*
      * Construtor de unidade, que necessita de uma linha e de uma coluna
      */
@@ -59,6 +63,8 @@ public:
      * Se os argumentos forem a posicao da unidade, retorna true
      */
     bool checkPosicao(int linha, int coluna);
+    
+    int getUnidade() const;
     
     /*
      * Funcao Virtual getNome. Deve ser implementada nas classes derivadas

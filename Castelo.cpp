@@ -13,7 +13,12 @@
 
 #include "Castelo.h"
 
-Castelo::Castelo(int linha, int coluna, int equipa):Edificios("C", 0, 50, 10, linha, coluna, equipa){
+Castelo::Castelo(int linha, int coluna, int equipa) : Edificios("C", 0, 50, 10, linha, coluna, equipa) {
+    this->tipo = this->CASTELO;
+}
+
+int Castelo::getTipo() const {
+    return this->tipo;
 }
 
 Castelo::~Castelo() {

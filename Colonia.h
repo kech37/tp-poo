@@ -4,6 +4,8 @@
 #include "Perfil.h"
 #include "Ser.h"
 #include "Edificios.h"
+#include "Quinta.h"
+#include "Torre.h"
 
 #include <iostream>
 
@@ -54,6 +56,8 @@ public:
     
     Edificios* getCastelo();
     Edificios* getEdificio(int id);
+    Quinta* getQuinta(int id);
+    Torre* getTorre(int id);
     
     vector<Perfil>* getVectorPerfil();
     vector<Ser>* getVectorSer();

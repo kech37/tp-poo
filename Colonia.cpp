@@ -172,6 +172,32 @@ Edificios* Colonia::getEdificio(int id) {
     }
 }
 
+Quinta* Colonia::getQuinta(int id) {
+    if(vectorEdificios.size()>0){
+        for(int i = 0; i < vectorEdificios.size(); i++){
+            if(vectorEdificios[i].getID() == id && vectorEdificios[i].getTipo() == Edificios::QUINTA){
+                return (Quinta*) &vectorEdificios[i];
+            }
+        }
+        return NULL;
+    }else{
+        return NULL;
+    }  
+}
+
+Torre* Colonia::getTorre(int id) {
+    if(vectorEdificios.size()>0){
+        for(int i = 0; i < vectorEdificios.size(); i++){
+            if(vectorEdificios[i].getID() == id && vectorEdificios[i].getTipo() == Edificios::TORRE){
+                return (Torre*) &vectorEdificios[i];
+            }
+        }
+        return NULL;
+    }else{
+        return NULL;
+    }  
+}
+
 vector<Edificios>* Colonia::getVectorEdificios() {
     return &vectorEdificios;
 }

@@ -13,18 +13,22 @@
 
 #include "Quinta.h"
 
-Quinta::Quinta(int linha, int coluna, int equipa):Edificios("Q", 20, 20, 10, linha, coluna, equipa){
-    this->moedasProduzitas = 2;
+#include <iostream>
+
+Quinta::Quinta(int linha, int coluna, int equipa) : Edificios("Q", 20, 20, 10, linha, coluna, equipa) {
+    moedasProduzitas = 2;
+    tipo = QUINTA;
 }
 
-int Quinta::getMoedasProduzidas() const {
-    return this->moedasProduzitas;
+Quinta::Quinta(const Quinta& q) : Quinta(q.getLinha(), q.getColuna(), q.getEquipa()) {
 }
 
-void Quinta::upgradeNivel() {
-    this->setDefesa(this->getDefesa()+1);
-    this->moedasProduzitas+=1;
-    this->setCusto(this->getCusto()+10);
+int Quinta::getMoedasProduzidas(){
+    return moedasProduzitas;
+}
+
+int Quinta::getTipo() const {
+    return tipo;
 }
 
 Quinta::~Quinta() {

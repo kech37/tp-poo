@@ -16,11 +16,11 @@
 
 #include "Edificios.h"
 
-
-class Castelo : public Edificios{
+class Castelo : public Edificios {
 private:
 public:
     Castelo(int linha, int coluna, int equipa);
+    int getTipo() const override;
     virtual ~Castelo();
 };
 

@@ -16,16 +16,13 @@
 
 #include "Edificios.h"
 
-
-class Torre:public Edificios{
+class Torre : public Edificios {
 private:
-    int ataque;
 public:
     Torre(int linha, int coluna, int equipa);
-    
+    Torre(const Torre &t);
     int getAtaque() const;
-    
-    void upgradeNivel() override;
+    int getTipo() const override;
     virtual ~Torre();
 };
 

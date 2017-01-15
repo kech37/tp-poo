@@ -52,6 +52,10 @@ bool Unidade::checkPosicao(int linha, int coluna) {
     }
 }
 
+int Unidade::getUnidade() const {
+    return tipoUnidade;
+}
+
 Unidade::~Unidade() {
 
 }

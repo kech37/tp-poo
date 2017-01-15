@@ -65,6 +65,7 @@ Ser::Ser(Perfil* p, int linha, int coluna, int equipa):Unidade(linha, coluna, eq
         c = this->perfil->getCarateristica(i);
     }
     this->saude = this->saudeMAX;
+    tipoUnidade = Unidade::SER;
 }
 
 int Ser::getAtaque() {

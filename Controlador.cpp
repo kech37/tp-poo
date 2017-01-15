@@ -16,6 +16,7 @@
 
 #include "Controlador.h"
 #include "Consola.h"
+#include "Torre.h"
 
 Controlador::Controlador() {
     this->moedasDefault = 0;
@@ -554,6 +555,88 @@ bool Controlador::next() {
                         }
                     }
                 }
+            }
+        }
+        for (int j = 0; j < vectorColonias[i].getVectorEdificios()->size(); j++) {
+            switch (vectorColonias[i].getVectorEdificios()->at(j).getTipo()) {
+                case Edificios::QUINTA:
+                    vectorColonias[i].setMoedas(vectorColonias[i].getMoedas()+(vectorColonias[i].getQuinta(vectorColonias[i].getVectorEdificios()->at(j).getID())->getMoedasProduzidas()));
+                    break;
+                case Edificios::TORRE:
+                    Torre* torre = vectorColonias[i].getTorre(vectorColonias[i].getVectorEdificios()->at(j).getID());
+                    Unidade * uniAtacar[24];
+                    uniAtacar[0] = this->verificaPosicao(torre->getLinha() - 1, torre->getColuna() - 1);
+                    uniAtacar[1] = this->verificaPosicao(torre->getLinha(), torre->getColuna() - 1);
+                    uniAtacar[2] = this->verificaPosicao(torre->getLinha() + 1, torre->getColuna() - 1);
+                    uniAtacar[3] = this->verificaPosicao(torre->getLinha() + 1, torre->getColuna());
+                    uniAtacar[4] = this->verificaPosicao(torre->getLinha() + 1, torre->getColuna() + 1);
+                    uniAtacar[5] = this->verificaPosicao(torre->getLinha(), torre->getColuna() + 1);
+                    uniAtacar[6] = this->verificaPosicao(torre->getLinha() - 1, torre->getColuna() + 1);
+                    uniAtacar[7] = this->verificaPosicao(torre->getLinha() - 1, torre->getColuna());
+                    uniAtacar[8] = this->verificaPosicao(torre->getLinha() - 2, torre->getColuna() - 1);
+                    uniAtacar[9] = this->verificaPosicao(torre->getLinha() - 2, torre->getColuna() - 2);
+                    uniAtacar[10] = this->verificaPosicao(torre->getLinha() - 1, torre->getColuna() - 2);
+                    uniAtacar[11] = this->verificaPosicao(torre->getLinha(), torre->getColuna() - 2);
+                    uniAtacar[12] = this->verificaPosicao(torre->getLinha() + 1, torre->getColuna() - 2);
+                    uniAtacar[13] = this->verificaPosicao(torre->getLinha() + 2, torre->getColuna() - 2);
+                    uniAtacar[14] = this->verificaPosicao(torre->getLinha() + 2, torre->getColuna() - 1);
+                    uniAtacar[15] = this->verificaPosicao(torre->getLinha() + 2, torre->getColuna());
+                    uniAtacar[16] = this->verificaPosicao(torre->getLinha() + 2, torre->getColuna() + 1);
+                    uniAtacar[17] = this->verificaPosicao(torre->getLinha() + 2, torre->getColuna() + 2);
+                    uniAtacar[18] = this->verificaPosicao(torre->getLinha() + 1, torre->getColuna() + 2);
+                    uniAtacar[19] = this->verificaPosicao(torre->getLinha(), torre->getColuna() + 2);
+                    uniAtacar[20] = this->verificaPosicao(torre->getLinha() - 1, torre->getColuna() + 2);
+                    uniAtacar[21] = this->verificaPosicao(torre->getLinha() - 2, torre->getColuna() + 2);
+                    uniAtacar[22] = this->verificaPosicao(torre->getLinha() - 2, torre->getColuna() + 1);
+                    uniAtacar[23] = this->verificaPosicao(torre->getLinha() - 2, torre->getColuna());
+                    for (int k = 0; k < 24; k++) {
+                        if (uniAtacar[k] != NULL) {
+                            cout << "for: " << k << endl;
+                            switch (uniAtacar[k]->getUnidade()) {
+                                case Unidade::SER:
+                                    Ser* serA;
+                                    serA = getSer(uniAtacar[k]->getLinha(), uniAtacar[k]->getColuna());
+                                    if (serA->getBandeira() == true && serA->getEquipa() != torre->getEquipa() || serA->getBandeira() == false) {
+                                        if (torre->getAtaque() > serA->getDefesa()) {
+                                            serA->setSaude(serA->getSaude()-(torre->getAtaque() - serA->getDefesa()));
+                                        } else {
+                                            serA->setSaude(serA->getSaude() - 1);
+                                        }
+                                        if (serA->getSaude() <= 0) {
+                                            if (serA->getSecondChance() == true) {
+                                                serA->setSecondChance(false);
+                                                serA->setSaude(serA->getSaudeMAX());
+                                                serA->setLinhaColuna(vectorColonias[i].getCastelo()->getLinha(), vectorColonias[i].getCastelo()->getColuna());
+                                            } else {
+                                                this->removeSer(serA->getID());
+                                            }
+                                        }
+                                        k = 24;
+                                    }
+                                    break;
+                                case Unidade::EDIFICO:
+                                    Edificios* ediA;
+                                    ediA = getEdifico(uniAtacar[k]->getLinha(), uniAtacar[k]->getColuna());
+                                    if (ediA != NULL && ediA->getEquipa() != torre->getEquipa()) {
+                                        if (torre->getAtaque() > ediA->getDefesa()) {
+                                            ediA->setSaude(ediA->getSaude()-(torre->getAtaque() - ediA->getDefesa()));
+                                        } else {
+                                            ediA->setSaude(ediA->getSaude() - 1);
+                                        }
+                                        if (ediA->getSaude() <= 0) {
+                                            if (ediA->getNome() == "C") {
+                                                this->removeColonia(ediA->getEquipa());
+                                            } else {
+                                                this->removeEdificio(ediA->getID());
+                                            }
+                                        }
+                                        k = 24;
+                                    }
+                                    break;
+                            }
+                        }
+                    }
+                    break;
             }
         }
     }

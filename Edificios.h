@@ -20,28 +20,34 @@
 
 using namespace std;
 
-class Edificios:public Unidade{
+class Edificios : public Unidade {
 private:
     string nome;
     static int conta;
     int id, custo, saude, defesa, saudeMAX;
     int nivel;
-    
+protected:
+    int tipo, moedasProduzitas, ataque;
 public:
+    const static int CASTELO = 0;
+    const static int TORRE = 1;
+    const static int QUINTA = 2;
+
     Edificios(string nome, int custo, int saude, int defesa, int linha, int coluna, int equipa);
     int getDefesa() const;
     int getSaude() const;
     int getSaudeMAX() const;
     int getCusto() const;
     int getNivel() const;
-    
+
     void setDefesa(int defesa);
     void setSaude(int saude);
     void setCusto(int custo);
-    
-   virtual int getID() const override;
-   virtual string getNome() const override;
-   virtual void upgradeNivel();
+
+    virtual int getTipo() const;
+    virtual int getID() const override;
+    virtual string getNome() const override;
+    void upgradeNivel();
 
     virtual ~Edificios() override;
 

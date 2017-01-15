@@ -1,5 +1,5 @@
 build/Debug/MinGW-Windows/Colonia.o: Colonia.cpp Colonia.h Perfil.h \
- Caracteristica.h Ser.h Unidade.h Edificios.h Castelo.h
+ Caracteristica.h Ser.h Unidade.h Edificios.h Quinta.h Torre.h Castelo.h
 
 Colonia.h:
 
@@ -12,5 +12,9 @@ Ser.h:
 Unidade.h:
 
 Edificios.h:
+
+Quinta.h:
+
+Torre.h:
 
 Castelo.h:
