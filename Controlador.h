@@ -57,6 +57,9 @@ public:
     bool removeSer(int id);
     Edificios* getEdifico(int linha, int coluna);
     bool removeEdificio(int id);
+    
+    bool removeColonia(int id);
+    
     Unidade* verificaPosicao(int linha, int coluna);
     bool verificaMovimento(int linha, int coluna, int flag, int equipa = -1);
     
@@ -64,7 +67,7 @@ public:
     
     void atribuirPerfil();
     
-    void next(int num);
+    bool next(int num);
     
     string toLower(string str);
     string toUpper(string str);

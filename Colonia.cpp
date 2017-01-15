@@ -203,7 +203,7 @@ void Colonia::listar() {
         if(vectorSer.size() > 0){
             for(int i = 0; i < vectorSer.size(); i++){
                 cout << "           " << vectorSer[i].getID() << ") " << vectorSer[i].getPerfil()->getNome();
-                cout << "   ["<< vectorSer[i].getLinha() << ":" << vectorSer[i].getColuna();
+                cout << "   ["<< vectorSer[i].getLinha() << ":" << vectorSer[i].getColuna() << "]";
                 cout << "   ["<< "Saude: "<< vectorSer[i].getSaude() << "]";
                 cout << "   ["<< "Defesa: "<< vectorSer[i].getDefesa() << "]";
                 cout << "   ["<< "Ataque: "<< vectorSer[i].getAtaque() << "]" << endl;;      

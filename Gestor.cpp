@@ -504,10 +504,14 @@ bool Gestor::intrepertaComandos(string comando) {
             }  
         }else if(stringSeparada[0] == "next"){
             if(stringSeparada.size() == 1){
-                controlador->next(1);
+                if(!controlador->next(1)){
+                    return false;
+                }
             }else if(stringSeparada.size() == 2){
                 if(checkNumero(stringSeparada[1])){
-                    controlador->next(atoi(stringSeparada[1].c_str()));
+                    if(!controlador->next(atoi(stringSeparada[1].c_str()))){
+                        return false;
+                    }
                 }else{
                     imprimeErro("O argumento tem que ser um valor inteiro positivo!\n");
                 }
