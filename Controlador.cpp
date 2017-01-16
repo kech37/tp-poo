@@ -251,6 +251,7 @@ bool Controlador::next() {
                                 for (int k = 0; k < 8; k++) {
                                     if (serAtacar[k] != NULL) {
                                         if (serAtacar[k]->getBandeira() == true && serAtacar[k]->getEquipa() != ser->getEquipa() || serAtacar[k]->getBandeira() == false) {
+                                            cout << "SER: vou atacar um ser -> " << serAtacar[k]->getID() << endl;
                                             if (ser->getAtaque() > serAtacar[k]->getDefesa()) {
                                                 serAtacar[k]->setSaude(serAtacar[k]->getSaude()-(ser->getAtaque() - serAtacar[k]->getDefesa()));
                                             } else {
@@ -284,17 +285,19 @@ bool Controlador::next() {
                                 ediAtacar[7] = this->getEdifico(ser->getLinha() - 1, ser->getColuna());
                                 for (int k = 0; k < 8; k++) {
                                     if (ediAtacar[k] != NULL && ediAtacar[k]->getEquipa() != ser->getEquipa()) {
+                                        cout << "SER: vou atacar um edificio -> " << ediAtacar[k]->getID() << endl;
                                         if (ser->getAtaque() > ediAtacar[k]->getDefesa()) {
                                             ediAtacar[k]->setSaude(ediAtacar[k]->getSaude()-(ser->getAtaque() - ediAtacar[k]->getDefesa()));
                                         } else {
                                             ediAtacar[k]->setSaude(ediAtacar[k]->getSaude() - 1);
                                         }
                                         if (ediAtacar[k]->getSaude() <= 0) {
-                                            if (ediAtacar[k]->getNome() == "C") {
+                                            /*if (ediAtacar[k]->getNome() == "C") {
                                                 this->removeColonia(ediAtacar[k]->getEquipa());
                                             } else {
                                                 this->removeEdificio(ediAtacar[k]->getID());
-                                            }
+                                            }*/
+                                            this->removeEdificio(ediAtacar[k]->getID());
                                         }
                                         k = 8;
                                     }
@@ -311,6 +314,7 @@ bool Controlador::next() {
                                 for (int c = ser->getColuna() - 20; c < ser->getColuna() + 20; c++) {
                                     temp = getSer(l, c);
                                     if (temp != NULL) {
+                                        cout << "Heat: Encontrei um ser: " << temp->getID() << " -Eq: " << temp->getEquipa() << endl;
                                         if (temp->getEquipa() != ser->getEquipa()) {
                                             if (perto == NULL) {
                                                 perto = temp;
@@ -341,11 +345,14 @@ bool Controlador::next() {
                                                     perto = temp;
                                                 }
                                             }
+                                            
+                                        cout << "Ser mais perto: " << perto->getID() << " -Eq: " << perto->getEquipa() << endl;
                                         }
                                     }
                                 }
                             }
                             if (perto != NULL) {
+                                cout << "SER HEAT: Detetei um ser -> " << perto->getID() << endl;
                                 if (ser->getLinha() < perto->getLinha() && ser->getColuna() < perto->getColuna()) {
                                     if (verificaMovimento(ser->getLinha() + 1, ser->getColuna() + 1, ATACA)) {
                                         ser->setLinhaColuna(ser->getLinha() + 1, ser->getColuna() + 1);
@@ -442,6 +449,7 @@ bool Controlador::next() {
                                 }
                             }
                             if (ep != NULL) {
+                                cout << "SER: Detetei um edificio -> " << ep->getID() << endl;
                                 if (ser->getLinha() < ep->getLinha() && ser->getColuna() < ep->getColuna()) {
                                     if (verificaMovimento(ser->getLinha() + 1, ser->getColuna() + 1, ATACA)) {
                                         ser->setLinhaColuna(ser->getLinha() + 1, ser->getColuna() + 1);
@@ -591,12 +599,12 @@ bool Controlador::next() {
                     uniAtacar[23] = this->verificaPosicao(torre->getLinha() - 2, torre->getColuna());
                     for (int k = 0; k < 24; k++) {
                         if (uniAtacar[k] != NULL) {
-                            cout << "for: " << k << endl;
                             switch (uniAtacar[k]->getUnidade()) {
                                 case Unidade::SER:
                                     Ser* serA;
                                     serA = getSer(uniAtacar[k]->getLinha(), uniAtacar[k]->getColuna());
                                     if (serA->getBandeira() == true && serA->getEquipa() != torre->getEquipa() || serA->getBandeira() == false) {
+                                        cout << "TORRE: Detetei um ser -> " << serA->getID() << endl;
                                         if (torre->getAtaque() > serA->getDefesa()) {
                                             serA->setSaude(serA->getSaude()-(torre->getAtaque() - serA->getDefesa()));
                                         } else {
@@ -618,17 +626,19 @@ bool Controlador::next() {
                                     Edificios* ediA;
                                     ediA = getEdifico(uniAtacar[k]->getLinha(), uniAtacar[k]->getColuna());
                                     if (ediA != NULL && ediA->getEquipa() != torre->getEquipa()) {
+                                        cout << "TORRE: Detetei um edicio -> " << ediA->getID() << endl;
                                         if (torre->getAtaque() > ediA->getDefesa()) {
                                             ediA->setSaude(ediA->getSaude()-(torre->getAtaque() - ediA->getDefesa()));
                                         } else {
                                             ediA->setSaude(ediA->getSaude() - 1);
                                         }
                                         if (ediA->getSaude() <= 0) {
-                                            if (ediA->getNome() == "C") {
+                                            /*if (ediA->getNome() == "C") {
                                                 this->removeColonia(ediA->getEquipa());
                                             } else {
                                                 this->removeEdificio(ediA->getID());
-                                            }
+                                            }*/
+                                            this->removeEdificio(ediA->getID());
                                         }
                                         k = 24;
                                     }
@@ -639,6 +649,15 @@ bool Controlador::next() {
                     break;
             }
         }
+    }
+    vector<int> indexApagar;
+    for(int i = 0; i < vectorColonias.size(); i++){
+        if(vectorColonias[i].getVectorEdificios()->size() == 0 && vectorColonias[i].getVectorSer()->size() == 0){
+            indexApagar.push_back(i);
+        }
+    }
+    for(int i = 0; i < indexApagar.size(); i++){
+        vectorColonias.erase(vectorColonias.begin()+indexApagar[i]);
     }
     if (vectorColonias.size() == 1) {
         Consola::setBackgroundColor(Consola::CYAN);
