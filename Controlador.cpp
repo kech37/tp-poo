@@ -23,6 +23,24 @@ Controlador::Controlador() {
     this->colunasDefault = 0;
     this->linhasDefault = 0;
     srand(time(NULL));
+    this->name = "";
+    this->config = true;
+    this->c_dim = false;
+    this->c_mkperfil = false;
+    this->c_moedas = false;
+    this->c_oponentes = false;
+}
+
+Controlador::Controlador(string name) : Controlador(){
+    this->name = toLower(name);
+}
+
+string Controlador::getName() const {
+    return this->name;
+}
+
+void Controlador::setName(string name) {
+    this->name = name;
 }
 
 void Controlador::setLinhasDefault(int linhas) {
@@ -495,7 +513,84 @@ bool Controlador::next() {
                             }
                             break;
                         case 14: //Aluno
-
+                            Unidade* aluno_ep;
+                            int aluno_l, aluno_c;
+                            Unidade* aluno_tp;
+                            int aluno_tp_l, aluno_tp_c;
+                            aluno_ep = NULL;
+                            for (int l = 0; l < getLinhasDefault(); l++) {
+                                for (int c = 0; c < getColunasDefault() + 20; c++) {
+                                    aluno_tp = getEdifico(l, c);
+                                    if (aluno_tp != NULL) {
+                                        if (aluno_tp->getEquipa() != ser->getEquipa()) {
+                                            if (aluno_ep == NULL) {
+                                                aluno_ep = aluno_tp;
+                                                if (aluno_ep->getLinha() > ser->getLinha()) {
+                                                    aluno_l = aluno_ep->getLinha() - ser->getLinha();
+                                                } else {
+                                                    aluno_l = ser->getLinha() - aluno_ep->getLinha();
+                                                }
+                                                if (aluno_ep->getColuna() > ser->getColuna()) {
+                                                    aluno_c = aluno_ep->getColuna() - ser->getColuna();
+                                                } else {
+                                                    aluno_c = ser->getColuna() - aluno_ep->getColuna();
+                                                }
+                                            } else {
+                                                if (aluno_tp->getLinha() > ser->getLinha()) {
+                                                    aluno_tp_l = aluno_tp->getLinha() - ser->getLinha();
+                                                } else {
+                                                    aluno_tp_l = ser->getLinha() - aluno_tp->getLinha();
+                                                }
+                                                if (aluno_tp->getColuna() > ser->getColuna()) {
+                                                    aluno_tp_c = aluno_tp->getColuna() - ser->getColuna();
+                                                } else {
+                                                    aluno_tp_c = ser->getColuna() - aluno_tp->getColuna();
+                                                }
+                                                if (aluno_tp_c < aluno_c && aluno_tp_l < aluno_l) {
+                                                    aluno_c = aluno_tp_c;
+                                                    aluno_l = aluno_tp_l;
+                                                    aluno_ep = aluno_tp;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            if (aluno_ep != NULL) {
+                                if (ser->getLinha() < aluno_ep->getLinha() && ser->getColuna() < aluno_ep->getColuna()) {
+                                    if (verificaMovimento(ser->getLinha() + 1, ser->getColuna() + 1, ATACA)) {
+                                        ser->setLinhaColuna(ser->getLinha() + 1, ser->getColuna() + 1);
+                                    }
+                                } else if (ser->getLinha() < aluno_ep->getLinha() && ser->getColuna() > aluno_ep->getColuna()) {
+                                    if (verificaMovimento(ser->getLinha() + 1, ser->getColuna() - 1, ATACA)) {
+                                        ser->setLinhaColuna(ser->getLinha() + 1, ser->getColuna() - 1);
+                                    }
+                                } else if (ser->getLinha() > aluno_ep->getLinha() && ser->getColuna() > aluno_ep->getColuna()) {
+                                    if (verificaMovimento(ser->getLinha() - 1, ser->getColuna() - 1, ATACA)) {
+                                        ser->setLinhaColuna(ser->getLinha() - 1, ser->getColuna() - 1);
+                                    }
+                                } else if (ser->getLinha() > aluno_ep->getLinha() && ser->getColuna() < aluno_ep->getColuna()) {
+                                    if (verificaMovimento(ser->getLinha() - 1, ser->getColuna() + 1, ATACA)) {
+                                        ser->setLinhaColuna(ser->getLinha() - 1, ser->getColuna() + 1);
+                                    }
+                                } else if (ser->getLinha() == aluno_ep->getLinha() && ser->getColuna() < aluno_ep->getColuna()) {
+                                    if (verificaMovimento(ser->getLinha(), ser->getColuna() + 1, ATACA)) {
+                                        ser->setLinhaColuna(ser->getLinha(), ser->getColuna() + 1);
+                                    }
+                                } else if (ser->getLinha() == aluno_ep->getLinha() && ser->getColuna() > aluno_ep->getColuna()) {
+                                    if (verificaMovimento(ser->getLinha(), ser->getColuna() - 1, ATACA)) {
+                                        ser->setLinhaColuna(ser->getLinha(), ser->getColuna() - 1);
+                                    }
+                                } else if (ser->getLinha() < aluno_ep->getLinha() && ser->getColuna() == aluno_ep->getColuna()) {
+                                    if (verificaMovimento(ser->getLinha() + 1, ser->getColuna(), ATACA)) {
+                                        ser->setLinhaColuna(ser->getLinha() + 1, ser->getColuna());
+                                    }
+                                } else if (ser->getLinha() > aluno_ep->getLinha() && ser->getColuna() == aluno_ep->getColuna()) {
+                                    if (verificaMovimento(ser->getLinha() - 1, ser->getColuna(), ATACA)) {
+                                        ser->setLinhaColuna(ser->getLinha() - 1, ser->getColuna());
+                                    }
+                                }
+                            }
                             break;
                     }
                     index_car++;

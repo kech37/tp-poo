@@ -96,8 +96,8 @@ Caracteristica::Caracteristica(int id) {
         case 14:
             this->id = 14;
             this->nome = "Aluno";
-            this->monetario = 1;
-            this->forca = 1;
+            this->monetario = 5;
+            this->forca = 3;
         break;
     }
 }

@@ -27,21 +27,21 @@ Gestor* Gestor::getInstance() {
 }
 
 void Gestor::start() {
-    controlador = new Controlador();
-    focoLinhas = 0;
-    focoColunas = 0;
+    controlador.push_back(Controlador());
+    jogoControlado = 0;
     string comando;
+    comando_foco(0, 0);
     Consola::setBackgroundColor(Consola::CYAN);
     Consola::clrscr();
     imprimeLogo();
     do {
-        if (!config) {
+        if (!controlador[jogoControlado].config) {
             cout << "Prima qualquer tecla para continuar...";
             Consola::getch();
             desenharMapa();
         }
         getline(cin, comando);
-    } while (intrepertaComandos(controlador->toLower(comando)));
+    } while (intrepertaComandos(this->toLower(comando)));
     imprimeLog("Jogo terminado.\n      Obrigado por jogar!\n\n");
 }
 
@@ -83,7 +83,7 @@ void Gestor::desenharMapa() {
                             cout << linhas;
                         }
                     } else {
-                        u = controlador->verificaPosicao(linhas, colunas);
+                        u = controlador[jogoControlado].verificaPosicao(linhas, colunas);
                         if (u != NULL) {
                             Consola::setBackgroundColor(u->getEquipa());
                             Consola::setTextColor(Consola::BRANCO_CLARO);
@@ -108,13 +108,47 @@ bool Gestor::intrepertaComandos(string comando) {
     if (stringSeparada.size() != 0) {
         if (stringSeparada[0] == "fim") {
             return false;
+        } else if (stringSeparada[0] == "save") {
+            if (comando_save(stringSeparada[1])) {
+                controlador.push_back(Controlador());
+                jogoControlado = controlador.size() - 1;
+                Consola::setBackgroundColor(Consola::CYAN);
+                Consola::clrscr();
+                imprimeLogo();
+                imprimeLog("Jogo gravado! Comecou agora um novo jogo.\n       Prima qualquer tecla para continuar...");
+                Consola::getch();
+            } else {
+                imprimeErro("Ja existe um save com esse nome!\n       Apague esse save, ou escolha outro nome!\n");
+            }
+        } else if (stringSeparada[0] == "restore") {
+            if (comando_restore(stringSeparada[1])) {    
+                Consola::setBackgroundColor(Consola::CYAN);
+                Consola::clrscr();
+                imprimeLogo();
+                imprimeLog("Jogo trocado com sucesso!\n       Prima qualquer tecla para continuar...");
+                Consola::getch();
+            } else {
+                imprimeErro("Nao foi encontrado esse savegame!\n");
+            }
+        } else if (stringSeparada[0] == "erase") {
+            if (comando_erase(stringSeparada[1])) {
+                controlador.push_back(Controlador());
+                jogoControlado = controlador.size() - 1;
+                Consola::setBackgroundColor(Consola::CYAN);
+                Consola::clrscr();
+                imprimeLogo();
+                imprimeLog("Savegame eliminado! Começou agora um novo jogo.\n       Prima qualquer tecla para continuar...");
+                Consola::getch();
+            } else {
+                imprimeErro("Nao foi encontrado esse savegame!\n");
+            }
         } else if (stringSeparada[0] == "dim") {
-            if (config) {
+            if (controlador[jogoControlado].config) {
                 if (stringSeparada.size() == 3) {
                     if (checkNumero(stringSeparada[1]) && checkNumero(stringSeparada[2])) {
                         if (comando_dim(atoi(stringSeparada[1].c_str()), atoi(stringSeparada[2].c_str()))) {
-                            imprimeLog("Dimensao configurada - Linhas: " + stringSeparada[1] + ", Colunas: " + stringSeparada[2] + ".\n");
-                            c_dim = true;
+                            imprimeLog("Dimensao dim - Linhas: " + stringSeparada[1] + ", Colunas: " + stringSeparada[2] + ".\n");
+                            controlador[jogoControlado].c_dim = true;
                         } else {
                             imprimeErro("As dimensoes tem que ser pelo menos 20 x 40.\n");
                         }
@@ -128,12 +162,12 @@ bool Gestor::intrepertaComandos(string comando) {
                 imprimeErro("Configuracao terminada!\n");
             }
         } else if (stringSeparada[0] == "moedas") {
-            if (config) {
+            if (controlador[jogoControlado].config) {
                 if (stringSeparada.size() == 2) {
                     if (checkNumero(stringSeparada[1])) {
                         comando_moedas(atoi(stringSeparada[1].c_str()));
-                        imprimeLog("Moedas configurada - Valor: " + stringSeparada[1] + ".\n");
-                        c_moedas = true;
+                        imprimeLog("Moedas default configurada - Valor: " + stringSeparada[1] + ".\n");
+                        controlador[jogoControlado].c_moedas = true;
                     } else {
                         imprimeErro("O argumento tem que se inteiro positivo!\n");
                     }
@@ -144,13 +178,13 @@ bool Gestor::intrepertaComandos(string comando) {
                 imprimeErro("Configuracao terminada!\n");
             }
         } else if (stringSeparada[0] == "oponentes") {
-            if (config) {
-                if (c_dim && c_moedas) {
+            if (controlador[jogoControlado].config) {
+                if (controlador[jogoControlado].c_dim && controlador[jogoControlado].c_moedas) {
                     if (stringSeparada.size() == 2) {
                         if (checkNumero(stringSeparada[1])) {
                             if (comando_oponentes(atoi(stringSeparada[1].c_str()))) {
-                                imprimeLog("Oponentes configurada - Num. Oponentes: " + stringSeparada[1] + ".\n");
-                                c_oponentes = true;
+                                imprimeLog("Oponentes configurado - Num. Oponentes: " + stringSeparada[1] + ".\n");
+                                controlador[jogoControlado].c_oponentes = true;
                             } else {
                                 imprimeErro("Nao ha espaco para mais colonias!\n");
                             }
@@ -167,10 +201,10 @@ bool Gestor::intrepertaComandos(string comando) {
                 imprimeErro("Configuracao terminada!\n");
             }
         } else if (stringSeparada[0] == "castelo") {
-            if (config) {
+            if (controlador[jogoControlado].config) {
                 if (stringSeparada.size() == 4) {
                     if (checkNumero(stringSeparada[2]) && checkNumero(stringSeparada[3])) {
-                        if (atoi(stringSeparada[2].c_str()) < controlador->getLinhasDefault() && atoi(stringSeparada[3].c_str()) < controlador->getColunasDefault()) {
+                        if (atoi(stringSeparada[2].c_str()) < controlador[jogoControlado].getLinhasDefault() && atoi(stringSeparada[3].c_str()) < controlador[jogoControlado].getColunasDefault()) {
                             switch (comando_castelo(stringSeparada[1], atoi(stringSeparada[2].c_str()), atoi(stringSeparada[3].c_str()))) {
                                 case -1:
                                     imprimeErro("Nao existe a colonia \'" + stringSeparada[1] + "\'!\n");
@@ -195,8 +229,8 @@ bool Gestor::intrepertaComandos(string comando) {
                 imprimeErro("Configuracao terminada!\n");
             }
         } else if (stringSeparada[0] == "mkperfil") {
-            if (config) {
-                if (c_oponentes) {
+            if (controlador[jogoControlado].config) {
+                if (controlador[jogoControlado].c_oponentes) {
                     if (stringSeparada.size() == 2) {
                         switch (comando_mkperfil("A", stringSeparada[1])) {
                             case -2:
@@ -210,7 +244,7 @@ bool Gestor::intrepertaComandos(string comando) {
                                 break;
                             case 1:
                                 imprimeLog("Perfil \'" + stringSeparada[1] + "\' criada com sucesso!\n");
-                                c_mkperfil = true;
+                                controlador[jogoControlado].c_mkperfil = true;
                                 break;
                         }
                     } else {
@@ -223,13 +257,13 @@ bool Gestor::intrepertaComandos(string comando) {
                 imprimeErro("Configuracao terminada!\n");
             }
         } else if (stringSeparada[0] == "addperfil") {
-            if (config) {
-                if (c_mkperfil) {
+            if (controlador[jogoControlado].config) {
+                if (controlador[jogoControlado].c_mkperfil) {
                     if (stringSeparada.size() == 3) {
                         if (checkNumero(stringSeparada[2])) {
                             inputInt = atoi(stringSeparada[2].c_str());
                             if (inputInt > 0 && inputInt < 15) {
-                                switch (comando_addperfil("A", controlador->toLower(stringSeparada[1]), inputInt)) {
+                                switch (comando_addperfil("A", this->toLower(stringSeparada[1]), inputInt)) {
                                     case -2:
                                         imprimeErro("Colonia nao encontrada\n");
                                         break;
@@ -259,12 +293,12 @@ bool Gestor::intrepertaComandos(string comando) {
                 imprimeErro("Configuracao terminada!\n");
             }
         } else if (stringSeparada[0] == "subperfil") {
-            if (config) {
+            if (controlador[jogoControlado].config) {
                 if (stringSeparada.size() == 3) {
                     if (checkNumero(stringSeparada[2])) {
                         inputInt = atoi(stringSeparada[2].c_str());
                         if (inputInt > 0 && inputInt < 15) {
-                            switch (comando_subperfil("A", controlador->toLower(stringSeparada[1]), inputInt)) {
+                            switch (comando_subperfil("A", this->toLower(stringSeparada[1]), inputInt)) {
                                 case -2:
                                     imprimeErro("Colonia nao encontrada\n");
                                     break;
@@ -291,7 +325,7 @@ bool Gestor::intrepertaComandos(string comando) {
                 imprimeErro("Configuracao terminada!\n");
             }
         } else if (stringSeparada[0] == "rmperfil") {
-            if (config) {
+            if (controlador[jogoControlado].config) {
                 if (stringSeparada.size() == 2) {
                     if (comando_rmperfil("A", stringSeparada[1])) {
                         imprimeLog("Perfil removido com sucesso!\n");
@@ -315,7 +349,7 @@ bool Gestor::intrepertaComandos(string comando) {
         } else if (stringSeparada[0] == "inicio") {
             if (isConfig()) {
                 comando_inicio();
-                config = false;
+                controlador[jogoControlado].config = false;
             }
         } else if (stringSeparada[0] == "foco") {
             if (stringSeparada.size() == 3) {
@@ -330,9 +364,9 @@ bool Gestor::intrepertaComandos(string comando) {
         } else if (stringSeparada[0] == "list") {
             Colonia* c;
             if (stringSeparada.size() == 1) {
-                controlador->listarTudo();
+                controlador[jogoControlado].listarTudo();
             } else {
-                c = controlador->getColonia(controlador->toUpper(stringSeparada[1]));
+                c = controlador[jogoControlado].getColonia(this->toUpper(stringSeparada[1]));
                 if (c != NULL) {
                     c->listar();
                 } else {
@@ -350,10 +384,10 @@ bool Gestor::intrepertaComandos(string comando) {
 
         } else if (stringSeparada[0] == "listallp") {
             if (stringSeparada.size() == 1) {
-                for (int i = 0; i < controlador->getVectorColonia()->size(); i++) {
-                    cout << "[ Colonia: " << controlador->getVectorColonia()->at(i).getNome() << " ]" << endl;
-                    for (int j = 0; j < controlador->getVectorColonia()->at(i).getVectorPerfil()->size(); j++) {
-                        controlador->getVectorColonia()->at(i).getVectorPerfil()->at(j).listarTudo();
+                for (int i = 0; i < controlador[jogoControlado].getVectorColonia()->size(); i++) {
+                    cout << "[ Colonia: " << controlador[jogoControlado].getVectorColonia()->at(i).getNome() << " ]" << endl;
+                    for (int j = 0; j < controlador[jogoControlado].getVectorColonia()->at(i).getVectorPerfil()->size(); j++) {
+                        controlador[jogoControlado].getVectorColonia()->at(i).getVectorPerfil()->at(j).listarTudo();
                     }
                 }
             } else {
@@ -363,7 +397,7 @@ bool Gestor::intrepertaComandos(string comando) {
             if (stringSeparada.size() == 3) {
                 if (checkNumero(stringSeparada[2])) {
                     Colonia* c;
-                    c = controlador->getColonia(controlador->toUpper(stringSeparada[1]));
+                    c = controlador[jogoControlado].getColonia(this->toUpper(stringSeparada[1]));
                     if (c != NULL) {
                         c->setMoedas(atoi(stringSeparada[2].c_str()));
                         imprimeLog("Moedas alteradas com sucesso!\n");
@@ -381,11 +415,11 @@ bool Gestor::intrepertaComandos(string comando) {
             if (stringSeparada.size() >= 4) {
                 if (checkNumero(stringSeparada[2]) && checkNumero(stringSeparada[3])) {
                     if (stringSeparada[0] == "mkbuild") {
-                        colString = controlador->toUpper(stringSeparada[4]);
+                        colString = this->toUpper(stringSeparada[4]);
                     } else {
                         colString = "A";
                     }
-                    switch (comando_build(colString, controlador->toLower(stringSeparada[1]), atoi(stringSeparada[2].c_str()), atoi(stringSeparada[3].c_str()))) {
+                    switch (comando_build(colString, this->toLower(stringSeparada[1]), atoi(stringSeparada[2].c_str()), atoi(stringSeparada[3].c_str()))) {
                         case -3:
                             imprimeErro("Esse edificio nao existe!\n");
                             break;
@@ -513,69 +547,8 @@ bool Gestor::intrepertaComandos(string comando) {
                     rounds = 1;
                 }
                 for (int i = 0; i < rounds; i++) {
-                    for (int j = 1; j < controlador->getVectorColonia()->size(); j++) {
-                        int resp, prob;
-                        prob = (rand() % 100 + 1);
-                        if (prob < 45) { //45% de probabilidade em mandar constuir edicisios
-                            /* Só manda se tiver um castelo */
-                            if (controlador->getVectorColonia()->at(j).getCastelo() != NULL) {
-                                /*
-                                 * Adicionar um rand para decidir se vai fazer uma torre ou uma quinta
-                                 */
 
-                                /*
-                                 * Sempre que tem 20 moedas manda construir uma quinta
-                                 * OBS: Adicionar um limite de quintas, por exemplo 3.
-                                 */
-                                if (controlador->getVectorColonia()->at(j).getMoedas() >= 20) {
-                                    do {
-                                        resp = comando_build(controlador->getVectorColonia()->at(j).getNome(), "quinta", controlador->getVectorColonia()->at(j).getCastelo()->getLinha() + rand() % 10, controlador->getVectorColonia()->at(j).getCastelo()->getColuna() + rand() % 10);
-                                    } while (resp < 0);
-                                }
-                                /*
-                                 * Sempre que tem 30 moedas manda construir uma torre
-                                 * OBS: Adicionar um limite de quintas, por exemplo 4.
-                                 */
-                                if (controlador->getVectorColonia()->at(j).getMoedas() >= 30) {
-                                    do {
-                                        resp = comando_build(controlador->getVectorColonia()->at(j).getNome(), "torre", controlador->getVectorColonia()->at(j).getCastelo()->getLinha() + rand() % 10, controlador->getVectorColonia()->at(j).getCastelo()->getColuna() + rand() % 10);
-                                    } while (resp < 0);
-                                }
-                            }
-                        }
-                        if (prob >= 45 && prob <= 85) { //40% de probabilidade em mandar fazer seres
-                            /*
-                             * Tenta arranjar maneira de melhorar a decisao de escolha dos seres
-                             */
-                            comando_ser(controlador->getVectorColonia()->at(j).getNome(), rand() % 5 + 1, controlador->getVectorColonia()->at(j).getVectorPerfil()->at(rand() % 5).getNome());
-                        }
-                        //Sobre 10% em q não faz nada
-
-                        if (controlador->getVectorColonia()->at(j).getVectorSer()->size() != 0) {
-                            /*
-                             * Verifica a saude média dos seus seres
-                             */
-                            int soma_saude = 0, soma_saude_total = 0;
-                            for (int p = 0; p < controlador->getVectorColonia()->at(j).getVectorSer()->size(); p++) {
-                                soma_saude += controlador->getVectorColonia()->at(j).getVectorSer()->at(p).getSaude();
-                                soma_saude_total += controlador->getVectorColonia()->at(j).getVectorSer()->at(p).getSaudeMAX();
-                            }
-                            if ((soma_saude / controlador->getVectorColonia()->at(j).getVectorSer()->size()) < (soma_saude_total / 2)) {
-                                // Se a média da suade for menor que metade da suade total, recolhe, se tiver um castelo para onde recolher
-                                if (controlador->getVectorColonia()->at(j).getCastelo() != NULL) {
-                                    comando_ataca_recolhe(controlador->getVectorColonia()->at(j).getNome(), false);
-                                }else{
-                                    // Se não tiver castelo, tem q avançar
-                                    comando_ataca_recolhe(controlador->getVectorColonia()->at(j).getNome(), true);
-                                }
-                            } else {
-                                // Senão ataca
-                                comando_ataca_recolhe(controlador->getVectorColonia()->at(j).getNome(), true);
-                            }
-                        }
-
-                    }
-                    if (!controlador->next()) {
+                    if (!controlador[jogoControlado].next()) {
                         return false;
                     }
                 }
@@ -612,20 +585,20 @@ bool Gestor::intrepertaComandos(string comando) {
 }
 
 void Gestor::comando_foco(int linhas, int colunas) {
-    if (linhas - 10 < 0) {
+    if (linhas - 10 < 0 || linhas < controlador[jogoControlado].getLinhasDefault()) {
         this->focoLinhas = 0;
     } else {
-        if (linhas + 10 >= controlador->getLinhasDefault()) {
-            this->focoLinhas = controlador->getLinhasDefault() - 20;
+        if (linhas + 10 >= controlador[jogoControlado].getLinhasDefault()) {
+            this->focoLinhas = controlador[jogoControlado].getLinhasDefault() - 20;
         } else {
             this->focoLinhas = linhas - 10;
         }
     }
-    if (colunas - 20 < 0) {
+    if (colunas - 20 < 0 || colunas < controlador[jogoControlado].getColunasDefault()) {
         this->focoColunas = 0;
     } else {
-        if (colunas + 20 >= controlador->getColunasDefault()) {
-            this->focoColunas = controlador->getLinhasDefault() - 40;
+        if (colunas + 20 >= controlador[jogoControlado].getColunasDefault()) {
+            this->focoColunas = controlador[jogoControlado].getLinhasDefault() - 40;
         } else {
             this->focoColunas = colunas - 20;
         }
@@ -633,10 +606,10 @@ void Gestor::comando_foco(int linhas, int colunas) {
 }
 
 bool Gestor::comando_listp(string perfil) {
-    for (int i = 0; i < controlador->getVectorColonia()->size(); i++) {
-        for (int j = 0; j < controlador->getVectorColonia()->at(i).getVectorPerfil()->size(); j++) {
-            if (controlador->getVectorColonia()->at(i).getVectorPerfil()->at(j).getNome() == controlador->toLower(perfil)) {
-                controlador->getVectorColonia()->at(i).getVectorPerfil()->at(j).listarTudo();
+    for (int i = 0; i < controlador[jogoControlado].getVectorColonia()->size(); i++) {
+        for (int j = 0; j < controlador[jogoControlado].getVectorColonia()->at(i).getVectorPerfil()->size(); j++) {
+            if (controlador[jogoControlado].getVectorColonia()->at(i).getVectorPerfil()->at(j).getNome() == this->toLower(perfil)) {
+                controlador[jogoControlado].getVectorColonia()->at(i).getVectorPerfil()->at(j).listarTudo();
                 return true;
             }
         }
@@ -659,12 +632,12 @@ bool Gestor::comando_load(string ficheiro) {
 }
 
 void Gestor::comando_inicio() {
-    comando_foco(controlador->getColonia("A")->getCastelo()->getLinha(), controlador->getColonia("A")->getCastelo()->getColuna());
-    controlador->atribuirPerfil();
+    comando_foco(controlador[jogoControlado].getColonia("A")->getCastelo()->getLinha(), controlador[jogoControlado].getColonia("A")->getCastelo()->getColuna());
+    controlador[jogoControlado].atribuirPerfil();
 }
 
 bool Gestor::comando_ataca_recolhe(string co, bool b) {
-    Colonia* c = controlador->getColonia(controlador->toUpper(co));
+    Colonia* c = controlador[jogoControlado].getColonia(this->toUpper(co));
     if (c != NULL) {
         c->setFlagAvancar(b);
         return true;
@@ -673,7 +646,7 @@ bool Gestor::comando_ataca_recolhe(string co, bool b) {
 }
 
 int Gestor::comando_build(string co, string edif, int linha, int coluna) {
-    Colonia* c = controlador->getColonia(controlador->toUpper(co));
+    Colonia* c = controlador[jogoControlado].getColonia(this->toUpper(co));
     int result;
     if (c != NULL) {
         if (edif == "torre") {
@@ -700,7 +673,7 @@ int Gestor::comando_build(string co, string edif, int linha, int coluna) {
 }
 
 int Gestor::comando_repair(string co, int id) {
-    Colonia* c = controlador->getColonia(controlador->toUpper(co));
+    Colonia* c = controlador[jogoControlado].getColonia(this->toUpper(co));
     int custoReparacao;
     if (c != NULL) {
         Edificios* e = c->getEdificio(id);
@@ -726,7 +699,7 @@ int Gestor::comando_repair(string co, int id) {
 }
 
 int Gestor::comando_upgrade(string co, int id) {
-    Colonia* c = controlador->getColonia(controlador->toUpper(co));
+    Colonia* c = controlador[jogoControlado].getColonia(this->toUpper(co));
     if (c != NULL) {
         Edificios* e = c->getEdificio(id);
         if (e != NULL) {
@@ -746,7 +719,7 @@ int Gestor::comando_upgrade(string co, int id) {
 }
 
 int Gestor::comando_sell(string co, int id) {
-    Colonia* c = controlador->getColonia(controlador->toUpper(co));
+    Colonia* c = controlador[jogoControlado].getColonia(this->toUpper(co));
     if (c != NULL) {
         Edificios* e = c->getEdificio(id);
         if (e != NULL) {
@@ -762,10 +735,10 @@ int Gestor::comando_sell(string co, int id) {
 }
 
 int Gestor::comando_ser(string co, int num, string perf) {
-    Colonia* c = controlador->getColonia(controlador->toUpper(co));
+    Colonia* c = controlador[jogoControlado].getColonia(this->toUpper(co));
     int custoTotal;
     if (c != NULL) {
-        Perfil* p = c->getPerfil(controlador->toLower(perf));
+        Perfil* p = c->getPerfil(this->toLower(perf));
         if (p != NULL) {
             custoTotal = p->getCusto() * num;
             if (c->getMoedas() - custoTotal >= 0) {
@@ -786,8 +759,8 @@ int Gestor::comando_ser(string co, int num, string perf) {
 
 bool Gestor::comando_dim(int linhas, int colunas) {
     if (linhas >= 20 && colunas >= 40) {
-        controlador->setLinhasDefault(linhas);
-        controlador->setColunasDefault(colunas);
+        controlador[jogoControlado].setLinhasDefault(linhas);
+        controlador[jogoControlado].setColunasDefault(colunas);
         return true;
     } else {
         return false;
@@ -795,14 +768,14 @@ bool Gestor::comando_dim(int linhas, int colunas) {
 }
 
 void Gestor::comando_moedas(int num) {
-    controlador->setMoedasDefault(num);
+    controlador[jogoControlado].setMoedasDefault(num);
 }
 
 bool Gestor::comando_oponentes(int num) {
-    controlador->apagarVectorColonias();
-    controlador->addColonia();
+    controlador[jogoControlado].apagarVectorColonias();
+    controlador[jogoControlado].addColonia();
     for (int i = 0; i < num; i++) {
-        if (!controlador->addColonia()) {
+        if (!controlador[jogoControlado].addColonia()) {
             return false;
         }
     }
@@ -810,9 +783,9 @@ bool Gestor::comando_oponentes(int num) {
 }
 
 int Gestor::comando_castelo(string nome, int linha, int coluna) {
-    Colonia* c = controlador->getColonia(controlador->toUpper(nome));
+    Colonia* c = controlador[jogoControlado].getColonia(this->toUpper(nome));
     if (c != NULL) {
-        if (controlador->verificaPosicao(linha, coluna) == NULL) {
+        if (controlador[jogoControlado].verificaPosicao(linha, coluna) == NULL) {
             c->getCastelo()->setLinhaColuna(linha, coluna);
             return 1;
         } else {
@@ -824,9 +797,9 @@ int Gestor::comando_castelo(string nome, int linha, int coluna) {
 }
 
 int Gestor::comando_mkperfil(string co, string ca) {
-    Colonia* c = controlador->getColonia(controlador->toUpper(co));
+    Colonia* c = controlador[jogoControlado].getColonia(this->toUpper(co));
     if (c != NULL) {
-        switch (c->addPerfil(controlador->toLower(ca))) {
+        switch (c->addPerfil(this->toLower(ca))) {
             case -1:
                 return -1;
                 break;
@@ -843,10 +816,10 @@ int Gestor::comando_mkperfil(string co, string ca) {
 }
 
 int Gestor::comando_addperfil(string co, string ca, int id) {
-    Colonia* c = controlador->getColonia(controlador->toUpper(co));
+    Colonia* c = controlador[jogoControlado].getColonia(this->toUpper(co));
     if (c != NULL) {
-        if (c->getPerfil(controlador->toLower(ca)) != NULL) {
-            if (c->getPerfil(controlador->toLower(ca))->addCaracteristica(new Caracteristica(id))) {
+        if (c->getPerfil(this->toLower(ca)) != NULL) {
+            if (c->getPerfil(this->toLower(ca))->addCaracteristica(new Caracteristica(id))) {
                 return 1;
             } else {
                 return 0;
@@ -860,10 +833,10 @@ int Gestor::comando_addperfil(string co, string ca, int id) {
 }
 
 int Gestor::comando_subperfil(string co, string ca, int id) {
-    Colonia* c = controlador->getColonia(controlador->toUpper(co));
+    Colonia* c = controlador[jogoControlado].getColonia(this->toUpper(co));
     if (c != NULL) {
-        if (c->getPerfil(controlador->toLower(ca)) != NULL) {
-            if (c->getPerfil(controlador->toLower(ca))->removeCarateristica(id)) {
+        if (c->getPerfil(this->toLower(ca)) != NULL) {
+            if (c->getPerfil(this->toLower(ca))->removeCarateristica(id)) {
                 return 1;
             } else {
                 return 0;
@@ -877,9 +850,9 @@ int Gestor::comando_subperfil(string co, string ca, int id) {
 }
 
 int Gestor::comando_rmperfil(string co, string ca) {
-    Colonia* c = controlador->getColonia(controlador->toUpper(co));
+    Colonia* c = controlador[jogoControlado].getColonia(this->toUpper(co));
     if (c != NULL) {
-        if (c->removePerfil(controlador->toLower(ca))) {
+        if (c->removePerfil(this->toLower(ca))) {
             return 1;
         } else {
             return 0;
@@ -948,13 +921,66 @@ bool Gestor::checkNumero(const string s) {
 }
 
 bool Gestor::isConfig() {
-    if (c_dim && c_mkperfil && c_moedas && c_oponentes) {
+    if (controlador[jogoControlado].c_dim && controlador[jogoControlado].c_mkperfil && controlador[jogoControlado].c_moedas && controlador[jogoControlado].c_oponentes) {
         return true;
     } else {
         return false;
     }
 }
 
+bool Gestor::setJogoControlado(string name) {
+    for (int i = 0; i < controlador.size(); i++) {
+        if (controlador[i].getName() == toLower(name)) {
+            jogoControlado = i;
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Gestor::comando_save(string name) {
+    if (controlador[jogoControlado].getName() != "") {
+        for (int i = 0; i < controlador.size(); i++) {
+            if (controlador[i].getName() == toLower(name)) {
+                return false;
+            }
+        }
+    } else {
+        controlador[jogoControlado].setName(toLower(name));
+    }
+    return true;
+}
+
+bool Gestor::comando_restore(string name) {
+    for (int i = 0; i < controlador.size(); i++) {
+        if (controlador[i].getName() == toLower(name)) {
+            jogoControlado = i;
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Gestor::comando_erase(string name) {
+    for (int i = 0; i < controlador.size(); i++) {
+        if (controlador[jogoControlado].getName() == toLower(name)) {
+            controlador.erase(controlador.begin() + i);
+            return true;
+        }
+    }
+    return false;
+}
+
+string Gestor::toLower(string str) {
+    transform(str.begin(), str.end(), str.begin(), ::tolower);
+    return str;
+}
+
+string Gestor::toUpper(string str) {
+    transform(str.begin(), str.end(), str.begin(), ::toupper);
+    return str;
+}
+
 Gestor::~Gestor() {
-    delete(controlador);
+
 }

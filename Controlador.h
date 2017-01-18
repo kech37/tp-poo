@@ -25,8 +25,11 @@ private:
     vector<Colonia> vectorColonias;
     int moedasDefault;
     int linhasDefault, colunasDefault;
+    string name;
     string nomes[26] = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
 public:
+    
+    bool c_dim, c_moedas, c_oponentes, c_mkperfil, config;
     
     const static int QUALQUER = 0;
     const static int EDIFICIO = 1;
@@ -34,8 +37,12 @@ public:
     const static int ATACA = 1;
     const static int RECOLHE = 2;
     
+    Controlador(string name);
     Controlador();
-   
+    
+    void setName(string name);
+    string getName() const;
+    
     void setLinhasDefault(int linhas);
     int getLinhasDefault() const;
     void setColunasDefault(int colunas);

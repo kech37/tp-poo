@@ -26,9 +26,9 @@
 
 class Gestor {
 private:
-    Controlador* controlador;
-    bool c_dim = false, c_moedas = false, c_oponentes = false, c_mkperfil = false, config = true;
+    vector<Controlador> controlador;
     int focoLinhas, focoColunas;
+    int jogoControlado;
 public:
     static Gestor * getInstance();
 
@@ -143,6 +143,15 @@ public:
     void imprimeLog(string msg);
     void imprimePedidoInfo(string msg);
     void imprimeLogo();
+    
+    bool setJogoControlado(string name);
+    
+    bool comando_save(string name);
+    bool comando_restore(string name);
+    bool comando_erase(string name);
+    
+    string toLower(string str);
+    string toUpper(string str);
     
     virtual ~Gestor();
 
