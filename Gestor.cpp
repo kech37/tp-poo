@@ -121,7 +121,7 @@ bool Gestor::intrepertaComandos(string comando) {
                 imprimeErro("Ja existe um save com esse nome!\n       Apague esse save, ou escolha outro nome!\n");
             }
         } else if (stringSeparada[0] == "restore") {
-            if (comando_restore(stringSeparada[1])) {    
+            if (comando_restore(stringSeparada[1])) {
                 Consola::setBackgroundColor(Consola::CYAN);
                 Consola::clrscr();
                 imprimeLogo();
@@ -547,7 +547,69 @@ bool Gestor::intrepertaComandos(string comando) {
                     rounds = 1;
                 }
                 for (int i = 0; i < rounds; i++) {
+                    for (int j = 1; j < controlador[jogoControlado].getVectorColonia()->size(); j++) {
+                        int resp, prob;
+                        prob = (rand() % 100 + 1);
 
+                        /* Só manda se tiver um castelo */
+                        if (controlador[jogoControlado].getVectorColonia()->at(j).getCastelo() != NULL) {
+                            if (prob < 45 && controlador[jogoControlado].getVectorColonia()->at(j).getVectorEdificios()->size() <= 6) { //45% de probabilidade em mandar constuir edicisios
+                                /*
+                                 * Adicionar um rand para decidir se vai fazer uma torre ou uma quinta
+                                 */
+
+                                /*
+                                 * Sempre que tem 20 moedas manda construir uma quinta
+                                 * OBS: Adicionar um limite de quintas, por exemplo 3.
+                                 */
+                                if (controlador[jogoControlado].getVectorColonia()->at(j).getMoedas() >= 20) {
+                                    do {
+                                        resp = comando_build(controlador[jogoControlado].getVectorColonia()->at(j).getNome(), "quinta", controlador[jogoControlado].getVectorColonia()->at(j).getCastelo()->getLinha() + rand() % 10, controlador[jogoControlado].getVectorColonia()->at(j).getCastelo()->getColuna() + rand() % 10);
+                                    } while (resp < 0);
+                                }
+                                /*
+                                 * Sempre que tem 30 moedas manda construir uma torre
+                                 * OBS: Adicionar um limite de quintas, por exemplo 4.
+                                 */
+                                if (controlador[jogoControlado].getVectorColonia()->at(j).getMoedas() >= 30) {
+                                    do {
+                                        resp = comando_build(controlador[jogoControlado].getVectorColonia()->at(j).getNome(), "torre", controlador[jogoControlado].getVectorColonia()->at(j).getCastelo()->getLinha() + rand() % 10, controlador[jogoControlado].getVectorColonia()->at(j).getCastelo()->getColuna() + rand() % 10);
+                                    } while (resp < 0);
+                                }
+                            }
+                        }
+                        if (prob >= 45 && prob <= 85) { //40% de probabilidade em mandar fazer seres
+                            /*
+                             * Tenta arranjar maneira de melhorar a decisao de escolha dos seres
+                             */
+                            comando_ser(controlador[jogoControlado].getVectorColonia()->at(j).getNome(), rand() % 5 + 1, controlador[jogoControlado].getVectorColonia()->at(j).getVectorPerfil()->at(rand() % 5).getNome());
+                        }
+                        //Sobre 10% em q não faz nada
+
+                        if (controlador[jogoControlado].getVectorColonia()->at(j).getVectorSer()->size() != 0) {
+                            /*
+                             * Verifica a saude média dos seus seres
+                             */
+                            int soma_saude = 0, soma_saude_total = 0;
+                            for (int p = 0; p < controlador[jogoControlado].getVectorColonia()->at(j).getVectorSer()->size(); p++) {
+                                soma_saude += controlador[jogoControlado].getVectorColonia()->at(j).getVectorSer()->at(p).getSaude();
+                                soma_saude_total += controlador[jogoControlado].getVectorColonia()->at(j).getVectorSer()->at(p).getSaudeMAX();
+                            }
+                            if ((soma_saude / controlador[jogoControlado].getVectorColonia()->at(j).getVectorSer()->size()) < (soma_saude_total / 2)) {
+                                // Se a média da suade for menor que metade da suade total, recolhe, se tiver um castelo para onde recolher
+                                if (controlador[jogoControlado].getVectorColonia()->at(j).getCastelo() != NULL) {
+                                    comando_ataca_recolhe(controlador[jogoControlado].getVectorColonia()->at(j).getNome(), false);
+                                } else {
+                                    // Se não tiver castelo, tem q avançar
+                                    comando_ataca_recolhe(controlador[jogoControlado].getVectorColonia()->at(j).getNome(), true);
+                                }
+                            } else {
+                                // Senão ataca
+                                comando_ataca_recolhe(controlador[jogoControlado].getVectorColonia()->at(j).getNome(), true);
+                            }
+                        }
+
+                    }
                     if (!controlador[jogoControlado].next()) {
                         return false;
                     }
